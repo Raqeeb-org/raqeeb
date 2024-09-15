@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class ResetPassword extends StatelessWidget {
   final ValueNotifier<bool> _dark = ValueNotifier<bool>(true);
 
+  ResetPassword({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -123,28 +125,34 @@ class PasswordResetForm extends StatelessWidget {
   }
 
   Widget _buildDoneButton(BuildContext context) {
-    return Container(
-      width: 141,
-      height: 39,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 242, 199, 90),
-        borderRadius: BorderRadius.circular(100),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x3F000000),
-            blurRadius: 4,
-            offset: Offset(0, 5),
-          ),
-        ],
-      ),
-      child: const Center(
-        child: Text(
-          'Done',
-          style: TextStyle(
-            color: Color(0xFF19181A),
-            fontSize: 16,
-            fontFamily: 'Aleo',
+    return GestureDetector(
+      onTap: () {
+        // Add your onTap action here
+        print('Done button clicked!'); // will modify its functionality later
+      },
+      child: Container(
+        width: 141,
+        height: 39,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 242, 199, 90),
+          borderRadius: BorderRadius.circular(100),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x3F000000),
+              blurRadius: 4,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
+        child: const Center(
+          child: Text(
+            'Done',
+            style: TextStyle(
+              color: Color(0xFF19181A),
+              fontSize: 16,
+              fontFamily: 'Aleo',
+            ),
           ),
         ),
       ),
