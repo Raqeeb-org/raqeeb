@@ -54,6 +54,11 @@ flutter:
   assets:
     - assets/images/
     - assets/images/Dinah.jpg
+    - assets/images/Khaled-2.png
+    - assets/images/Deena.png
+    - assets/images/Haneen-2.png
+    - assets/images/Azeez-2.png
+    - assets/images/Abdullah.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
