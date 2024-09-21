@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:raqeeb/screens/admins/admin_homepage.dart';
-import 'package:raqeeb/screens/admins/admin_profile.dart';
+import 'package:raqeeb/screens/admins/adminHomepage.dart';
+import 'package:raqeeb/screens/admins/adminProfile.dart';
 
 class MainLayout extends StatefulWidget {
   final int initialIndex;
