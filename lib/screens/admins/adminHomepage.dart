@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/admins/SchoolBuses.dart';
 
 class AdminHomePage extends StatelessWidget {
-  const AdminHomePage({Key? key}) : super(key: key);
+  const AdminHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,7 @@ class AdminHomePage extends StatelessWidget {
             // Morning Trip Widget
             TripCard(
               title: 'Morning Trips',
+              timing: 'Start: 6:00 AM',
               icon: Icons.wb_sunny,
               onArrowClick: () {
                 Navigator.push(
@@ -53,6 +54,7 @@ class AdminHomePage extends StatelessWidget {
             // Afternoon Trip Widget
             TripCard(
               title: 'Afternoon Trips',
+              timing: 'Start: 12:00 PM',
               icon: Icons.wb_sunny_outlined,
               onArrowClick: () {
                 Navigator.push(
@@ -73,11 +75,13 @@ class AdminHomePage extends StatelessWidget {
 // TripCard Widget (For Reuse)
 class TripCard extends StatelessWidget {
   final String title;
+  final String timing;
   final IconData icon;
   final VoidCallback onArrowClick;
 
   const TripCard({
     required this.title,
+    required this.timing,
     required this.icon,
     required this.onArrowClick,
     Key? key,
@@ -135,6 +139,15 @@ class TripCard extends StatelessWidget {
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        timing,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w100,
+                          color: Colors.black54,
                         ),
                       ),
                     ],
