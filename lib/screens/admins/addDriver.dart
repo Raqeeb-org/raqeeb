@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class AddDriverScreen extends StatefulWidget {
   @override
-  _AddDriverScreenState createState() => _AddDriverScreenState(); // The state class should match the widget name
+  _AddDriverScreenState createState() =>
+      _AddDriverScreenState(); // The state class should match the widget name
 }
 
-class _AddDriverScreenState extends State<AddDriverScreen> { // State class name corrected
+class _AddDriverScreenState extends State<AddDriverScreen> {
+  // State class name corrected
   final _formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> _controllers = {
     'First Name': TextEditingController(),
@@ -67,17 +69,19 @@ class _AddDriverScreenState extends State<AddDriverScreen> { // State class name
                   children: [
                     Container(
                       width: 175, // Custom width for First Name
-                      child: buildTextField('First Name', _controllers['First Name']),
+                      child: buildTextField(
+                          'First Name', _controllers['First Name']),
                     ),
                     const SizedBox(width: 10), // Space between the two fields
                     Container(
                       width: 175, // Custom width for Last Name
-                      child: buildTextField('Last Name', _controllers['Last Name']),
+                      child: buildTextField(
+                          'Last Name', _controllers['Last Name']),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
-                
+
                 // ID No. Field
                 buildTextField('ID No.', _controllers['ID No.']),
                 const SizedBox(height: 10),
@@ -88,17 +92,21 @@ class _AddDriverScreenState extends State<AddDriverScreen> { // State class name
                 buildTextField('Email', _controllers['Email']),
                 const SizedBox(height: 10),
                 // Password Field
-                buildTextField('Password', _controllers['Password'], isPassword: true),
+                buildTextField('Password', _controllers['Password'],
+                    isPassword: true),
                 const SizedBox(height: 10),
                 // Repeat Password Field
-                buildTextField('Repeat Password', _controllers['Repeat Password'], isPassword: true),
+                buildTextField(
+                    'Repeat Password', _controllers['Repeat Password'],
+                    isPassword: true),
                 const SizedBox(height: 20),
-                
+
                 // Submit Button
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange, // Background color
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 15.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
@@ -124,17 +132,21 @@ class _AddDriverScreenState extends State<AddDriverScreen> { // State class name
   }
 
   // Helper function to build text form fields with reduced width and more rounded corners
-  Widget buildTextField(String label, TextEditingController? controller, {bool isPassword = false}) {
+  Widget buildTextField(String label, TextEditingController? controller,
+      {bool isPassword = false}) {
     return Center(
       child: Container(
         width: 350, // Default width for other text boxes
         child: TextFormField(
           controller: controller,
           obscureText: isPassword,
-          style: const TextStyle(color: Colors.black), // Set input text color to black
+          style: const TextStyle(
+              color: Colors.black), // Set input text color to black
           decoration: InputDecoration(
             labelText: label,
-            labelStyle: const TextStyle(color: Color.fromARGB(255, 144, 141, 141)), // Set label text color to black
+            labelStyle: const TextStyle(
+                color: Color.fromARGB(
+                    255, 144, 141, 141)), // Set label text color to black
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.orange, width: 2.0),
               borderRadius: BorderRadius.circular(30.0), // More rounded corners
