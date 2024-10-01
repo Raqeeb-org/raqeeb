@@ -5,17 +5,20 @@ import 'package:raqeeb/screens/commons/login.dart';
 //firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:get/get.dart';
+
 
 // ...
 
-void main() async{
+/*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
-  runApp(RaqeebApp());
-  
+  );
+  runApp(RaqeebApp());  // Change this to match your class name
 }
+
+
 
 class RaqeebApp extends StatelessWidget {
   @override
@@ -27,6 +30,58 @@ class RaqeebApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginPage(), // Set the LoginPage as the home page
+    );
+  }
+}
+
+class RaqeebApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Firebase Connected!'),
+      ),
+      body: Center(
+        child: Text('Firebase is working!'),
+      ),
+    );
+  }
+}*/
+
+
+
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp( // Ensure that MaterialApp is here
+      title: 'Firebase Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),  // Your home widget, ensure this is wrapped inside MaterialApp
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold( // Scaffold should be wrapped inside MaterialApp
+      appBar: AppBar(
+        title: Text('Firebase Connected!'),
+      ),
+      body: Center(
+        child: Text('Firebase is working!'),
+      ),
     );
   }
 }
