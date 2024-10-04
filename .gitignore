@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+node_modules/
 
 # IntelliJ related
 *.iml
@@ -30,7 +31,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-
+# Exclude node_modules folder
+node_modules/
 # Symbolication related
 app.*.symbols
 

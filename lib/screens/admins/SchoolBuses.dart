@@ -3,12 +3,12 @@ import 'package:raqeeb/widgets/busCard.dart';
 import 'package:raqeeb/screens/admins/morningBusChildren.dart';
 
 class SchoolBusesScreen extends StatelessWidget {
-  const SchoolBusesScreen({Key? key}) : super(key: key);
+  const SchoolBusesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 189, 236, 242),
+      backgroundColor: const Color.fromARGB(255, 189, 236, 242),
       appBar: AppBar(
         centerTitle: true,
         title: const Text(

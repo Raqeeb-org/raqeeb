@@ -21,6 +21,8 @@ import 'package:get/get.dart';
 
 
 class RaqeebApp extends StatelessWidget {
+  const RaqeebApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AddDriverScreen extends StatefulWidget {
+  const AddDriverScreen({super.key});
+
   @override
   _AddDriverScreenState createState() =>
       _AddDriverScreenState(); // The state class should match the widget name
@@ -21,7 +23,9 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
 
   @override
   void dispose() {
-    _controllers.values.forEach((controller) => controller.dispose());
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -43,7 +47,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
               children: [
                 // Avatar and Title Section
                 const Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
+                  padding: EdgeInsets.only(bottom: 20.0),
                   child: Column(
                     children: [
                       Icon(
