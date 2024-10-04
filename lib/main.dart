@@ -7,7 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:get/get.dart';
 
-
 // ...
 
 /*void main() async {
@@ -50,26 +49,25 @@ class RaqeebApp extends StatelessWidget {
   }
 }*/
 
-
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(RaqeebApp());
 }
 
-class MyApp extends StatelessWidget {
+class RaqeebApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( // Ensure that MaterialApp is here
+    return MaterialApp(
+      // Ensure that MaterialApp is here
       title: 'Firebase Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),  // Your home widget, ensure this is wrapped inside MaterialApp
+      home:
+          MyHomePage(), // Your home widget, ensure this is wrapped inside MaterialApp
     );
   }
 }
@@ -77,7 +75,8 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold( // Scaffold should be wrapped inside MaterialApp
+    return Scaffold(
+      // Scaffold should be wrapped inside MaterialApp
       appBar: AppBar(
         title: Text('Firebase Connected!'),
       ),
