@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "537975076496",
+    "project_id": "raqeeb-46b04",
+    "storage_bucket": "raqeeb-46b04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537975076496:android:8681c009b4c63b5e710a15",
+        "android_client_info": {
+          "package_name": "com.raqeebapp.raqeeb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFCJvaqVX82u9ayF8SneUTS4GFzwUqgqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
