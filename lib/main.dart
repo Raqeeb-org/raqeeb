@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:raqeeb/widgets/mainLayout.dart';
 import 'package:raqeeb/screens/commons/login.dart';
-//import 'package:raqeeb/screens/commons/reset_password.dart';
-//import 'package:raqeeb/screens/commons/verification.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(RaqeebApp());
+  // Initialize Firebase for web
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyAbZ2Jap00L4fdOXBOAEYuHSOp1MpNCxyo",
+        authDomain: "raqeeb-c6520.firebaseapp.com",
+        projectId: "raqeeb-c6520",
+        storageBucket: "raqeeb-c6520.appspot.com",
+        messagingSenderId: "479747832887",
+        appId: "1:479747832887:web:e59b52cd50e7648c4fd3b2",
+      ),
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
+  runApp(const RaqeebApp());
 }
 
 /*
