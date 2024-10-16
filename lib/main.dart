@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:raqeeb/widgets/mainLayout.dart';
 import 'package:raqeeb/screens/commons/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,8 @@ void main() async {
     );
   } else {
     await Firebase.initializeApp();
+    // Set authentication persistence (local for mobile)
+    await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
   }
   runApp(const RaqeebApp());
 }
