@@ -97,11 +97,49 @@ class _LoginScreenState extends State<LoginPage> {
 
               // Log In Button
               ElevatedButton(
-                onPressed: () {
-                  if (_selectedUserType != null &&
-                      _selectedUserType == 'Driver') {
-                    Navigator.pushNamed(
-                        context, '/schedule'); // Navigate to Driver's home page
+                onPressed: () async {
+                  if (_selectedUserType != null) {
+                    String email = _emailController.text.trim();
+                    String password = _passwordController.text.trim();
+                    String selectedRole = _selectedUserType!
+                        .toLowerCase(); // Ensure the role is lowercase
+
+                    // Use AuthService to log in and verify role
+                    try {
+                      AuthService authService = AuthService();
+                      bool loginSuccess = await authService.signInAndVerifyRole(
+                          email, password, selectedRole);
+
+                      if (loginSuccess) {
+                        // Navigate to the corresponding home page based on role
+                        switch (selectedRole) {
+                          case 'driver':
+                            Navigator.pushReplacementNamed(
+                                context, '/driver_home');
+                            break;
+                          case 'parent':
+                            Navigator.pushReplacementNamed(
+                                context, '/parent_home');
+                            break;
+                          case 'school administrator':
+                            Navigator.pushReplacementNamed(
+                                context, '/admin_home');
+                            break;
+                        }
+                      } else {
+                        // Show error if role verification fails
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'Role verification failed! Please check your credentials.')),
+                        );
+                      }
+                    } catch (e) {
+                      // Handle error and show appropriate message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Login failed: $e')),
+                      );
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
