@@ -13,7 +13,7 @@ class LoginScreenState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   String? _selectedUserType;
 
-  final List<String> userTypes = ['Driver', 'Parent', 'School Administrator'];
+  final List<String> userTypes = ['Driver', 'Parent', 'Admins'];
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +102,8 @@ class LoginScreenState extends State<LoginPage> {
                   if (_selectedUserType != null) {
                     String email = _emailController.text.trim();
                     String password = _passwordController.text.trim();
-                    String selectedRole = _selectedUserType!
-                        .toLowerCase(); // Ensure the role is lowercase
+                    String selectedRole = _selectedUserType!;
+                    //.toLowerCase(); // Ensure the role is lowercase
                     print('Role: $selectedRole');
 
                     // Use AuthService to log in and verify role
@@ -123,7 +123,7 @@ class LoginScreenState extends State<LoginPage> {
                             Navigator.pushReplacementNamed(
                                 context, '/parent_home');
                             break;
-                          case 'school administrator':
+                          case 'Admins':
                             Navigator.pushReplacementNamed(
                                 context, '/admin_home');
                             break;
