@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -134,5 +136,39 @@ class _LoginScreenState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+// Login function
+Future<void> loginUser(
+    String email, String password, String selectedRole) async {
+  try {
+    // Sign in user using Firebase Auth
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    // Get user ID
+    String userId = userCredential.user!.uid;
+
+    // Fetch user details from Firestore based on role
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection(selectedRole)
+        .doc(userId)
+        .get();
+
+    // Extract user data (this will vary based on your structure)
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    print("User Data: $userData");
+
+    // Navigate to the appropriate screen (you need to implement this)
+    // e.g. navigateToRoleScreen(userData, selectedRole);
+  } catch (e) {
+    print("Login failed: $e");
+    // Handle error (e.g., show error message to the user)
   }
 }
