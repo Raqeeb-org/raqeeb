@@ -60,12 +60,4 @@ class AuthService {
         .doc(userID)
         .get();
   }
-
-  // Optionally: Method to retrieve user role (if stored in Firestore)
-  Future<String> getUserRole(String userID) async {
-    DocumentSnapshot snapshot =
-        await _firestore.collection('users').doc(userID).get();
-    return snapshot[
-        'role']; // Make sure to store the role in Firestore for each user
-  }
 }
