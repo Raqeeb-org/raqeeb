@@ -5,10 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginPage> {
+class LoginScreenState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _selectedUserType;
@@ -130,7 +130,7 @@ class _LoginScreenState extends State<LoginPage> {
                       } else {
                         // Show error if role verification fails
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                               content: Text(
                                   'Role verification failed! Please check your credentials.')),
                         );
