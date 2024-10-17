@@ -44,6 +44,11 @@ class RaqeebApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginPage(), // Set the LoginPage as the home page
+      // Adding the routes for navigation
+      routes: {
+        '/admin_home': (context) =>
+            const MainLayout(), // Driver's home page route
+      },
     );
   }
 }
