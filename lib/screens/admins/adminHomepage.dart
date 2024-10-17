@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:raqeeb/screens/admins/SchoolBuses.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -23,13 +24,13 @@ class AdminHomePageState extends State<AdminHomePage> {
   // Method to fetch the admin's username from Firestore
   Future<void> fetchAdminUsername() async {
     try {
+      String userId = FirebaseAuth.instance.currentUser!.uid;
       // Assuming you're fetching the first admin document from the 'Admins' subcollection
       DocumentSnapshot adminSnapshot = await FirebaseFirestore.instance
           .collection('Users')
           .doc('2J4DFh6Gxi9vNAmip0iA') // Assuming the Admins document's ID
           .collection('Admins') // The Admins subcollection
-          .doc(
-              'UAvCFxwxdGSZdOCrVkX9') // Replace with the actual document ID of the admin
+          .doc(userId) // Replace with the actual document ID of the admin
           .get();
 
       if (adminSnapshot.exists) {
