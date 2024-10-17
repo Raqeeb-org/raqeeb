@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:raqeeb/screens/commons/changePassword.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -32,13 +33,13 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
   // Method to fetch the admin's data from Firestore
   Future<void> fetchAdminData() async {
     try {
-      // Fetching the first admin document from the 'Admins' subcollection
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+      // Fetching the current admin from the 'Admins' subcollection
       DocumentSnapshot adminSnapshot = await FirebaseFirestore.instance
           .collection('Users') // Main Users collection
           .doc('2J4DFh6Gxi9vNAmip0iA') // Assuming the Admins document's ID
           .collection('Admins') // The Admins subcollection
-          .doc(
-              'UAvCFxwxdGSZdOCrVkX9') // Replace with the actual document ID of the admin
+          .doc(userId) // Replace with the actual document ID of the admin
           .get();
 
       // Fetch the school document using the schoolID reference from the admin document
@@ -57,7 +58,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
         setState(() {
           name =
               adminSnapshot['fullName'] ?? 'N/A'; // Retrieve the 'name' field
-          phoneNumber = adminSnapshot['phoneNum'] ??
+          phoneNumber = adminSnapshot['phoneNumber'] ??
               'N/A'; // Retrieve the 'phoneNumber' field
           email = adminSnapshot['email']; // Retrieve the 'email' field
           schoolName = schoolSnapshot['schoolName'] ??

@@ -25,7 +25,6 @@ class AdminHomePageState extends State<AdminHomePage> {
   Future<void> fetchAdminUsername() async {
     try {
       String userId = FirebaseAuth.instance.currentUser!.uid;
-      // Assuming you're fetching the first admin document from the 'Admins' subcollection
       DocumentSnapshot adminSnapshot = await FirebaseFirestore.instance
           .collection('Users')
           .doc('2J4DFh6Gxi9vNAmip0iA') // Assuming the Admins document's ID
