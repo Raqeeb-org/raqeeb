@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:raqeeb/screens/commons/changePassword.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:raqeeb/services/auth_service.dart';
+import 'package:raqeeb/screens/commons/changePassword.dart';
 
 class AdminProfilePage extends StatefulWidget {
   const AdminProfilePage({super.key});
@@ -226,8 +227,15 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
             ProfileOptionCard(
               title: 'Logout',
               icon: Icons.logout,
-              onArrowClick: () {
-                // Implement logout functionality here
+              expandable: true,
+              message: 'Are you sure you want to logout?',
+              onArrowClick: () async {
+                // Calling the sign-out method from your AuthService
+                AuthService authService = AuthService();
+                await authService.signOut();
+
+                // Navigate to the login screen
+                Navigator.pushReplacementNamed(context, '/login');
               },
             ),
           ],
@@ -265,17 +273,29 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
 }
 
 // ProfileOptionCard Widget for other profile options
-class ProfileOptionCard extends StatelessWidget {
+class ProfileOptionCard extends StatefulWidget {
   final String title;
   final IconData icon;
   final VoidCallback onArrowClick;
+  final bool expandable;
+  // final Widget? expandedContent;
+  final String? message; // Optional message for the expanded state
 
   const ProfileOptionCard({
     required this.title,
     required this.icon,
     required this.onArrowClick,
+    this.expandable = false,
+    this.message,
     Key? key,
   }) : super(key: key);
+
+  @override
+  _ProfileOptionCardState createState() => _ProfileOptionCardState();
+}
+
+class _ProfileOptionCardState extends State<ProfileOptionCard> {
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -283,7 +303,6 @@ class ProfileOptionCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Container(
         width: double.infinity,
-        height: 80, // Fixed height for each option card
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 252, 196, 113),
           borderRadius: BorderRadius.circular(15),
@@ -296,40 +315,80 @@ class ProfileOptionCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Leading Icon and Title
-              Row(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    icon,
-                    size: 40,
-                    color: const Color.fromARGB(255, 201, 129, 36),
+                  Row(
+                    children: [
+                      Icon(
+                        widget.icon,
+                        size: 40,
+                        color: const Color.fromARGB(255, 201, 129, 36),
+                      ),
+                      const SizedBox(width: 15), // Space between icon and title
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 15), // Space between icon and title
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  IconButton(
+                    icon: AnimatedRotation(
+                      turns: _isExpanded ? 0.25 : 0,
+                      duration: const Duration(milliseconds: 300),
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.black54,
+                      ),
                     ),
+                    onPressed: () {
+                      if (widget.expandable) {
+                        setState(() {
+                          _isExpanded = !_isExpanded;
+                        });
+                      }
+                    },
                   ),
                 ],
               ),
-              // Arrow Button
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.black54,
+            ),
+            if (_isExpanded && widget.expandable) ...[
+              const SizedBox(height: 10),
+              if (widget.message != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(
+                    widget.message!,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                  ),
                 ),
-                onPressed: onArrowClick,
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: widget.onArrowClick,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
               ),
-            ],
-          ),
+              const SizedBox(height: 10),
+            ]
+          ],
         ),
       ),
     );
