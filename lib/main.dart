@@ -48,6 +48,7 @@ class RaqeebApp extends StatelessWidget {
       routes: {
         '/admin_home': (context) =>
             const MainLayout(), // Driver's home page route
+        '/login': (context) => LoginPage(), // Login page route
       },
     );
   }
