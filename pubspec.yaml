@@ -34,6 +34,7 @@ dependencies:
   timeline_tile: ^2.0.0
   firebase_core: ^2.10.0
   cloud_firestore: ^4.8.0
+  url_launcher: ^6.1.11
   # Add other Firebase packages as needed
 
   # The following adds the Cupertino Icons font to your application.
