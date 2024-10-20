@@ -45,5 +45,25 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Internet Access Permissions -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+
+	<!-- Camera Access Permission (if using camera for face recognition or other purposes) -->
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is needed for face recognition features.</string>
+	
+	<!-- Microphone Access Permission (if using audio features) -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone access is needed for app audio features.</string>
+
+	<!-- Photo Library Access Permission (if accessing the user's photos) -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo library access is needed to select images.</string>
+
 </dict>
 </plist>
