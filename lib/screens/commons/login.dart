@@ -13,7 +13,7 @@ class LoginScreenState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   String? _selectedUserType;
 
-  final List<String> userTypes = ['Driver', 'Parent', 'Admins'];
+  final List<String> userTypes = ['Drivers', 'Parent', 'Admins'];
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class LoginScreenState extends State<LoginPage> {
                       if (loginSuccess) {
                         // Navigate to the corresponding home page based on role
                         switch (selectedRole) {
-                          case 'driver':
+                          case 'Drivers':
                             Navigator.pushReplacementNamed(
                                 context, '/driver_home');
                             break;
