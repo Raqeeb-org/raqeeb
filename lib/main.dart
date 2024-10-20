@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:raqeeb/widgets/mainLayout.dart';
+import 'package:raqeeb/screens/driver/driverHomePage.dart';
 import 'package:raqeeb/screens/commons/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,7 +48,9 @@ class RaqeebApp extends StatelessWidget {
       // Adding the routes for navigation
       routes: {
         '/admin_home': (context) =>
-            const MainLayout(), // Driver's home page route
+            const MainLayout(), // Admin's home page route
+        '/driver_home': (context) =>
+            ScheduleScreen(), // Driver's home page route
         '/login': (context) => LoginPage(), // Login page route
       },
     );
