@@ -36,6 +36,7 @@ dependencies:
   cloud_firestore: ^5.4.4
   firebase_auth: ^5.3.1
   firebase_phone_auth_handler: ^1.1.0
+  url_launcher: ^6.0.9  
   # Add other Firebase packages as needed
 
   # The following adds the Cupertino Icons font to your application.
