@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart'; // To use kIsWeb
+import 'dart:io' show Platform; // To check for mobile platforms (iOS/Android)
 import 'package:raqeeb/widgets/mainLayout.dart';
 import 'package:raqeeb/screens/commons/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   // Initialize Firebase for web
   if (kIsWeb) {
     await Firebase.initializeApp(
@@ -21,16 +23,19 @@ void main() async {
     );
   } else {
     await Firebase.initializeApp();
-    // Set authentication persistence (local for mobile)
-    await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+
+    // Check if platform is not iOS/Android before setting persistence
+    if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
+      // setPersistence() is not supported on mobile platforms
+      print("Persistence not required for iOS or Android");
+    } else {
+      // Set authentication persistence for web
+      await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+    }
   }
+
   runApp(const RaqeebApp());
 }
-
-/*
-void main() {
-  runApp(RaqeebApp());
-}*/
 
 class RaqeebApp extends StatelessWidget {
   const RaqeebApp({super.key});
