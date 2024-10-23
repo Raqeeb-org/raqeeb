@@ -38,51 +38,64 @@ class MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Display the page based on selected index
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
+      body: Stack(
+        children: [
+          // This ensures the body content stretches fully
+          Container(
+            color: const Color.fromRGBO(172, 230, 238, 100), // Light blue background color
+            child: _pages[_selectedIndex], // Display the page based on selected index
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: BottomNavigationBar(
-              backgroundColor: Colors.white,
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.contact_page), // Contact icon
-                  label: 'Contact',
+          Positioned(
+            bottom: 0, // Pin the navigation bar to the bottom
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.directions_bus), // Status icon (or bus icon)
-                  label: 'Status',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: BottomNavigationBar(
+                    backgroundColor: Colors.white,
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.contact_page), // Contact icon
+                        label: 'Contact',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.directions_bus), // Status icon (or bus icon)
+                        label: 'Status',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home), // Home icon
+                        label: 'Home',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.account_circle), // Profile icon
+                        label: 'Profile',
+                      ),
+                    ],
+                    currentIndex: _selectedIndex,
+                    selectedItemColor: Colors.orange,
+                    unselectedItemColor: Colors.grey,
+                    onTap: onItemTapped,
+                  ),
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home), // Home icon
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.account_circle), // Profile icon
-                  label: 'Profile',
-                ),
-              ],
-              currentIndex: _selectedIndex,
-              selectedItemColor: Colors.orange,
-              unselectedItemColor: Colors.grey,
-              onTap: onItemTapped,
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

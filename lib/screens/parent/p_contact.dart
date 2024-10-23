@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart'; // Correct import
 
 class ContactScreen extends StatelessWidget {
+  // Helper method to launch a phone call
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(callUri)) {
+      await launchUrl(callUri);
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,7 +21,7 @@ class ContactScreen extends StatelessWidget {
         elevation: 0, // Transparent app bar
         title: const Text(
           'Contact',
-          style: TextStyle(color: Colors.orange, fontSize: 26, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.orange, fontSize: 30, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -33,23 +44,32 @@ class ContactScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 color: const Color(0xFFFFE08D),
-                child: const ListTile(
-                  leading: CircleAvatar(
+                child: ListTile(
+                  leading: const CircleAvatar(
                     backgroundImage: AssetImage('assets/images/admin_photo.png'), // Placeholder for admin photo
                     radius: 30,
                   ),
-                  title: Text(
+                  title: const Text(
                     'School Administrator',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Muhammad Alsheekh'),
-                      SizedBox(height: 5),
-                      Text(
-                        '+966 567 343 77 81',
-                        style: TextStyle(color: Colors.blue),
+                      const Text('Muhammad Alsheekh'),
+                      const SizedBox(height: 5),
+                      Row(
+                        children: [
+                          const Text(
+                            '+966 567 343 77 81',
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(Icons.phone, color: Colors.blue),
+                            onPressed: () => _makePhoneCall('+9665673437781'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -66,7 +86,7 @@ class ContactScreen extends StatelessWidget {
                 ),
                 color: const Color(0xFFFFE08D),
                 child: ListTile(
-                  leading:const CircleAvatar(
+                  leading: const CircleAvatar(
                     backgroundImage: AssetImage('assets/images/driver_photo.png'), // Placeholder for driver photo
                     radius: 30,
                   ),
@@ -80,7 +100,7 @@ class ContactScreen extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           const Text('Ahmad Ali'),
-                          Spacer(),
+                          const Spacer(),
                           Text(
                             'ID No. Dr123SA456',
                             style: TextStyle(color: Colors.grey[600], fontSize: 12),
@@ -95,14 +115,14 @@ class ContactScreen extends StatelessWidget {
                             style: TextStyle(color: Colors.blue),
                           ),
                           const Spacer(),
-                          Text(
-                            'Bus No. 123',
-                            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                          IconButton(
+                            icon: const Icon(Icons.phone, color: Colors.blue),
+                            onPressed: () => _makePhoneCall('+96651234561278'),
                           ),
                         ],
                       ),
                       const SizedBox(height: 5),
-                      Text(
+                       Text(
                         'Plate No. SA 1 S44',
                         style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
@@ -118,14 +138,14 @@ class ContactScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Image.asset(
-                'assets/images/call_center.png', // Replace with your illustration image
+                'assets/images/call_center.png', // Replace with your illustration
                 height: 200,
+                fit: BoxFit.contain,
               ),
             ),
           ],
         ),
       ),
-     // bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0), // Bottom navigation bar
     );
   }
 }
