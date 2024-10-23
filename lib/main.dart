@@ -4,7 +4,7 @@ import 'package:raqeeb/screens/commons/login.dart';
 //import 'package:raqeeb/screens/commons/verification.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async {
+/*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(RaqeebApp());
@@ -29,4 +29,28 @@ class RaqeebApp extends StatelessWidget {
       home: LoginPage(), // Set the LoginPage as the home page
     );
   }
+}*/
+import 'package:raqeeb/screens/parent/p_home.dart';    // Home screen
+import 'package:flutter/material.dart';
+import 'package:raqeeb/screens/parent/MainLayoutParent.dart'; // Import the MainLayout
+
+void main() {
+  runApp(MyApp());
 }
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false, // Hides the debug banner
+      title: 'Raqeeb App',
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: MainLayout(), // Set the MainLayout as the initial page
+    );
+  }
+}
+
+
