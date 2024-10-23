@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
           Stack(
             children: <Widget>[
               Image.asset(
-                'assets/images/school_background.png', // Your background image
+              'assets/images/school_background.png', // Your background image
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                   color: const Color(0xFFFFE08D),
                   child: const ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/abdulla.png'), // Child's photo
+                      backgroundImage: AssetImage('assets/images/Abdulla.png'), // Child's photo
                       radius: 30,
                     ),
                     title: Text(
