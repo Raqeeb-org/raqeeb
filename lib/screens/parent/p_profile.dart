@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:raqeeb/screens/commons/login.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -129,13 +131,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
 
             // Logout Card
+
             ProfileOptionCard(
-              title: 'Logout',
-              icon: Icons.logout,
-              onArrowClick: () {
-                // Handle logout logic
-              },
-            ),
+  title: 'Logout',
+  icon: Icons.logout,
+  onArrowClick: () {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  },
+),
+
           ],
         ),
       ),
