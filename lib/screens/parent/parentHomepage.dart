@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 //import './bottom_navigation_bar.dart';
 
-class HomeScreen extends StatelessWidget {
+class parentHomepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
           Stack(
             children: <Widget>[
               Image.asset(
-              'assets/images/school_background.png', // Your background image
+                'assets/images/header.png', // Your background image
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
@@ -34,7 +34,8 @@ class HomeScreen extends StatelessWidget {
 
           // My Children Section
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -54,7 +55,8 @@ class HomeScreen extends StatelessWidget {
                   color: const Color(0xFFFFE08D),
                   child: const ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/Abdulla.png'), // Child's photo
+                      backgroundImage: AssetImage(
+                          'assets/images/Abdulla.png'), // Child's photo
                       radius: 30,
                     ),
                     title: Text(
@@ -79,7 +81,8 @@ class HomeScreen extends StatelessWidget {
 
           // Schedules Section
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -145,7 +148,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          Spacer(),
+          const Spacer(),
         ],
       ),
       //bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0), // Home is not in the bottom nav but represented as index 0

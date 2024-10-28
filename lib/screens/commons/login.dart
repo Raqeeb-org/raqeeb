@@ -1,171 +1,178 @@
 import 'package:flutter/material.dart';
+import '/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LoginPage extends StatelessWidget {
-  final ValueNotifier<bool> _dark = ValueNotifier<bool>(true);
-  final ValueNotifier<double> _widthFactor = ValueNotifier<double>(1.0);
+class LoginPage extends StatefulWidget {
+  @override
+  LoginScreenState createState() => LoginScreenState();
+}
+
+class LoginScreenState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  String? _selectedUserType;
+
+  final List<String> userTypes = ['Drivers', 'Parent', 'Admins'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _dark.value ? Colors.black : Colors.white,
-      appBar: AppBar(
-        actions: [
-          Switch(
-            value: _dark.value,
-            onChanged: (value) {
-              _dark.value = value;
-            },
-          ),
-          DropdownButton<double>(
-            value: _widthFactor.value,
-            onChanged: (value) {
-              _widthFactor.value = value!;
-            },
-            items: const [
-              DropdownMenuItem<double>(
-                value: 0.5,
-                child: Text('Size: 50%'),
+      backgroundColor: Colors.lightBlue[100],
+      resizeToAvoidBottomInset:
+          true, // This will resize when the keyboard opens
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 50), // Adds space at the top
+
+              // Title
+              Text(
+                'Log In',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange[300],
+                ),
               ),
-              DropdownMenuItem<double>(
-                value: 0.75,
-                child: Text('Size: 75%'),
+              const SizedBox(height: 10),
+              const Text(
+                'Log in to your account and rest',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              DropdownMenuItem<double>(
-                value: 1.0,
-                child: Text('Size: 100%'),
+              const SizedBox(height: 40),
+
+              // Email TextField
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  labelText: 'Email',
+                  prefixIcon: const Icon(Icons.email),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Password TextField
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  labelText: 'Password',
+                  prefixIcon: const Icon(Icons.lock),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Dropdown for Type of User
+              DropdownButtonFormField<String>(
+                value: _selectedUserType,
+                hint: const Text('Type of user'),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedUserType = newValue;
+                  });
+                },
+                items: userTypes.map((String type) {
+                  return DropdownMenuItem<String>(
+                    value: type,
+                    child: Text(type),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  prefixIcon: const Icon(Icons.person),
+                ),
+              ),
+              const SizedBox(height: 40),
+
+              // Log In Button
+              ElevatedButton(
+                onPressed: () async {
+                  if (_selectedUserType != null) {
+                    String email = _emailController.text.trim();
+                    String password = _passwordController.text.trim();
+                    String selectedRole = _selectedUserType!;
+                    //.toLowerCase(); // Ensure the role is lowercase
+                    print('Role: $selectedRole');
+
+                    // Use AuthService to log in and verify role
+                    try {
+                      AuthService authService = AuthService();
+                      bool loginSuccess = await authService.signInAndVerifyRole(
+                          email, password, selectedRole);
+
+                      if (loginSuccess) {
+                        // Navigate to the corresponding home page based on role
+                        switch (selectedRole) {
+                          case 'Drivers':
+                            Navigator.pushReplacementNamed(
+                                context, '/driver_home');
+                            break;
+                          case 'parent':
+                            Navigator.pushReplacementNamed(
+                                context, '/parent_home');
+                            break;
+                          case 'Admins':
+                            Navigator.pushReplacementNamed(
+                                context, '/admin_home');
+                            break;
+                        }
+                      } else {
+                        // Show error if role verification fails
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                                  'Role verification failed! Please check your credentials.')),
+                        );
+                      }
+                    } catch (e) {
+                      // Handle error and show appropriate message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Login failed: $e')),
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Please select a valid user type')),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange[300],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+                ),
+                child: const Text(
+                  'Log in',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Forgot Password Text
+              TextButton(
+                onPressed: () {
+                  // Forgot password logic
+                  Navigator.pushNamed(context, '/forgot_password');
+                },
+                child: const Text('Forgot my password'),
               ),
             ],
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          // Blue background that fills the entire screen
-          Container(
-            color: const Color(0xFFCCF7FD),
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          // Scrollable content to prevent overflow
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 70), // Top padding
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * _widthFactor.value,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Log In',
-                        style: TextStyle(
-                          color: Color(0xFFFFB700),
-                          fontSize: 64,
-                          fontFamily: 'Wendy One',
-                        ),
-                      ),
-                      const Text(
-                        'Log in to your account and rest',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontFamily: 'Baloo Bhai 2',
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      buildTextField('Email'),
-                      const SizedBox(height: 15),
-                      buildTextField('Password'),
-                      const SizedBox(height: 15),
-                      buildTextField('Type of user'),
-                      const SizedBox(height: 30),
-                      buildLoginButton(),
-                      const SizedBox(height: 15),
-                      const Text(
-                        'Forgot my password',
-                        style: TextStyle(
-                          color: Color(0xFF1083EE),
-                          fontSize: 12,
-                          fontFamily: 'Aleo',
-                        ),
-                      ),
-                      const SizedBox(height: 50), // Spacing before image
-                      Image.asset(
-                        "assets/images/bus.png", // Local image
-                        fit: BoxFit.cover,
-                        height: 250,
-                        width: double.infinity,
-                      ),
-                      const SizedBox(height: 30),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildTextField(String labelText) {
-    return Container(
-      width: 323,
-      height: 43,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 2, color: Color(0xFFFFB700)),
-          borderRadius: BorderRadius.circular(100),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            labelText,
-            style: TextStyle(
-              color: Colors.black.withOpacity(0.38),
-              fontSize: 14,
-              fontFamily: 'Aleo',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildLoginButton() {
-    return Container(
-      width: 323,
-      height: 37,
-      padding: const EdgeInsets.all(8),
-      decoration: ShapeDecoration(
-        color: const Color(0xFFFFB700),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
-        ),
-        shadows: const [
-          BoxShadow(
-            color: Color(0x3F000000),
-            blurRadius: 4,
-            offset: Offset(0, 5),
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: const Center(
-        child: Text(
-          'Log in',
-          style: TextStyle(
-            color: Color(0xFF19181A),
-            fontSize: 16,
-            fontFamily: 'Aleo',
           ),
         ),
       ),
