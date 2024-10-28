@@ -1,28 +1,16 @@
 import 'package:flutter/material.dart';
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bus Schedule',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: driverHomePage(),
-    );
-  }
-}
+import 'morningTrip.dart';
+import 'driverAfrenonTrip.dart';
 
 class driverHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Column(
         children: [
           // Image section
           Image.asset(
-            'assets/images/header.png', // Make sure to update the path accordingly
+            'assets/images/header.png',
             width: double.infinity,
             height: 200,
             fit: BoxFit.cover,
@@ -48,12 +36,18 @@ class driverHomePage extends StatelessWidget {
                   day: 'Sun',
                   date: '09',
                   tripTime: 'Morning trip: Start (6:00 AM) - End (8:00 AM)',
+                  onSeeTripPressed: () {
+                    Navigator.pushNamed(context, '/morningTrip');
+                  },
                 ),
                 SizedBox(height: 16),
                 ScheduleCard(
                   day: 'Sun',
                   date: '09',
                   tripTime: 'Afternoon trip: Start (2:00 PM) - End (4:00 PM)',
+                  onSeeTripPressed: () {
+                    Navigator.pushNamed(context, '/afternoonTrip');
+                  },
                 ),
               ],
             ),
@@ -68,12 +62,14 @@ class ScheduleCard extends StatelessWidget {
   final String day;
   final String date;
   final String tripTime;
+  final VoidCallback onSeeTripPressed;
 
   const ScheduleCard({
     Key? key,
     required this.day,
     required this.date,
     required this.tripTime,
+    required this.onSeeTripPressed,
   }) : super(key: key);
 
   @override
@@ -118,9 +114,7 @@ class ScheduleCard extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {
-              // Define action for "See my trip"
-            },
+            onPressed: onSeeTripPressed,
             child: Text('See my trip'),
           ),
         ],

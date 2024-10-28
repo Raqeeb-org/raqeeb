@@ -7,6 +7,8 @@ import 'package:raqeeb/screens/commons/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:raqeeb/screens/commons/forgotPassword.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize Firebase for web
