@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
           Stack(
             children: <Widget>[
               Image.asset(
-              'assets/images/school_background.png', // Your background image
+              'assets/images/header.png', // Your background image
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
