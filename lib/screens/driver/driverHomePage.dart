@@ -1,32 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:raqeeb/screens/commons/login.dart';
 import 'morningTrip.dart';
 import 'driverAfrenonTrip.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bus Schedule',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: LoginPage(),
-      routes: {
-        '/login': (context) => LoginPage(), // Your LoginPage
-        '/schedule': (context) => ScheduleScreen(), // Schedule screen route
-        '/morningTrip': (context) => MorningTripScreen(),
-        '/afternoonTrip': (context) => AfternoonTripScreen(),
-      },
-    );
-  }
-}
-
-class ScheduleScreen extends StatelessWidget {
+class driverHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +30,8 @@ class ScheduleScreen extends StatelessWidget {
           // Schedule Cards section
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(16),
-              children: [
+              padding: const EdgeInsets.all(16),
+              children: const [
                 ScheduleCard(
                   day: 'Sun',
                   date: '09',

@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // This is where you declare dependencies for the build script
+        classpath 'com.google.gms:google-services:4.4.2' // Use latest version here
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -6,9 +17,11 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }
@@ -16,14 +29,3 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-
-buildscript {
-    dependencies {
-        // Add this line
-        classpath 'com.google.gms:google-services:4.3.15'
-
-    }
-}
-/*plugins{
-    id 'com.google.gms.google-services' version '4.4.2' apply false
-}*/

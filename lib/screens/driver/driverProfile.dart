@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(ProfileScreen());
-}
-
-class ProfileScreen extends StatelessWidget {
+class DriverProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: Text(
+          title: const Text(
             'Profile',
             style: TextStyle(
               fontSize: 24,
@@ -34,30 +30,30 @@ class ProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: ListTile(
-                  leading: CircleAvatar(
+                  leading: const CircleAvatar(
                     backgroundImage: AssetImage('assets/images/Dinah.jpg'),
                     radius: 30,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Dinah Hani ',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
-                  subtitle: Text(
+                  subtitle: const Text(
                     '+966 592366747',
                     style: TextStyle(
                       color: Colors.blue,
                     ),
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios),
+                  trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     // Handle profile tap
                   },
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Change Password Section
               Card(
@@ -66,25 +62,25 @@ class ProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.lock,
                     color: Colors.black,
                     size: 40,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Change password',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios),
+                  trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     // Handle change password tap
                   },
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Logout Section
               Card(
@@ -93,19 +89,19 @@ class ProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.logout,
                     color: Colors.black,
                     size: 40,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Logout',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios),
+                  trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     // Handle logout tap
                   },

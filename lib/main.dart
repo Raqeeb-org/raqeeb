@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:raqeeb/widgets/mainLayout.dart';
-import 'package:raqeeb/screens/driver/driverHomePage.dart';
+import 'package:raqeeb/widgets/mainLayoutAdmin.dart';
+import 'package:raqeeb/widgets/mainLayoutDriver.dart';
+import 'package:raqeeb/widgets/mainLayoutParent.dart';
 import 'package:raqeeb/screens/commons/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,12 +50,14 @@ class RaqeebApp extends StatelessWidget {
       home: LoginPage(), // Set the LoginPage as the home page
       // Adding the routes for navigation
       routes: {
-        '/admin_home': (context) =>
-            const MainLayout(), // Admin's home page route
-        '/driver_home': (context) =>
-            ScheduleScreen(), // Driver's home page route
-        '/login': (context) => LoginPage(), // Login page route
-        '/forgot_password': (context) => ForgotPasswordPage(),
+        // Admin's home page route
+        '/admin_home': (context) => const MainLayout(),
+        // Driver's home page route
+        '/driver_home': (context) => const MainLayoutDriver(),
+        // Parent's home page route
+        '/parent_home': (context) => const MainLayoutParent(),
+        // Login page route
+        '/login': (context) => LoginPage(),
       },
     );
   }
