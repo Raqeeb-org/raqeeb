@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -12,20 +8,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ScheduleScreen(),
+      home: driverHomePage(),
     );
   }
 }
 
-class ScheduleScreen extends StatelessWidget {
+class driverHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // Image section
           Image.asset(
-            'assets/images/school.png', // Make sure to update the path accordingly
+            'assets/images/header.png', // Make sure to update the path accordingly
             width: double.infinity,
             height: 200,
             fit: BoxFit.cover,
@@ -45,8 +42,8 @@ class ScheduleScreen extends StatelessWidget {
           // Schedule Cards section
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(16),
-              children: [
+              padding: const EdgeInsets.all(16),
+              children: const [
                 ScheduleCard(
                   day: 'Sun',
                   date: '09',
