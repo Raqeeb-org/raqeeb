@@ -31,7 +31,7 @@ class driverHomePage extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16),
-              children: const [
+              children: [
                 ScheduleCard(
                   day: 'Sun',
                   date: '09',
@@ -40,7 +40,7 @@ class driverHomePage extends StatelessWidget {
                     Navigator.pushNamed(context, '/morningTrip');
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ScheduleCard(
                   day: 'Sun',
                   date: '09',
