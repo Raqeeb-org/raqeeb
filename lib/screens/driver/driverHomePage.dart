@@ -10,7 +10,7 @@ class driverHomePage extends StatelessWidget {
         children: [
           // Image section
           Image.asset(
-            'assets/images/school.png', // Ensure this asset exists in the right location
+            'assets/images/header.png', // Ensure this asset exists in the right location
             width: double.infinity,
             height: 200,
             fit: BoxFit.cover,
