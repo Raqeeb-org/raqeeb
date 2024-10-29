@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:raqeeb/widgets/mainLayoutAdmin.dart';
 import 'package:raqeeb/widgets/mainLayoutDriver.dart';
 import 'package:raqeeb/widgets/mainLayoutParent.dart';
+import 'package:raqeeb/screens/commons/splashScreen.dart';
 import 'package:raqeeb/screens/commons/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,7 +48,7 @@ class RaqeebApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginPage(), // Set the LoginPage as the home page
+      home: SplashScreen(), // Set the LoginPage as the home page
       // Adding the routes for navigation
       routes: {
         // Admin's home page route
