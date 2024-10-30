@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/parent/p_contact.dart'; // Contact screen
 import 'package:raqeeb/screens/parent/status.dart'; // Status screen
 import 'package:raqeeb/screens/parent/parentHomepage.dart'; // Home screen
-import 'package:raqeeb/screens/parent/p_profile.dart'; // Profile screen
+import 'package:raqeeb/screens/parent/parentProfile.dart'; // Profile screen
 
 class MainLayoutParent extends StatefulWidget {
   final int initialIndex;
 
-  const MainLayoutParent({Key? key, this.initialIndex = 1}) : super(key: key);
+  const MainLayoutParent({Key? key, this.initialIndex = 2}) : super(key: key);
 
   @override
   MainLayoutState createState() => MainLayoutState();
@@ -19,7 +19,7 @@ class MainLayoutState extends State<MainLayoutParent> {
   static List<Widget> _pages = <Widget>[
     ContactScreen(), // Page 0 (Contact page)
     StatusScreen(), // Page 1 (Status page)
-    parentHomepage(), // Page 2 (Home page)
+    ParentHomepage(), // Page 2 (Home page)
     ProfileScreen() // Page 3 (Profile page)
   ];
 
