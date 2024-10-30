@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFCCF7FD), // Light blue background
+      backgroundColor: Color(0xFFCCF7FD),
       appBar: AppBar(
-        backgroundColor:
-            Colors.transparent, // Makes the AppBar background transparent
-        elevation: 0, // Removes shadow from the AppBar
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black), // Back arrow icon
+          icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context); // Navigates back to the previous screen
+            Navigator.pop(context);
           },
         ),
       ),
@@ -23,23 +25,20 @@ class ForgotPasswordPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Bus image
                 Image.asset(
-                  'assets/images/Bus.jpg',
+                  'assets/images/bus.png',
                   height: 250,
                 ),
                 const SizedBox(height: 20),
-                // Forgot Password Text
                 const Text(
                   'Forgot Password?',
                   style: TextStyle(
                     color: Color(0xFFFFB700),
                     fontSize: 36,
-                    fontFamily: 'Wendy One', // Use your own font
+                    fontFamily: 'Wendy One',
                   ),
                 ),
                 const SizedBox(height: 10),
-                // Email text field
                 Container(
                   width: 300,
                   height: 45,
@@ -52,6 +51,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     ),
                   ),
                   child: TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Email',
@@ -62,13 +62,29 @@ class ForgotPasswordPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-                // Next Button
                 ElevatedButton(
-                  onPressed: () {
-                    // Define action here
+                  onPressed: () async {
+                    String email = emailController.text.trim();
+                    if (email.isNotEmpty) {
+                      try {
+                        await FirebaseAuth.instance
+                            .sendPasswordResetEmail(email: email);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Password reset link sent!')),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: ${e.toString()}')),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Please enter your email')),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFFFB700), // Button color
+                    backgroundColor: Color(0xFFFFB700),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),
@@ -81,7 +97,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     'Next',
                     style: TextStyle(
                       fontSize: 18,
-                      color: Color(0xFF19181A), // Text color
+                      color: Color(0xFF19181A),
                     ),
                   ),
                 ),
