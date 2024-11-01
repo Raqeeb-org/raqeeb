@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:raqeeb/screens/commons/location_service.dart';
+import 'package:raqeeb/screens/driver/DriverMapScreen.dart';
 
 class MorningTripScreen extends StatelessWidget {
+  final LocationService _locationService = LocationService(); // Initialize LocationService
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,14 +67,22 @@ class MorningTripScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle Start Trip action
+                      onPressed: () async {
+                        List<Map<String, dynamic>> studentLocations = [
+                          {"name": "Khaled", "latitude": 24.774265, "longitude": 46.738586},
+                          {"name": "Deena", "latitude": 24.774965, "longitude": 46.739586},
+                          // Add more students as needed
+                        ];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DriverMapScreen(studentLocations: studentLocations),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors
-                            .green, // Updated from `primary` to `backgroundColor`
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        backgroundColor: Colors.green,
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
                         "Start Trip",
@@ -82,10 +94,8 @@ class MorningTripScreen extends StatelessWidget {
                         // Handle Report action
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors
-                            .red, // Updated from `primary` to `backgroundColor`
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
                         "Report",
@@ -98,7 +108,6 @@ class MorningTripScreen extends StatelessWidget {
               ],
             ),
           ),
-          // Future widget can be added here after the SizedBox space
         ],
       ),
     );
