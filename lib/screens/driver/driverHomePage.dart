@@ -37,7 +37,11 @@ class driverHomePage extends StatelessWidget {
                   date: '09',
                   tripTime: 'Morning trip: Start (6:00 AM) - End (8:00 AM)',
                   onSeeTripPressed: () {
-                    Navigator.pushNamed(context, '/morningTrip');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MorningTripScreen()),
+                    );
                   },
                 ),
                 const SizedBox(height: 16),
@@ -46,7 +50,11 @@ class driverHomePage extends StatelessWidget {
                   date: '09',
                   tripTime: 'Afternoon trip: Start (2:00 PM) - End (4:00 PM)',
                   onSeeTripPressed: () {
-                    Navigator.pushNamed(context, '/afternoonTrip');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AfternoonTripScreen()),
+                    );
                   },
                 ),
               ],
