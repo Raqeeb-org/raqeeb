@@ -25,7 +25,7 @@ class ForgotPasswordPage extends StatelessWidget {
               children: [
                 // Bus image
                 Image.asset(
-                  'assets/images/Bus.jpg',
+                  'assets/images/bus.png',
                   height: 250,
                 ),
                 const SizedBox(height: 20),
