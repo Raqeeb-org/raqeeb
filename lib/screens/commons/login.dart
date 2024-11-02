@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,7 +11,7 @@ class LoginScreenState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   String? _selectedUserType;
 
-  final List<String> userTypes = ['Drivers', 'Parent', 'Admins'];
+  final List<String> userTypes = ['Drivers', 'Parents', 'Admins'];
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +117,7 @@ class LoginScreenState extends State<LoginPage> {
                             Navigator.pushReplacementNamed(
                                 context, '/driver_home');
                             break;
-                          case 'parent':
+                          case 'Parents':
                             Navigator.pushReplacementNamed(
                                 context, '/parent_home');
                             break;
