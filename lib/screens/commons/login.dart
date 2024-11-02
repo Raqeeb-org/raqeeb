@@ -10,6 +10,8 @@ class LoginScreenState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _selectedUserType;
+  bool _isPasswordVisible =
+      false; // Add this variable for password visibility toggle
 
   final List<String> userTypes = ['Drivers', 'Parents', 'Admins'];
 
@@ -59,13 +61,25 @@ class LoginScreenState extends State<LoginPage> {
               // Password TextField
               TextField(
                 controller: _passwordController,
-                obscureText: true,
+                obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                   labelText: 'Password',
                   prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
