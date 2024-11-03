@@ -185,12 +185,12 @@ Padding(
           color: Colors.grey[300],
         ),
         child: GoogleMap(
-          initialCameraPosition: CameraPosition(
+          initialCameraPosition: const CameraPosition(
             target: LatLng(24.7136, 46.6753), // Replace with child's initial location
             zoom: 14.0,
           ),
           markers: {
-            Marker(
+            const Marker(
               markerId: MarkerId('child_location'),
               position: LatLng(24.7136, 46.6753), // Replace with child's actual location
               infoWindow: InfoWindow(
