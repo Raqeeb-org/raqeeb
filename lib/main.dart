@@ -59,6 +59,7 @@ class RaqeebApp extends StatelessWidget {
         '/parent_home': (context) => const MainLayoutParent(),
         // Login page route
         '/login': (context) => LoginPage(),
+        '/forgot_password': (context) => ForgotPasswordPage(),
       },
     );
   }

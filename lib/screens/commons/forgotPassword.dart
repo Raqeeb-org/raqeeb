@@ -1,6 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
+  final TextEditingController emailController =
+      TextEditingController(); // Add this to control the text field
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  @override
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +35,7 @@ class ForgotPasswordPage extends StatelessWidget {
               children: [
                 // Bus image
                 Image.asset(
-                  'assets/images/Bus.jpg',
+                  'assets/images/bus.png',
                   height: 250,
                 ),
                 const SizedBox(height: 20),
@@ -52,6 +62,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     ),
                   ),
                   child: TextField(
+                    controller: emailController, // Connects the controller
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Email',
@@ -64,8 +75,34 @@ class ForgotPasswordPage extends StatelessWidget {
                 const SizedBox(height: 30),
                 // Next Button
                 ElevatedButton(
-                  onPressed: () {
-                    // Define action here
+                  onPressed: () async {
+                    if (emailController.text.isNotEmpty) {
+                      try {
+                        String email = emailController.text.trim();
+                        await resetPassword(email);
+
+                        // Show the same message for registered and unregistered emails
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "A password reset link has been sent if the email is registered."),
+                          ),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text("An error occurred. Please try again."),
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Please enter your email."),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFFFB700), // Button color
