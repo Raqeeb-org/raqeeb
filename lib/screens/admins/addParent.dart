@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AddStudentScreen extends StatefulWidget {
+class AddParentScreen extends StatefulWidget {
   @override
-  _AddStudentScreenState createState() => _AddStudentScreenState();
+  _AddParentScreenState createState() => _AddParentScreenState();
 }
 
-class _AddStudentScreenState extends State<AddStudentScreen> {
+class _AddParentScreenState extends State<AddParentScreen> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> _controllers = {
     'First Name': TextEditingController(),
