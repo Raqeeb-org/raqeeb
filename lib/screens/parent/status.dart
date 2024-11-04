@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 
 class StatusScreen extends StatefulWidget {
   @override
@@ -165,30 +167,43 @@ class _StatusScreenState extends State<StatusScreen> {
             ),
 
             // Map Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Child Location',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey[300],
-                    ),
-                    child: const Center(
-                      child: Text('Map Placeholder'),
-                      // Normally, here you'd use a Google Maps or similar widget to display the child's location.
-                    ),
-                  ),
-                ],
+            // Map Section
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Child Location',
+        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
+      ),
+      const SizedBox(height: 20),
+      Container(
+        height: 200, // Adjust height as needed
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.grey[300],
+        ),
+        child: GoogleMap(
+          initialCameraPosition: const CameraPosition(
+            target: LatLng(24.7136, 46.6753), // Replace with child's initial location
+            zoom: 14.0,
+          ),
+          markers: {
+            const Marker(
+              markerId: MarkerId('child_location'),
+              position: LatLng(24.7136, 46.6753), // Replace with child's actual location
+              infoWindow: InfoWindow(
+                title: "Child's Location",
               ),
             ),
+          },
+        ),
+      ),
+    ],
+  ),
+),
+
 
             const SizedBox(height: 20), // Add extra spacing to fill screen
 
