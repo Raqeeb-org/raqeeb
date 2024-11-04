@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/commons/location_service.dart';
 import 'package:raqeeb/screens/driver/DriverMapScreen.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import url_launcher for phone functionality
 
 class MorningTripScreen extends StatelessWidget {
   final LocationService _locationService = LocationService(); // Initialize LocationService
@@ -26,6 +27,7 @@ class MorningTripScreen extends StatelessWidget {
                   eta: "6:00",
                   avatar: "assets/images/Khaled-2.png",
                   isOnBoard: false,
+                  phoneNumber: "0598765432", // Khaled's phone number
                 ),
                 studentCard(
                   name: "Deena",
@@ -33,6 +35,7 @@ class MorningTripScreen extends StatelessWidget {
                   eta: "6:30",
                   avatar: "assets/images/Deena.png",
                   isOnBoard: true,
+                  phoneNumber: "0598765433", // Deena's phone number
                 ),
                 studentCard(
                   name: "Haneen",
@@ -40,6 +43,7 @@ class MorningTripScreen extends StatelessWidget {
                   eta: "6:45",
                   avatar: "assets/images/Haneen-2.png",
                   isOnBoard: true,
+                  phoneNumber: "0598765434", // Haneen's phone number
                 ),
                 studentCard(
                   name: "Azeez",
@@ -47,6 +51,7 @@ class MorningTripScreen extends StatelessWidget {
                   eta: "7:15",
                   avatar: "assets/images/Azeez-2.png",
                   isOnBoard: false,
+                  phoneNumber: "0598765435", // Azeez's phone number
                 ),
                 studentCard(
                   name: "Abdullah",
@@ -55,6 +60,7 @@ class MorningTripScreen extends StatelessWidget {
                   avatar: "assets/images/Abdullah.png",
                   isOnBoard: true,
                   isCompleted: true, // Indicates the trip is done
+                  phoneNumber: "0598765436", // Abdullah's phone number
                 ),
               ],
             ),
@@ -82,7 +88,8 @@ class MorningTripScreen extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
                         "Start Trip",
@@ -91,11 +98,13 @@ class MorningTripScreen extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle Report action
+                        showReportDialog(
+                            context); // Call the report dialog here
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
                         "Report",
@@ -119,6 +128,7 @@ class MorningTripScreen extends StatelessWidget {
     required String eta,
     required String avatar,
     required bool isOnBoard,
+    required String phoneNumber, // Add phone number as a required parameter
     bool isCompleted = false,
   }) {
     return Card(
@@ -150,7 +160,7 @@ class MorningTripScreen extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.call, color: Colors.black),
               onPressed: () {
-                // Call button action
+                _callFamily(phoneNumber); // Call the predefined number
               },
             ),
             Icon(
@@ -160,6 +170,53 @@ class MorningTripScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  // Function to make the phone call using url_launcher
+  void _callFamily(String phoneNumber) async {
+    final Uri phoneUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber, // Using the provided phone number
+    );
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri); // Launch the phone dialer
+    } else {
+      throw 'Could not launch $phoneUri'; // Handle error if the phone launch fails
+    }
+  }
+
+  // Method to show the report dialog with school number and call functionality
+  void showReportDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("School Contact"),
+          content: Text("School number: 0599945789"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Call School"),
+              onPressed: () async {
+                final Uri phoneUri = Uri(
+                    scheme: 'tel',
+                    path: '0599945789'); // Create the URI for the phone number
+                if (await canLaunchUrl(phoneUri)) {
+                  await launchUrl(phoneUri); // Launch the phone dialer
+                } else {
+                  throw 'Could not launch $phoneUri'; // Handle error if launch fails
+                }
+              },
+            ),
+            TextButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
