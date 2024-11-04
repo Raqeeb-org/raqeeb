@@ -1,8 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Location permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:label="raqeeb"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Add Google Maps API key here -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD4rqSIaphARv6Y0XT0uEOGjVYLU7bSlzo"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,7 +38,7 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
+            android:value="AIzaSyD4rqSIaphARv6Y0XT0uEOGjVYLU7bSlzo" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

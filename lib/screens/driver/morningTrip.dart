@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:raqeeb/screens/commons/location_service.dart';
+import 'package:raqeeb/screens/driver/DriverMapScreen.dart';
 import 'package:url_launcher/url_launcher.dart'; // Import url_launcher for phone functionality
 
 class MorningTripScreen extends StatelessWidget {
+  final LocationService _locationService = LocationService(); // Initialize LocationService
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,8 +73,18 @@ class MorningTripScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle Start Trip action
+                      onPressed: () async {
+                        List<Map<String, dynamic>> studentLocations = [
+                          {"name": "Khaled", "latitude": 24.774265, "longitude": 46.738586},
+                          {"name": "Deena", "latitude": 24.774965, "longitude": 46.739586},
+                          // Add more students as needed
+                        ];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DriverMapScreen(studentLocations: studentLocations),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
