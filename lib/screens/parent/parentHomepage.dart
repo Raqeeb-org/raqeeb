@@ -1,155 +1,131 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ParentHomepage extends StatelessWidget {
+void main() {
+  runApp(MaterialApp(
+    home: ParentHomepage(),
+  ));
+}
+
+class ParentHomepage extends StatefulWidget {
+  @override
+  _ParentHomepageState createState() => _ParentHomepageState();
+}
+
+class _ParentHomepageState extends State<ParentHomepage> {
+  List<bool> _isExpanded = [false, false];
+
+  void _launchCaller(String number) async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: number);
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      throw 'Could not launch $number';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            // Header Section
-            Stack(
-              children: <Widget>[
-                Image.asset(
-                  'assets/images/header.png', // Your background image
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-                const Positioned(
-                  top: 50,
-                  left: 20,
-                  child: Text(
-                    '',
-                    style: TextStyle(
-                      color: Colors.yellowAccent,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            // My Children Section
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      body: Column(
+        children: [
+          Stack(
+            children: [
+              Image.asset(
+                'assets/images/header.png',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 200,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
+                children: [
+                  Text(
                     'MY CHILDREN',
                     style: TextStyle(
-                      color: Colors.orange,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: Colors.orange,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    color: const Color(0xFFFFE08D),
-                    child: const ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: AssetImage(
-                            'assets/images/Abdulla.png'), // Child's photo
-                        radius: 30,
-                      ),
-                      title: Text(
-                        'Abdullah',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('ID No: GAGT254H'),
-                          Text('ETA: 7:34'),
-                        ],
-                      ),
-                    ),
-                  ),
+                  SizedBox(height: 16),
+                  _buildChildCard('Abdullah', 'GAGJT236H', '0555555555',
+                      'assets/images/abdullah.png', 0),
+                  _buildChildCard('Azeez', 'GAGJT236H', '0555555555',
+                      'assets/images/Azeez-2.png', 1),
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
 
-            // Schedules Section
+  Widget _buildChildCard(String name, String id, String driverNumber,
+      String imagePath, int index) {
+    return Card(
+      color: Colors.amber, // Set the color of the card
+      child: Column(
+        children: [
+          ListTile(
+            leading: CircleAvatar(
+              backgroundImage:
+                  AssetImage(imagePath), // Use specific image for each child
+            ),
+            title: Text(name),
+            subtitle: Text('ID No. $id'),
+            trailing: Icon(
+                _isExpanded[index] ? Icons.expand_less : Icons.expand_more),
+            onTap: () {
+              setState(() {
+                _isExpanded[index] = !_isExpanded[index];
+              });
+            },
+          ),
+          if (_isExpanded[index])
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'Schedules',
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                children: [
+                  Text(
+                    'Morning trip: Start (6:15 AM)',
+                    style: TextStyle(fontSize: 16),
                   ),
-                  const SizedBox(height: 10),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    color: const Color(0xFFFFE08D),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Row(
-                        children: <Widget>[
-                          // Date
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                'Sun',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                              Text(
-                                '09',
-                                style: TextStyle(
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                            ],
+                  Text(
+                    'Afternoon trip: Start (2:05 PM)',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: () => _launchCaller(driverNumber),
+                    child: Row(
+                      children: [
+                        Icon(Icons.phone,
+                            color: const Color.fromARGB(255, 0, 0, 0)),
+                        SizedBox(width: 8),
+                        Text(
+                          'Driver: $driverNumber',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: const Color.fromARGB(255, 0, 0, 0),
+                            decoration: TextDecoration.underline,
                           ),
-                          SizedBox(width: 20),
-                          // Schedule Info
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Morning trip: Start (6:15 AM)',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                'Afternoon trip: Start (2:05 PM)',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 100),
-          ],
-        ),
+        ],
       ),
     );
   }
