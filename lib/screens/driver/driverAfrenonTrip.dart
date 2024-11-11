@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:raqeeb/screens/commons/location_service.dart';
+import 'package:raqeeb/screens/driver/DriverMapScreen.dart';
 
-class MorningTripScreen extends StatelessWidget {
+class AfternoonTripScreen extends StatelessWidget {
+  final LocationService _locationService = LocationService(); // Initialize LocationService
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +54,7 @@ class MorningTripScreen extends StatelessWidget {
                   eta: "7:34",
                   avatar: "assets/images/Abdullah.png",
                   isOnBoard: true,
-                  isCompleted: true, // Indicates the trip is done
+                  isCompleted: true,
                 ),
               ],
             ),
@@ -63,14 +67,25 @@ class MorningTripScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle Start Trip action
+                      onPressed: () async {
+                        List<Map<String, dynamic>> studentLocations = [
+                          {"name": "Basma ", "latitude": 24.774265, "longitude": 46.738586},
+                          {"name": "Deena", "latitude": 24.774965, "longitude": 46.739586},
+                          {"name": "Haneen", "latitude": 24.77494, "longitude": 46.739597},
+                          {"name": "Azeez", "latitude": 24.778965, "longitude": 46.739586},
+                          {"name": "Abdullah", "latitude": 24.664965, "longitude": 46.723586},
+                          // Add more students as needed
+                        ];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DriverMapScreen(studentLocations: studentLocations),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors
-                            .green, // Updated from `primary` to `backgroundColor`
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        backgroundColor: Colors.green,
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
                         "Start Trip",
@@ -82,10 +97,8 @@ class MorningTripScreen extends StatelessWidget {
                         // Handle Report action
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors
-                            .red, // Updated from `primary` to `backgroundColor`
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
                         "Report",
@@ -94,11 +107,10 @@ class MorningTripScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 50), // Adds space after buttons for bar
+                SizedBox(height: 50),
               ],
             ),
           ),
-          // Future widget can be added here after the SizedBox space
         ],
       ),
     );
@@ -122,7 +134,7 @@ class MorningTripScreen extends StatelessWidget {
         contentPadding: const EdgeInsets.all(16.0),
         leading: CircleAvatar(
           radius: 20,
-          backgroundImage: AssetImage(avatar), // Load the image from assets
+          backgroundImage: AssetImage(avatar),
         ),
         title: Text(
           name,
@@ -158,6 +170,6 @@ class MorningTripScreen extends StatelessWidget {
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: MorningTripScreen(),
+    home: AfternoonTripScreen(),
   ));
 }
