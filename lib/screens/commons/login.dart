@@ -145,7 +145,7 @@ class LoginScreenState extends State<LoginPage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                               content: Text(
-                                  'Role verification failed! Please check your credentials.')),
+                                  'Login failed! Please check your credentials.')),
                         );
                       }
                     } catch (e) {
@@ -157,7 +157,8 @@ class LoginScreenState extends State<LoginPage> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                          content: Text('Please select a valid user type')),
+                          content: Text(
+                              'Login failed! Please check your credentials')),
                     );
                   }
                 },

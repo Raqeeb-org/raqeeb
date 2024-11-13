@@ -7,7 +7,6 @@ import 'package:raqeeb/screens/commons/splashScreen.dart';
 import 'package:raqeeb/screens/commons/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:raqeeb/screens/commons/forgotPassword.dart';
 
 void main() async {
@@ -31,11 +30,6 @@ void main() async {
   }
   runApp(const RaqeebApp());
 }
-
-/*
-void main() {
-  runApp(RaqeebApp());
-}*/
 
 class RaqeebApp extends StatelessWidget {
   const RaqeebApp({super.key});

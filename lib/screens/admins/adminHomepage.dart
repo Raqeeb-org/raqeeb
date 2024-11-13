@@ -67,24 +67,49 @@ class AdminHomePageState extends State<AdminHomePage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  const Text(
-                    'Schedules',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 255, 199, 14),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 10), // Space between icon and text
+                      Text(
+                        username != null
+                            ? 'Hello, $username'
+                            : 'Hello, Admin', // Display the fetched username or a default value
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
                   ),
+                  const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.schedule,
+                          size: 35,
+                          color: Color.fromARGB(255, 255, 199, 14),
+                        ),
+                        SizedBox(width: 5), // Space between icon and text
+                        Text(
+                          'Schedules',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 255, 199, 14),
+                          ),
+                        ),
+                      ]),
                   const SizedBox(
                       height: 8), // Add some space between the two texts
+                  // Display the date from the system
                   Text(
-                    username != null
-                        ? 'Hello, $username'
-                        : 'Hello, Admin', // Display the fetched username or a default value
+                    'Today: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.normal,
-                      color: Colors.black,
+                      color: Colors.black54,
                     ),
                   ),
                 ],
@@ -121,7 +146,6 @@ class AdminHomePageState extends State<AdminHomePage> {
           ],
         ),
       ),
-      // Add the reusable navigation bar here
     );
   }
 }

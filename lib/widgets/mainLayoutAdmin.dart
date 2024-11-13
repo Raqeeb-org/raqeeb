@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/admins/adminHomepage.dart';
 import 'package:raqeeb/screens/admins/adminProfile.dart';
+import 'package:raqeeb/screens/parent/status.dart';
+import 'package:raqeeb/screens/admins/dashboardPage.dart';
 
 class MainLayout extends StatefulWidget {
   final int initialIndex;
 
-  const MainLayout({Key? key, this.initialIndex = 1})
+  const MainLayout({Key? key, this.initialIndex = 2})
       : super(key: key); // Default to 'Home'
   @override
   MainLayoutState createState() => MainLayoutState();
@@ -14,10 +16,11 @@ class MainLayout extends StatefulWidget {
 class MainLayoutState extends State<MainLayout> {
   late int _selectedIndex;
 
-  static const List<Widget> _pages = <Widget>[
-    AdminHomePage(), // Page 0
-    AdminHomePage(), // Page 1 (can be any other homepage if different)
-    AdminProfilePage(), // Page 2
+  static final List<Widget> _pages = <Widget>[
+    DashboardPage(), // Page 0
+    StatusScreen(), // Page 1
+    const AdminHomePage(), // Page 2 (can be any other homepage if different)
+    const AdminProfilePage(), // Page 3
   ];
 
   @override
@@ -57,6 +60,10 @@ class MainLayoutState extends State<MainLayout> {
             child: BottomNavigationBar(
               backgroundColor: Colors.white,
               items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.space_dashboard),
+                  label: 'Dashboard',
+                ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.directions_bus),
                   label: 'Track',
