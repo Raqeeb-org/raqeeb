@@ -22,6 +22,8 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
   bool _isCurrentPasswordVisible = false;
   bool _isNewPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+
+  // Expand/collapse toggle for password fields
   bool _isPasswordExpanded = false;
 
   @override
@@ -60,8 +62,8 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
               trailing: IconButton(
                 icon: Icon(
                   _isPasswordExpanded
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
+                      ? Icons.keyboard_arrow_down // Down arrow when expanded
+                      : Icons.arrow_forward_ios, // Right arrow when collapsed
                   color: Colors.black54,
                 ),
                 onPressed: () {
@@ -194,7 +196,8 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
                           _confirmPasswordController.clear();
 
                           setState(() {
-                            _isPasswordExpanded = false;
+                            _isPasswordExpanded =
+                                false; // Collapse after update
                           });
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(

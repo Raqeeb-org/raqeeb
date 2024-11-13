@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:raqeeb/services/auth_service.dart';
-import 'package:raqeeb/screens/commons/changePassword.dart';
+import 'package:raqeeb/widgets/change_password_card.dart'; // Import ChangePasswordCard
 import 'package:raqeeb/widgets/logoutCard.dart';
 
 class DriverProfilePage extends StatefulWidget {
@@ -13,13 +13,12 @@ class DriverProfilePage extends StatefulWidget {
 }
 
 class _DriverProfilePageState extends State<DriverProfilePage> {
-  bool _isExpanded = false; // Control the expansion
+  bool _isExpanded = false;
 
   // Variables to store admin data
   String name = '';
   String phoneNumber = '';
   String email = '';
-  // variables to store school data
   String schoolName = '';
   String neighborhood = '';
   String city = '';
@@ -36,42 +35,31 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
   Future<void> fetchAdminData() async {
     try {
       String userId = FirebaseAuth.instance.currentUser!.uid;
-      // Fetching the current admin from the 'Admins' subcollection
       DocumentSnapshot adminSnapshot = await FirebaseFirestore.instance
-          .collection('Users') // Main Users collection
-          .doc('2J4DFh6Gxi9vNAmip0iA') // Assuming the Admins document's ID
-          .collection('Drivers') // The Admins subcollection
-          .doc(userId) // Replace with the actual document ID of the admin
+          .collection('Users')
+          .doc('2J4DFh6Gxi9vNAmip0iA')
+          .collection('Drivers')
+          .doc(userId)
           .get();
 
-      // Fetch the school document using the schoolID reference from the admin document
-      DocumentReference schoolRef =
-          adminSnapshot['schoolID']; // schoolID is a DocumentReference
+      DocumentReference schoolRef = adminSnapshot['schoolID'];
       DocumentSnapshot schoolSnapshot = await schoolRef.get();
 
-      // Fetch the address document using the addressID reference from the school document
-      DocumentReference addressRef =
-          schoolSnapshot['addressID']; // addressID is a DocumentReference
+      DocumentReference addressRef = schoolSnapshot['addressID'];
       DocumentSnapshot addressSnapshot = await addressRef.get();
 
       if (adminSnapshot.exists &&
           schoolSnapshot.exists &&
           addressSnapshot.exists) {
         setState(() {
-          name =
-              adminSnapshot['fullName'] ?? 'N/A'; // Retrieve the 'name' field
-          phoneNumber = adminSnapshot['phoneNumber'] ??
-              'N/A'; // Retrieve the 'phoneNumber' field
-          email = adminSnapshot['email']; // Retrieve the 'email' field
-          schoolName = schoolSnapshot['schoolName'] ??
-              'N/A'; // Retrieve the 'schoolName' field
-          neighborhood = addressSnapshot['neighborhood'] ??
-              'N/A'; // Retrieve the 'neighborhood' field
-          city = addressSnapshot['city'] ?? 'N/A'; // Retrieve the 'city' field
-          country = addressSnapshot['country'] ??
-              'N/A'; // Retrieve the 'country' field
-          studentsNum = adminSnapshot['studentsNum'] ??
-              'N/A'; // Retrieve the 'studentsNum' field
+          name = adminSnapshot['fullName'] ?? 'N/A';
+          phoneNumber = adminSnapshot['phoneNumber'] ?? 'N/A';
+          email = adminSnapshot['email'];
+          schoolName = schoolSnapshot['schoolName'] ?? 'N/A';
+          neighborhood = addressSnapshot['neighborhood'] ?? 'N/A';
+          city = addressSnapshot['city'] ?? 'N/A';
+          country = addressSnapshot['country'] ?? 'N/A';
+          studentsNum = adminSnapshot['studentsNum'] ?? 'N/A';
         });
       }
     } catch (e) {
@@ -88,7 +76,6 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            // Profile Title
             const Text(
               'Profile',
               style: TextStyle(
@@ -99,7 +86,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
             ),
             const SizedBox(height: 20),
 
-            // Expandable Profile Card (Name and Image + Extra Details)
+            // Expandable Profile Card
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -108,8 +95,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(
-                      255, 252, 196, 113), // Yellow background color
+                  color: const Color.fromARGB(255, 252, 196, 113),
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
@@ -124,16 +110,12 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
                   children: [
                     Row(
                       children: [
-                        // Profile Image
                         const CircleAvatar(
-                          radius: 35, // Circular profile image
+                          radius: 35,
                           backgroundImage:
                               AssetImage('assets/images/Dinah.png'),
                         ),
-                        const SizedBox(
-                            width: 15), // Space between image and info
-
-                        // Expanded Column for Name and Phone
+                        const SizedBox(width: 15),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,8 +128,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
-                                overflow:
-                                    TextOverflow.ellipsis, // Prevents overflow
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 phoneNumber,
@@ -155,57 +136,41 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
                                   fontSize: 16,
                                   color: Colors.blue,
                                 ),
-                                overflow:
-                                    TextOverflow.ellipsis, // Prevents overflow
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
                         ),
-
-                        // Arrow Button
                         IconButton(
                           icon: AnimatedRotation(
-                            turns: _isExpanded
-                                ? 0.25
-                                : 0, // Rotate arrow when expanded
+                            turns: _isExpanded ? 0.25 : 0,
                             duration: const Duration(milliseconds: 300),
                             child: const Icon(Icons.arrow_forward_ios,
                                 color: Colors.black54),
                           ),
                           onPressed: () {
                             setState(() {
-                              _isExpanded = !_isExpanded; // Toggle expansion
+                              _isExpanded = !_isExpanded;
                             });
                           },
                         ),
                       ],
                     ),
                     if (_isExpanded) ...[
-                      const SizedBox(
-                          height: 20), // Spacing before extra details
+                      const SizedBox(height: 20),
                       _buildExtraDetail('Email', email),
                       _buildExtraDetail('School Name', schoolName),
                       _buildExtraDetail('Neighborhood', neighborhood),
                       _buildExtraDetail('City', city),
                       _buildExtraDetail('Country', country),
-                      // _buildExtraDetail('Students Num', '50 Student'),
                     ]
                   ],
                 ),
               ),
             ),
 
-            // Change Password Widget
-            ProfileOptionCard(
-              title: 'Change password',
-              icon: Icons.lock_outline,
-              onArrowClick: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChangePassword()),
-                );
-              },
-            ),
+            // Replace with ChangePasswordCard
+            const ChangePasswordCard(), // Use the ChangePasswordCard widget directly
 
             // Logout Widget
             ProfileOptionCard(
@@ -214,11 +179,8 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
               expandable: true,
               message: 'Are you sure you want to logout?',
               onArrowClick: () async {
-                // Calling the sign-out method from your AuthService
                 AuthService authService = AuthService();
                 await authService.signOut();
-
-                // Navigate to the login screen
                 Navigator.pushReplacementNamed(context, '/login');
               },
             ),
