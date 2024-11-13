@@ -1,150 +1,161 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart'; // Correct import
+import 'package:url_launcher/url_launcher.dart';
 
-class ContactScreen extends StatelessWidget {
-  // Helper method to launch a phone call
+void main() {
+  runApp(ContactPage());
+}
+
+class ContactPage extends StatefulWidget {
+  const ContactPage({Key? key}) : super(key: key);
+
+  @override
+  _ContactPageState createState() => _ContactPageState();
+}
+
+class _ContactPageState extends State<ContactPage> {
+  final Color customColor = Color(0xFFFCC471); // Define the custom color
+
+  // Function to make a call
   void _makePhoneCall(String phoneNumber) async {
-    final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
-    if (await canLaunchUrl(callUri)) {
-      await launchUrl(callUri);
-    } else {
-      throw 'Could not launch $phoneNumber';
-    }
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0, // Transparent app bar
-        title: const Text(
-          'Contact',
-          style: TextStyle(color: Colors.orange, fontSize: 30, fontWeight: FontWeight.bold),
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            'Contact',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: customColor, // Use custom color here
+            ),
+          ),
         ),
-        centerTitle: true,
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 10),
+              Text(
+                'If you need help please contact these numbers',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+              ),
+              SizedBox(height: 20),
+              ContactCard(
+                role: 'School Administrator',
+                name: 'Muhammed Alsheekh',
+                phone: '+966547778823',
+                imageUrl:
+                    'https://via.placeholder.com/100', // Replace with actual image URL
+                backgroundColor: customColor, // Set card color
+                onTap: () => _makePhoneCall('+966547778823'),
+              ),
+              SizedBox(height: 20),
+              ContactCard(
+                role: 'School Driver',
+                name: 'Ahmad Ali',
+                phone: '+96678893213',
+                imageUrl:
+                    'https://via.placeholder.com/100', // Replace with actual image URL
+                backgroundColor: customColor, // Set card color
+                onTap: () => _makePhoneCall('+96678893213'),
+              ),
+              Spacer(),
+              Image.asset(
+                'assets/helpdesk.png', // Add this image to your assets folder
+                height: 150,
+              ),
+            ],
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 10),
-            const Text(
-              'Need help? please contact these numbers',
-              style: TextStyle(fontSize: 16, color: Colors.black54),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
+    );
+  }
+}
 
-            // School Administrator Card
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                color: const Color(0xFFFFE08D),
-                child: ListTile(
-                  leading: const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/admin_photo.png'), // Placeholder for admin photo
-                    radius: 30,
-                  ),
-                  title: const Text(
-                    'School Administrator',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text('Muhammad Alsheekh'),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          const Text(
-                            '+966 567 343 77 81',
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            icon: const Icon(Icons.phone, color: Colors.blue),
-                            onPressed: () => _makePhoneCall('+9665673437781'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+class ContactCard extends StatelessWidget {
+  final String role;
+  final String name;
+  final String phone;
+  final String imageUrl;
+  final Color backgroundColor;
+  final VoidCallback onTap;
 
-            // School Driver Card
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                color: const Color(0xFFFFE08D),
-                child: ListTile(
-                  leading: const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/driver_photo.png'), // Placeholder for driver photo
-                    radius: 30,
-                  ),
-                  title: const Text(
-                    'School Driver',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          const Text('Ahmad Ali'),
-                          const Spacer(),
-                          Text(
-                            'ID No. Dr123SA456',
-                            style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: <Widget>[
-                          const Text(
-                            '+966 5123 456 12 78',
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            icon: const Icon(Icons.phone, color: Colors.blue),
-                            onPressed: () => _makePhoneCall('+96651234561278'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                       Text(
-                        'Plate No. SA 1 S44',
-                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                      ),
-                    ],
+  const ContactCard({
+    required this.role,
+    required this.name,
+    required this.phone,
+    required this.imageUrl,
+    required this.backgroundColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: backgroundColor, // Apply custom color
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(imageUrl),
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  role,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 16,
                   ),
                 ),
-              ),
+                Text(
+                  name,
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 0, 0, 0), fontSize: 14),
+                ),
+                GestureDetector(
+                  onTap: onTap,
+                  child: Text(
+                    phone,
+                    style: TextStyle(
+                      color: Colors.blue[200],
+                      fontSize: 14,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ],
             ),
-
-            const SizedBox(height: 20),
-
-            // Illustration image at the bottom
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Image.asset(
-                'assets/images/call_center.png', // Replace with your illustration
-                height: 200,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: Icon(Icons.phone, color: Colors.blue[200]),
+            onPressed: onTap,
+          ),
+        ],
       ),
     );
   }

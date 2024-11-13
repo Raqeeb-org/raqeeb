@@ -17,7 +17,7 @@ class MainLayoutState extends State<MainLayoutParent> {
   late int _selectedIndex;
 
   static List<Widget> _pages = <Widget>[
-    ContactScreen(), // Page 0 (Contact page)
+    ContactPage(), // Page 0 (Contact page)
     StatusScreen(), // Page 1 (Status page)
     ParentHomepage(), // Page 2 (Home page)
     ProfileScreen() // Page 3 (Profile page)

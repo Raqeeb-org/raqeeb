@@ -3,7 +3,7 @@ import UIKit
 import GoogleMaps // Import Google Maps
 
 @main
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
     _ application: UIApplication,
