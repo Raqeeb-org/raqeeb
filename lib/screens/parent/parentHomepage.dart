@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 
 void main() {
   runApp(MaterialApp(
@@ -14,6 +15,23 @@ class ParentHomepage extends StatefulWidget {
 
 class _ParentHomepageState extends State<ParentHomepage> {
   List<bool> _isExpanded = [false, false];
+  String _userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserName(); // Call to get the user's name
+  }
+
+  // Method to get the user's name from the email
+  void _getUserName() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && user.email != null) {
+      setState(() {
+        _userName = user.email!.split('@')[0]; // Extract name part of the email
+      });
+    }
+  }
 
   void _launchCaller(String number) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: number);
@@ -46,6 +64,15 @@ class _ParentHomepageState extends State<ParentHomepage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
+                    'Hello, $_userName',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
                     'MY CHILDREN',
                     style: TextStyle(
                       fontSize: 24,
@@ -70,13 +97,12 @@ class _ParentHomepageState extends State<ParentHomepage> {
   Widget _buildChildCard(String name, String id, String driverNumber,
       String imagePath, int index) {
     return Card(
-      color: Colors.amber, // Set the color of the card
+      color: Colors.amber,
       child: Column(
         children: [
           ListTile(
             leading: CircleAvatar(
-              backgroundImage:
-                  AssetImage(imagePath), // Use specific image for each child
+              backgroundImage: AssetImage(imagePath),
             ),
             title: Text(name),
             subtitle: Text('ID No. $id'),

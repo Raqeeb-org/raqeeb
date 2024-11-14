@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'morningTrip.dart';
 import 'driverAfrenonTrip.dart';
-import 'package:raqeeb/widgets/schedule_card_widget.dart'; // Import the widget
+import 'package:raqeeb/widgets/schedule_card_widget.dart';
 
-class driverHomePage extends StatelessWidget {
+class DriverHomePage extends StatelessWidget {
+  final String userName;
+
+  DriverHomePage({Key? key, required this.userName})
+      : super(key: key); // Accept username as parameter
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,16 +22,30 @@ class driverHomePage extends StatelessWidget {
             height: 200,
             fit: BoxFit.cover,
           ),
-          // Title section
+          // Greeting and Title section
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Schedules',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.amber[700],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hello, $userName', // Display the user's name
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber[700],
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Schedules',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber[700],
+                  ),
+                ),
+              ],
             ),
           ),
           // Schedule Cards section
