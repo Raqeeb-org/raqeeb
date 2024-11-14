@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/commons/location_service.dart';
-import 'package:raqeeb/screens/driver/DriverMapScreen.dart';
+import 'package:raqeeb/screens/driver/DriverMapScreen.dart'; 
+import 'package:url_launcher/url_launcher.dart'; // Import url_launcher for phone functionality
 
 class AfternoonTripScreen extends StatelessWidget {
   final LocationService _locationService = LocationService(); // Initialize LocationService
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,38 +24,43 @@ class AfternoonTripScreen extends StatelessWidget {
                 studentCard(
                   name: "Khaled",
                   id: "GAG17236H",
-                  eta: "6:00",
+                  eta: "2:00 PM",
                   avatar: "assets/images/Khaled-2.png",
                   isOnBoard: false,
+                  phoneNumber: "0598765432",
                 ),
                 studentCard(
                   name: "Deena",
                   id: "GAG17236H",
-                  eta: "6:30",
+                  eta: "2:30 PM",
                   avatar: "assets/images/Deena.png",
                   isOnBoard: true,
+                  phoneNumber: "0598765433",
                 ),
                 studentCard(
                   name: "Haneen",
                   id: "GAG17236H",
-                  eta: "6:45",
+                  eta: "2:45 PM",
                   avatar: "assets/images/Haneen-2.png",
                   isOnBoard: true,
+                  phoneNumber: "0598765434",
                 ),
                 studentCard(
                   name: "Azeez",
                   id: "GAG17236H",
-                  eta: "7:15",
+                  eta: "3:15 PM",
                   avatar: "assets/images/Azeez-2.png",
                   isOnBoard: false,
+                  phoneNumber: "0598765435",
                 ),
                 studentCard(
                   name: "Abdullah",
                   id: "GAG17236H",
-                  eta: "7:34",
+                  eta: "3:34 PM",
                   avatar: "assets/images/Abdullah.png",
                   isOnBoard: true,
-                  isCompleted: true,
+                  isCompleted: true, // Indicates the trip is done
+                  phoneNumber: "0598765436",
                 ),
               ],
             ),
@@ -85,7 +91,8 @@ class AfternoonTripScreen extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
                         "Start Trip",
@@ -94,11 +101,13 @@ class AfternoonTripScreen extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle Report action
+                        showReportDialog(
+                            context); // Call the report dialog here
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
                         "Report",
@@ -122,6 +131,7 @@ class AfternoonTripScreen extends StatelessWidget {
     required String eta,
     required String avatar,
     required bool isOnBoard,
+    required String phoneNumber,
     bool isCompleted = false,
   }) {
     return Card(
@@ -153,7 +163,7 @@ class AfternoonTripScreen extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.call, color: Colors.black),
               onPressed: () {
-                // Call button action
+                _callFamily(phoneNumber);
               },
             ),
             Icon(
@@ -163,6 +173,52 @@ class AfternoonTripScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _callFamily(String phoneNumber) async {
+    final Uri phoneUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber, // Using the provided phone number
+    );
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri); // Launch the phone dialer
+    } else {
+      throw 'Could not launch $phoneUri'; // Handle error if the phone launch fails
+    }
+  }
+
+  // Method to show the report dialog with school number and call functionality
+  void showReportDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("School Contact"),
+          content: Text("School number: 0599945789"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Call School"),
+              onPressed: () async {
+                final Uri phoneUri = Uri(
+                    scheme: 'tel',
+                    path: '0599945789'); // Create the URI for the phone number
+                if (await canLaunchUrl(phoneUri)) {
+                  await launchUrl(phoneUri); // Launch the phone dialer
+                } else {
+                  throw 'Could not launch $phoneUri'; // Handle error if launch fails
+                }
+              },
+            ),
+            TextButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
