@@ -1,8 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:raqeeb/screens/admins/SchoolBuses.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AdminHomePage extends StatelessWidget {
-  const AdminHomePage({super.key});
+class AdminHomePage extends StatefulWidget {
+  const AdminHomePage({Key? key}) : super(key: key);
+
+  @override
+  AdminHomePageState createState() => AdminHomePageState();
+}
+
+class AdminHomePageState extends State<AdminHomePage> {
+  // Variable to store the admin's username
+  String? username;
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch the admin username when the widget is initialized
+    fetchAdminUsername();
+  }
+
+  // Method to fetch the admin's username from Firestore
+  Future<void> fetchAdminUsername() async {
+    try {
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+      DocumentSnapshot adminSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc('2J4DFh6Gxi9vNAmip0iA') // Assuming the Admins document's ID
+          .collection('Admins') // The Admins subcollection
+          .doc(userId) // Replace with the actual document ID of the admin
+          .get();
+
+      if (adminSnapshot.exists) {
+        setState(() {
+          username = adminSnapshot['username']; // Retrieve the 'username' field
+        });
+      }
+    } catch (e) {
+      print('Error fetching admin username: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +62,57 @@ class AdminHomePage extends StatelessWidget {
               ],
             ),
 
-            // Schedules Title
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Schedules',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 255, 199, 14),
-                ),
+            // Schedules Title with the admin's username
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 10), // Space between icon and text
+                      Text(
+                        username != null
+                            ? 'Hello, $username'
+                            : 'Hello, Admin', // Display the fetched username or a default value
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.schedule,
+                          size: 35,
+                          color: Color.fromARGB(255, 255, 199, 14),
+                        ),
+                        SizedBox(width: 5), // Space between icon and text
+                        Text(
+                          'Schedules',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 255, 199, 14),
+                          ),
+                        ),
+                      ]),
+                  const SizedBox(
+                      height: 8), // Add some space between the two texts
+                  // Display the date from the system
+                  Text(
+                    'Today: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -67,7 +146,6 @@ class AdminHomePage extends StatelessWidget {
           ],
         ),
       ),
-      // Add the reusable navigation bar here
     );
   }
 }

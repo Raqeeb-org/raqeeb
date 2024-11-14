@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/parent/p_contact.dart'; // Contact screen
-import 'package:raqeeb/screens/parent/status.dart';  // Status screen
-import 'package:raqeeb/screens/parent/p_home.dart';    // Home screen
-import 'package:raqeeb/screens/parent/p_profile.dart'; // Profile screen
+import 'package:raqeeb/screens/parent/status.dart'; // Status screen
+import 'package:raqeeb/screens/parent/parentHomepage.dart'; // Home screen
+import 'package:raqeeb/screens/parent/parentProfile.dart'; // Profile screen
 
-class MainLayout extends StatefulWidget {
+class MainLayoutParent extends StatefulWidget {
   final int initialIndex;
 
-  const MainLayout({Key? key, this.initialIndex = 1}) : super(key: key);
+  const MainLayoutParent({Key? key, this.initialIndex = 2}) : super(key: key);
 
   @override
   MainLayoutState createState() => MainLayoutState();
 }
 
-class MainLayoutState extends State<MainLayout> {
+class MainLayoutState extends State<MainLayoutParent> {
   late int _selectedIndex;
 
   static List<Widget> _pages = <Widget>[
-    ContactScreen(),   // Page 0 (Contact page)
-    StatusScreen(),    // Page 1 (Status page)
-    HomeScreen(),      // Page 2 (Home page)
-    ProfileScreen()    // Page 3 (Profile page)
+    ContactPage(), // Page 0 (Contact page)
+    StatusScreen(), // Page 1 (Status page)
+    ParentHomepage(), // Page 2 (Home page)
+    ProfileScreen() // Page 3 (Profile page)
   ];
 
   @override
@@ -42,8 +42,10 @@ class MainLayoutState extends State<MainLayout> {
         children: [
           // This ensures the body content stretches fully
           Container(
-            color: const Color.fromRGBO(172, 230, 238, 100), // Light blue background color
-            child: _pages[_selectedIndex], // Display the page based on selected index
+            color: const Color.fromRGBO(
+                172, 230, 238, 100), // Light blue background color
+            child: _pages[
+                _selectedIndex], // Display the page based on selected index
           ),
           Positioned(
             bottom: 0, // Pin the navigation bar to the bottom
@@ -74,7 +76,8 @@ class MainLayoutState extends State<MainLayout> {
                         label: 'Contact',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.directions_bus), // Status icon (or bus icon)
+                        icon: Icon(
+                            Icons.directions_bus), // Status icon (or bus icon)
                         label: 'Status',
                       ),
                       BottomNavigationBarItem(

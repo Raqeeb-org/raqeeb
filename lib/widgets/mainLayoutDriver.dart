@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:raqeeb/screens/admins/adminHomepage.dart';
-import 'package:raqeeb/screens/admins/adminProfile.dart';
+import 'package:raqeeb/screens/driver/driverHomepage.dart';
+import 'package:raqeeb/screens/driver/driverProfile.dart';
 
-class MainLayout extends StatefulWidget {
+class MainLayoutDriver extends StatefulWidget {
   final int initialIndex;
 
-  const MainLayout({Key? key, this.initialIndex = 1})
+  const MainLayoutDriver({Key? key, this.initialIndex = 1})
       : super(key: key); // Default to 'Home'
   @override
   MainLayoutState createState() => MainLayoutState();
 }
 
-class MainLayoutState extends State<MainLayout> {
+class MainLayoutState extends State<MainLayoutDriver> {
   late int _selectedIndex;
 
-  static const List<Widget> _pages = <Widget>[
-    AdminHomePage(), // Page 0
-    AdminHomePage(), // Page 1 (can be any other homepage if different)
-    AdminProfilePage(), // Page 2
+  static List<Widget> _pages = <Widget>[
+    driverHomePage(), // Page 0
+    driverHomePage(), // Page 1 (can be any other homepage if different)
+    DriverProfilePage(), // Page 2
   ];
 
   @override
