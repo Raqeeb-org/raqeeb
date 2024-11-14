@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:raqeeb/screens/commons/location_service.dart';
+import 'package:raqeeb/screens/driver/DriverMapScreen.dart'; 
 import 'package:url_launcher/url_launcher.dart'; // Import url_launcher for phone functionality
 
 class AfternoonTripScreen extends StatelessWidget {
+  final LocationService _locationService = LocationService(); // Initialize LocationService
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,8 +73,21 @@ class AfternoonTripScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle Start Trip action
+                      onPressed: () async {
+                        List<Map<String, dynamic>> studentLocations = [
+                          {"name": "Basma ", "latitude": 24.774265, "longitude": 46.738586},
+                          {"name": "Deena", "latitude": 24.774965, "longitude": 46.739586},
+                          {"name": "Haneen", "latitude": 24.77494, "longitude": 46.739597},
+                          {"name": "Azeez", "latitude": 24.778965, "longitude": 46.739586},
+                          {"name": "Abdullah", "latitude": 24.664965, "longitude": 46.723586},
+                          // Add more students as needed
+                        ];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DriverMapScreen(studentLocations: studentLocations),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -99,7 +116,7 @@ class AfternoonTripScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 50), // Adds space after buttons for bar
+                SizedBox(height: 50),
               ],
             ),
           ),
@@ -127,7 +144,7 @@ class AfternoonTripScreen extends StatelessWidget {
         contentPadding: const EdgeInsets.all(16.0),
         leading: CircleAvatar(
           radius: 20,
-          backgroundImage: AssetImage(avatar), // Load the image from assets
+          backgroundImage: AssetImage(avatar),
         ),
         title: Text(
           name,
