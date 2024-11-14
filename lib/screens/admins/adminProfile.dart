@@ -44,26 +44,19 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
           .doc(userId) // Replace with the actual document ID of the admin
           .get();
 
-      // Fetch the school document using the schoolID reference from the admin document
-      DocumentReference schoolRef =
-          adminSnapshot['schoolID']; // schoolID is a DocumentReference
-      DocumentSnapshot schoolSnapshot = await schoolRef.get();
-
       // Fetch the address document using the addressID reference from the school document
       DocumentReference addressRef =
-          schoolSnapshot['addressID']; // addressID is a DocumentReference
+          adminSnapshot['addressID']; // addressID is a DocumentReference
       DocumentSnapshot addressSnapshot = await addressRef.get();
 
-      if (adminSnapshot.exists &&
-          schoolSnapshot.exists &&
-          addressSnapshot.exists) {
+      if (adminSnapshot.exists && addressSnapshot.exists) {
         setState(() {
           name =
               adminSnapshot['fullName'] ?? 'N/A'; // Retrieve the 'name' field
           phoneNumber = adminSnapshot['phoneNumber'] ??
               'N/A'; // Retrieve the 'phoneNumber' field
           email = adminSnapshot['email']; // Retrieve the 'email' field
-          schoolName = schoolSnapshot['schoolName'] ??
+          schoolName = adminSnapshot['schoolName'] ??
               'N/A'; // Retrieve the 'schoolName' field
           neighborhood = addressSnapshot['neighborhood'] ??
               'N/A'; // Retrieve the 'neighborhood' field
