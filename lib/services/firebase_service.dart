@@ -28,7 +28,7 @@ class FirebaseService {
   Stream<QuerySnapshot> getChildrenForBus(String busId) {
     return _firestore
         .collection('Children')
-        .where('bus', isEqualTo: busId)
+        .where('bus', isEqualTo: _firestore.collection('Buses').doc(busId))
         .snapshots();
   }
 }
