@@ -124,8 +124,7 @@ class AdminHomePageState extends State<AdminHomePage> {
               onArrowClick: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const SchoolBusesScreen()),
+                  MaterialPageRoute(builder: (context) => SchoolBusesScreen()),
                 );
               },
             ),
@@ -138,8 +137,7 @@ class AdminHomePageState extends State<AdminHomePage> {
               onArrowClick: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const SchoolBusesScreen()),
+                  MaterialPageRoute(builder: (context) => SchoolBusesScreen()),
                 );
               },
             ),
