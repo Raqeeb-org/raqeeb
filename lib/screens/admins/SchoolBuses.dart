@@ -1,15 +1,18 @@
+// school_buses_screen.dart
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:raqeeb/widgets/busCard.dart';
 import 'package:raqeeb/screens/admins/morningBusChildren.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:raqeeb/services/firebase_service.dart';
 
 class SchoolBusesScreen extends StatelessWidget {
-  const SchoolBusesScreen({super.key});
+  final FirebaseService firebaseService = FirebaseService();
+
+  SchoolBusesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final String? adminId = FirebaseAuth.instance.currentUser?.uid;
+    final String? adminId = firebaseService.getCurrentAdminId();
 
     if (adminId == null) {
       return const Scaffold(
@@ -32,11 +35,8 @@ class SchoolBusesScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('Buses')
-            .where('adminID', isEqualTo: adminId)
-            .snapshots(),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: firebaseService.getBusesForAdmin(adminId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -55,12 +55,12 @@ class SchoolBusesScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: buses.length,
             itemBuilder: (context, index) {
-              final bus = buses[index].data();
-              final String busId = buses[index].id; // Get the bus document ID
+              final bus = buses[index].data() as Map<String, dynamic>;
+              final String busID = buses[index].id;
               final DocumentReference driverRef = bus['driverID'];
 
               return FutureBuilder<DocumentSnapshot>(
-                future: driverRef.get(),
+                future: firebaseService.getDriverData(driverRef),
                 builder: (context, driverSnapshot) {
                   if (driverSnapshot.connectionState ==
                       ConnectionState.waiting) {
@@ -85,8 +85,7 @@ class SchoolBusesScreen extends StatelessWidget {
                     busNumber: bus['busNum'] ?? 'Unknown',
                     driverName: driverName,
                     numberOfStudents: bus['numberOfStudents'] ?? 0,
-                    destinationPage:
-                        MorningBusChildren(busId: busId), // Pass busID here
+                    destinationPage: MorningBusChildren(busId: busID),
                   );
                 },
               );
