@@ -21,7 +21,7 @@ class BusCard extends StatelessWidget {
       child: Container(
         height: 100,
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 252, 196, 113),
+          color: const Color.fromARGB(255, 252, 196, 113),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -35,7 +35,7 @@ class BusCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Bus',
                       style: TextStyle(
                         fontSize: 22,
@@ -45,7 +45,7 @@ class BusCard extends StatelessWidget {
                     ),
                     Text(
                       busNumber,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 30,
                         color: Color.fromARGB(255, 201, 129, 36),
                         fontWeight: FontWeight.bold,
@@ -73,7 +73,7 @@ class BusCard extends StatelessWidget {
                   children: [
                     Text(
                       'Driver: $driverName',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         color: Color.fromARGB(255, 0, 0, 0),
                         fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@ class BusCard extends StatelessWidget {
                     ),
                     Text(
                       'Number of Students: $numberOfStudents',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         color: Color.fromARGB(230, 0, 0, 0),
                         fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class BusCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_forward_ios,
                   color: Colors.black54,
                 ),
