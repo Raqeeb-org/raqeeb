@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:raqeeb/utils/phone_utils.dart';
 
 class ChildCard extends StatelessWidget {
   final String name;
   final String id;
   final String imageUrl;
   final bool isCheckedIn;
-  final bool isCallEnabled;
+  final String parentPhoneNumber;
 
   const ChildCard({
     Key? key,
@@ -13,7 +14,7 @@ class ChildCard extends StatelessWidget {
     required this.id,
     required this.imageUrl,
     required this.isCheckedIn,
-    required this.isCallEnabled,
+    required this.parentPhoneNumber,
   }) : super(key: key);
 
   @override
@@ -66,11 +67,11 @@ class ChildCard extends StatelessWidget {
                 ),
               ),
               // Trailing Icons
-              if (isCallEnabled)
+              if (parentPhoneNumber.isNotEmpty)
                 IconButton(
                   icon: const Icon(Icons.call, color: Colors.white),
                   onPressed: () {
-                    // Action when call button is pressed
+                    makePhoneCall(parentPhoneNumber);
                   },
                 ),
               Icon(
