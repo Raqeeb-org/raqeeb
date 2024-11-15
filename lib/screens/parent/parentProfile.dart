@@ -136,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
 
             // Change Password Card
-            const ChangePasswordCard(), // Use the new ChangePasswordCard widget
+            const ChangePasswordCard(),
             const SizedBox(height: 20),
 
             // Logout Card
