@@ -1,11 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:raqeeb/widgets/childCard.dart';
+import 'package:raqeeb/services/firebase_service.dart';
 
 class MorningBusChildren extends StatelessWidget {
   final String busId;
+  final FirebaseService firebaseService = FirebaseService();
 
-  const MorningBusChildren({Key? key, required this.busId}) : super(key: key);
+  MorningBusChildren({Key? key, required this.busId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +25,8 @@ class MorningBusChildren extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        body: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('Children')
-                .where('bus',
-                    isEqualTo: FirebaseFirestore.instance
-                        .collection('Buses')
-                        .doc(busId))
-                .snapshots(),
+        body: StreamBuilder<QuerySnapshot>(
+            stream: firebaseService.getChildrenForBus(busId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -46,12 +42,11 @@ class MorningBusChildren extends StatelessWidget {
               }
 
               final children = snapshot.data!.docs;
-              print("Retrieved children count: ${children.length}");
 
               return ListView.builder(
                 itemCount: children.length,
                 itemBuilder: (context, index) {
-                  final child = children[index].data();
+                  final child = children[index].data() as Map<String, dynamic>;
 
                   return ChildCard(
                     name: child['firstName'] + " " + child['lastName'] ??
