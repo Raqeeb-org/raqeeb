@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:raqeeb/services/auth_service.dart';
-import 'package:raqeeb/screens/commons/changePassword.dart';
 import 'package:raqeeb/widgets/logoutCard.dart';
+import 'package:raqeeb/screens/admins/addDriver.dart';
+import 'package:raqeeb/widgets/change_password_card.dart';
 
 class AdminProfilePage extends StatefulWidget {
   const AdminProfilePage({super.key});
@@ -188,16 +189,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
             ),
 
             // Change Password Widget
-            ProfileOptionCard(
-              title: 'Change password',
-              icon: Icons.lock_outline,
-              onArrowClick: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChangePassword()),
-                );
-              },
-            ),
+            const ChangePasswordCard(),
 
             // Add/Delete Student Widget
             ProfileOptionCard(
@@ -213,7 +205,10 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
               title: 'Add/Delete Driver',
               icon: Icons.directions_bus_filled,
               onArrowClick: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const SomeOtherPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddDriverScreen()));
               },
             ),
 
