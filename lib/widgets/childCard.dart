@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ChildCard extends StatelessWidget {
   final String name;
   final String id;
-  final String eta;
+  // final String eta;
   final String imageUrl;
   final bool isCheckedIn;
   final bool isCallEnabled;
@@ -12,7 +12,7 @@ class ChildCard extends StatelessWidget {
     Key? key,
     required this.name,
     required this.id,
-    required this.eta,
+    // required this.eta,
     required this.imageUrl,
     required this.isCheckedIn,
     required this.isCallEnabled,
@@ -52,7 +52,7 @@ class ChildCard extends StatelessWidget {
                 ),
               ),
               Text(
-                'ETA: $eta',
+                'Status: ${isCheckedIn ? 'Checked In' : 'Not Checked In'}',
                 style: const TextStyle(
                   color: Colors.white70,
                 ),
