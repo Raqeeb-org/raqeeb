@@ -57,7 +57,7 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
               leading: Icon(Icons.lock_outline, color: Colors.orange),
               title: const Text(
                 'Change Password',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               trailing: IconButton(
                 icon: Icon(
