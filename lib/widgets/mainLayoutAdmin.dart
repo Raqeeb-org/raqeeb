@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/admins/adminHomepage.dart';
 import 'package:raqeeb/screens/admins/adminProfile.dart';
-import 'package:raqeeb/screens/parent/status.dart';
+import 'package:raqeeb/screens/admins/trackBuses.dart';
 import 'package:raqeeb/screens/admins/dashboardPage.dart';
 
 class MainLayout extends StatefulWidget {
@@ -18,8 +18,8 @@ class MainLayoutState extends State<MainLayout> {
 
   static final List<Widget> _pages = <Widget>[
     DashboardPage(), // Page 0
-    StatusScreen(), // Page 1
-    const AdminHomePage(), // Page 2 (can be any other homepage if different)
+    TrackBusesScreen(), // Page 1
+    const AdminHomePage(), // Page 2
     const AdminProfilePage(), // Page 3
   ];
 
