@@ -103,6 +103,7 @@ class SchoolBusesScreen extends StatelessWidget {
                         busNumber: bus['busNum'] ?? 'Unknown',
                         driverName: driverName,
                         numberOfStudents: numberOfStudents,
+                        driverPhoneNumber: driverData['phoneNum'] ?? 'N/A',
                         destinationPage: MorningBusChildren(busId: busID),
                       );
                     },
