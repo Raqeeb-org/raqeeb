@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:raqeeb/utils/phone_utils.dart';
 
 class BusCard extends StatelessWidget {
   final String busNumber;
   final String driverName;
   final int numberOfStudents;
+  final String driverPhoneNumber;
   final Widget destinationPage; // Add destination page for navigation
 
   const BusCard({
@@ -11,6 +13,7 @@ class BusCard extends StatelessWidget {
     required this.busNumber,
     required this.driverName,
     required this.numberOfStudents,
+    required this.driverPhoneNumber,
     required this.destinationPage, // Required to pass destination page
   }) : super(key: key);
 
@@ -90,6 +93,14 @@ class BusCard extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            // Phone Icon
+            IconButton(
+              icon: const Icon(
+                Icons.phone,
+                color: Colors.green,
+              ),
+              onPressed: () => makePhoneCall(driverPhoneNumber),
             ),
             // Arrow Icon
             Padding(
