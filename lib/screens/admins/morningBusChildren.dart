@@ -11,19 +11,21 @@ class MorningBusChildren extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Debug: Fetching children for busId: $busId"); // Debugging output
+    print("Debug: Fetching children for busId: $busId");
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 189, 236, 242),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Assigned Children',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 25,
-              color: Color.fromARGB(255, 247, 164, 0),
-              fontWeight: FontWeight.bold,
-            )),
+        title: const Text(
+          'Assigned Children',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 25,
+            color: Color.fromARGB(255, 247, 164, 0),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -52,19 +54,66 @@ class MorningBusChildren extends StatelessWidget {
             itemCount: children.length,
             itemBuilder: (context, index) {
               final child = children[index].data() as Map<String, dynamic>;
-              final String gender = child['gender'] ?? 'Unknown';
-              print("Debug: Child data, Gender: $gender, Bus: ${child['bus']}");
+              final DocumentReference parentRef = child['parentID1'];
+              print("Debug: Parent ID for child: ${parentRef.id}");
 
-              return ChildCard(
-                name:
-                    (child['firstName'] + " " + child['lastName']) ?? 'Unknown',
-                id: child['idNum'] ?? 'N/A',
-                // chech the child gender and set the image accordingly
-                imageUrl: child['gender'] == "Female"
-                    ? "assets/images/femaleChild.png"
-                    : "assets/images/maleChild.png",
-                isCheckedIn: child['isCheckedIn'] ?? false,
-                isCallEnabled: true,
+              return FutureBuilder<DocumentSnapshot>(
+                future: firebaseService.getParentData(parentRef),
+                builder: (context, parentSnapshot) {
+                  if (parentSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const SizedBox(
+                        height: 50,
+                        child: Center(child: CircularProgressIndicator()));
+                  }
+
+                  if (parentSnapshot.hasError) {
+                    print(
+                        "Debug: Error fetching parent - ${parentSnapshot.error}");
+                    return ChildCard(
+                      name: (child['firstName'] + " " + child['lastName']) ??
+                          'Unknown',
+                      id: child['idNum'] ?? 'N/A',
+                      imageUrl: child['gender'] == "Female"
+                          ? "assets/images/femaleChild.png"
+                          : "assets/images/maleChild.png",
+                      isCheckedIn: child['isCheckedIn'] ?? false,
+                      parentPhoneNumber: 'N/A', // Fallback value
+                    );
+                  }
+
+                  if (!parentSnapshot.hasData || !parentSnapshot.data!.exists) {
+                    print(
+                        "Debug: Parent document not found for parentId: ${parentRef.id}");
+                    return ChildCard(
+                      name: (child['firstName'] + " " + child['lastName']) ??
+                          'Unknown',
+                      id: child['idNum'] ?? 'N/A',
+                      imageUrl: child['gender'] == "Female"
+                          ? "assets/images/femaleChild.png"
+                          : "assets/images/maleChild.png",
+                      isCheckedIn: child['isCheckedIn'] ?? false,
+                      parentPhoneNumber: 'N/A', // Fallback value
+                    );
+                  }
+
+                  final parentData =
+                      parentSnapshot.data!.data() as Map<String, dynamic>;
+                  final String parentPhoneNumber =
+                      parentData['phoneNumber'] ?? 'N/A';
+                  print("Debug: Parent phone number: $parentPhoneNumber");
+
+                  return ChildCard(
+                    name: (child['firstName'] + " " + child['lastName']) ??
+                        'Unknown',
+                    id: child['idNum'] ?? 'N/A',
+                    imageUrl: child['gender'] == "Female"
+                        ? "assets/images/femaleChild.png"
+                        : "assets/images/maleChild.png",
+                    isCheckedIn: child['isCheckedIn'] ?? false,
+                    parentPhoneNumber: parentPhoneNumber,
+                  );
+                },
               );
             },
           );
