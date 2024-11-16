@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // ProfileOptionCard Widget for other profile options
-class LogoutCard extends StatefulWidget {
+class ProfileOptionCard extends StatefulWidget {
   final String title;
   final IconData icon;
   final VoidCallback onArrowClick;
@@ -9,7 +9,7 @@ class LogoutCard extends StatefulWidget {
   // final Widget? expandedContent;
   final String? message; // Optional message for the expanded state
 
-  const LogoutCard({
+  const ProfileOptionCard({
     required this.title,
     required this.icon,
     required this.onArrowClick,
@@ -19,10 +19,10 @@ class LogoutCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _LogoutCardState createState() => _LogoutCardState();
+  _ProfileOptionCardState createState() => _ProfileOptionCardState();
 }
 
-class _LogoutCardState extends State<LogoutCard> {
+class _ProfileOptionCardState extends State<ProfileOptionCard> {
   bool _isExpanded = false;
 
   @override
@@ -77,45 +77,11 @@ class _LogoutCardState extends State<LogoutCard> {
                         color: Colors.black54,
                       ),
                     ),
-                    onPressed: () {
-                      if (widget.expandable) {
-                        setState(() {
-                          _isExpanded = !_isExpanded;
-                        });
-                      }
-                    },
+                    onPressed: widget.onArrowClick,
                   ),
                 ],
               ),
             ),
-            if (_isExpanded && widget.expandable) ...[
-              const SizedBox(height: 10),
-              if (widget.message != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    widget.message!,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: widget.onArrowClick,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                ),
-                child: const Text(
-                  'Confirm',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 10),
-            ]
           ],
         ),
       ),

@@ -173,7 +173,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
             const ChangePasswordCard(), // Use the ChangePasswordCard widget directly
 
             // Logout Widget
-            ProfileOptionCard(
+            LogoutCard(
               title: 'Logout',
               icon: Icons.logout,
               expandable: true,
