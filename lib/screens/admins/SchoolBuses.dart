@@ -81,11 +81,31 @@ class SchoolBusesScreen extends StatelessWidget {
                   final String driverName =
                       driverData['fullName'] ?? 'Unknown Driver';
 
-                  return BusCard(
-                    busNumber: bus['busNum'] ?? 'Unknown',
-                    driverName: driverName,
-                    numberOfStudents: bus['numberOfStudents'] ?? 0,
-                    destinationPage: MorningBusChildren(busId: busID),
+                  // Another futureBuilder to get the number of students
+                  return FutureBuilder<int>(
+                    future: firebaseService.getStudentCountForBus(busID),
+                    builder: (context, studentCountSnapshot) {
+                      if (studentCountSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (studentCountSnapshot.hasError) {
+                        return Center(
+                            child:
+                                Text("Error: ${studentCountSnapshot.error}"));
+                      }
+
+                      final int numberOfStudents =
+                          studentCountSnapshot.data ?? 0;
+
+                      return BusCard(
+                        busNumber: bus['busNum'] ?? 'Unknown',
+                        driverName: driverName,
+                        numberOfStudents: numberOfStudents,
+                        destinationPage: MorningBusChildren(busId: busID),
+                      );
+                    },
                   );
                 },
               );
