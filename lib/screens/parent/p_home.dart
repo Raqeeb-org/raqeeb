@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                   color: const Color(0xFFFFE08D),
                   child: const ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/Abdulla.png'), // Child's photo
+                      backgroundImage: AssetImage('assets/images/Abdullah.png'), // Child's photo
                       radius: 30,
                     ),
                     title: Text(

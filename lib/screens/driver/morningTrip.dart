@@ -1,9 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/commons/location_service.dart';
 import 'package:raqeeb/screens/driver/DriverMapScreen.dart';
+import 'package:raqeeb/screens/commons/face_recognition_service.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class MorningTripScreen extends StatelessWidget {
-  final LocationService _locationService = LocationService(); // Initialize LocationService
+class FaceRecognitionService {
+  final String esp32Url;
+  final String flaskUrl;
+
+  FaceRecognitionService({required this.esp32Url, required this.flaskUrl});
+
+  Future<String?> checkFaceRecognition() async {
+    try {
+      // Step 1: Capture image from ESP32-CAM
+      final esp32Response = await http.get(Uri.parse("$esp32Url/capture"));
+      if (esp32Response.statusCode != 200) {
+        throw Exception("Failed to capture image from ESP32-CAM");
+      }
+
+      // Step 2: Send the captured image to Flask server
+      var request = http.MultipartRequest('POST', Uri.parse("$flaskUrl/recognize"));
+      request.files.add(http.MultipartFile.fromBytes('image', esp32Response.bodyBytes, filename: 'image.jpg'));
+
+      var response = await request.send();
+      var responseData = await response.stream.bytesToString();
+      var result = json.decode(responseData);
+
+      // Step 3: Handle the recognition result
+      if (result['status'] == 'success' && result['recognized']) {
+        return result['person']; // Recognized person's name
+      } else {
+        return null; // No face recognized
+      }
+    } catch (e) {
+      print("Error in face recognition process: $e");
+      return null;
+    }
+  }
+}
+
+class MorningTripScreen extends StatefulWidget {
+  @override
+  _MorningTripScreenState createState() => _MorningTripScreenState();
+}
+
+class _MorningTripScreenState extends State<MorningTripScreen> {
+  final FaceRecognitionService _faceRecognitionService = FaceRecognitionService(
+    esp32Url: "http://192.168.100.143",  // ESP32-CAM IP
+    flaskUrl: "http://127.0.0.1:5000",  // Flask server URL
+  );
+
+  Map<String, bool> isStudentOnBoard = {
+    "Khaled": false,
+    "Deena": true,
+    "Basma_Alhajji": false,
+    "Azeez": false,
+    "Abdullah": true,
+  };
+
+  Future<void> startRecognition() async {
+    final recognizedPerson = await _faceRecognitionService.checkFaceRecognition();
+
+    if (recognizedPerson != null && isStudentOnBoard.containsKey(recognizedPerson)) {
+      setState(() {
+        isStudentOnBoard[recognizedPerson] = true;  // Update on-board status
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,42 +84,13 @@ class MorningTripScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(8.0),
               children: [
-                studentCard(
-                  name: "Khaled",
+                ...isStudentOnBoard.keys.map((name) => studentCard(
+                  name: name,
                   id: "GAG17236H",
-                  eta: "6:00",
-                  avatar: "assets/images/Khaled-2.png",
-                  isOnBoard: false,
-                ),
-                studentCard(
-                  name: "Deena",
-                  id: "GAG17236H",
-                  eta: "6:30",
-                  avatar: "assets/images/Deena.png",
-                  isOnBoard: true,
-                ),
-                studentCard(
-                  name: "Haneen",
-                  id: "GAG17236H",
-                  eta: "6:45",
-                  avatar: "assets/images/Haneen-2.png",
-                  isOnBoard: true,
-                ),
-                studentCard(
-                  name: "Azeez",
-                  id: "GAG17236H",
-                  eta: "7:15",
-                  avatar: "assets/images/Azeez-2.png",
-                  isOnBoard: false,
-                ),
-                studentCard(
-                  name: "Abdullah",
-                  id: "GAG17236H",
-                  eta: "7:34",
-                  avatar: "assets/images/Abdullah.png",
-                  isOnBoard: true,
-                  isCompleted: true, // Indicates the trip is done
-                ),
+                  eta: "6:00", // Set appropriate ETA
+                  avatar: "assets/images/$name.png",  // Use a filename pattern that matches your assets
+                  isOnBoard: isStudentOnBoard[name] ?? false,
+                )).toList(),
               ],
             ),
           ),
@@ -67,19 +102,7 @@ class MorningTripScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () async {
-                        List<Map<String, dynamic>> studentLocations = [
-                          {"name": "Khaled", "latitude": 24.774265, "longitude": 46.738586},
-                          {"name": "Deena", "latitude": 24.774965, "longitude": 46.739586},
-                          // Add more students as needed
-                        ];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DriverMapScreen(studentLocations: studentLocations),
-                          ),
-                        );
-                      },
+                      onPressed: startRecognition,  // Start the face recognition process
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),

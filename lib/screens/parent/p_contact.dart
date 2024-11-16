@@ -46,7 +46,7 @@ class ContactScreen extends StatelessWidget {
                 color: const Color(0xFFFFE08D),
                 child: ListTile(
                   leading: const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/admin_photo.png'), // Placeholder for admin photo
+                    backgroundImage: AssetImage('assets/images/admin1.png'), // Placeholder for admin photo
                     radius: 30,
                   ),
                   title: const Text(
@@ -87,7 +87,7 @@ class ContactScreen extends StatelessWidget {
                 color: const Color(0xFFFFE08D),
                 child: ListTile(
                   leading: const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/driver_photo.png'), // Placeholder for driver photo
+                    backgroundImage: AssetImage('assets/images/driver.png'), // Placeholder for driver photo
                     radius: 30,
                   ),
                   title: const Text(

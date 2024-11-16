@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TrackBusesScreen(), // Set the MainLayout as the initial page
+      home: MainLayout(), // Set the MainLayout as the initial page
     );
   }
 }

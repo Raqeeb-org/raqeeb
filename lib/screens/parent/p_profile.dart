@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/commons/login.dart';
 
-
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
+
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _isExpanded = false; // Control the expansion for the profile card
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        
         child: Column(
-          
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 60),
@@ -57,23 +54,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Row(
                       children: [
-                        // Profile Image
                         const CircleAvatar(
-                          radius: 35, // Circular profile image
-                          backgroundColor: Colors.orange,
-                          child: Icon(
-                            Icons.person,
-                            size: 30,
-                            color: Colors.white,
-                          ),
+                          backgroundImage: AssetImage('assets/images/profile_icon.png'),
+                          radius: 30,
                         ),
-                        const SizedBox(width: 15), // Space between image and info
-
+                        const SizedBox(width: 15),
                         // Expanded Column for Name and Phone
                         const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            children: const [
                               Text(
                                 'Muna Khalaf',
                                 style: TextStyle(
@@ -81,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
-                                overflow: TextOverflow.ellipsis, // Prevents overflow
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 '+966 567 343 77 81',
@@ -89,13 +79,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   fontSize: 16,
                                   color: Colors.blue,
                                 ),
-                                overflow: TextOverflow.ellipsis, // Prevents overflow
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
                         ),
-
-                        // Arrow Button
                         IconButton(
                           icon: AnimatedRotation(
                             turns: _isExpanded ? 0.25 : 0, // Rotate arrow when expanded
@@ -111,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     if (_isExpanded) ...[
-                      const SizedBox(height: 20), // Spacing before extra details
+                      const SizedBox(height: 20),
                       _buildExtraDetail('Email', 'muna@example.com'),
                       _buildExtraDetail('Location', 'Riyadh, Saudi Arabia'),
                     ]
@@ -126,22 +114,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: 'Change Password',
               icon: Icons.lock_outline,
               onArrowClick: () {
+                // Add change password functionality here
               },
             ),
             const SizedBox(height: 20),
 
             // Logout Card
-
             ProfileOptionCard(
-  title: 'Logout',
-  icon: Icons.logout,
-  onArrowClick: () {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-  },
-),
-
+              title: 'Logout',
+              icon: Icons.logout,
+              onArrowClick: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -221,7 +208,7 @@ class ProfileOptionCard extends StatelessWidget {
                     size: 40,
                     color: const Color(0xFFC98124),
                   ),
-                  const SizedBox(width: 15), // Space between icon and title
+                  const SizedBox(width: 15),
                   Text(
                     title,
                     style: const TextStyle(
