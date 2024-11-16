@@ -32,6 +32,15 @@ class FirebaseService {
         .snapshots();
   }
 
+  // Method to count the number of students assigned to a bus
+  Future<int> getStudentCountForBus(String busId) async {
+    final QuerySnapshot childrenSnapshot = await _firestore
+        .collection('Children')
+        .where('bus', isEqualTo: _firestore.collection('Buses').doc(busId))
+        .get();
+    return childrenSnapshot.docs.length;
+  }
+
 // Not used yet
   Future<DocumentSnapshot> getParentDocument(String parentId) async {
     return await FirebaseFirestore.instance
