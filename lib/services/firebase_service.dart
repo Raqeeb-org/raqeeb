@@ -31,4 +31,24 @@ class FirebaseService {
         .where('bus', isEqualTo: _firestore.collection('Buses').doc(busId))
         .snapshots();
   }
+
+// Not used yet
+  Future<DocumentSnapshot> getParentDocument(String parentId) async {
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(parentId)
+        .get();
+  }
+
+  Future<DocumentSnapshot> getParentData(DocumentReference parentRef) async {
+    return await parentRef.get();
+  }
+
+  // Method to update the child's check-in status (NOT USED YET)
+  Future<void> updateChildCheckInStatus(
+      String childId, bool isCheckedIn) async {
+    await _firestore.collection('Children').doc(childId).update({
+      'isCheckedIn': isCheckedIn,
+    });
+  }
 }
