@@ -140,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
 
             // Logout Card
-            ProfileOptionCard(
+            LogoutCard(
               title: 'Logout',
               icon: Icons.logout,
               expandable: true,

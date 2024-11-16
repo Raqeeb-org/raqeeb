@@ -5,6 +5,7 @@ import 'package:raqeeb/services/auth_service.dart';
 import 'package:raqeeb/widgets/logoutCard.dart';
 import 'package:raqeeb/screens/admins/addDriver.dart';
 import 'package:raqeeb/widgets/change_password_card.dart';
+import 'package:raqeeb/widgets/profileOptionCard.dart';
 
 class AdminProfilePage extends StatefulWidget {
   const AdminProfilePage({super.key});
@@ -213,7 +214,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
             ),
 
             // Logout Widget
-            ProfileOptionCard(
+            LogoutCard(
               title: 'Logout',
               icon: Icons.logout,
               expandable: true,

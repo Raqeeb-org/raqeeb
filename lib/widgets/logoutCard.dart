@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // ProfileOptionCard Widget for other profile options
-class ProfileOptionCard extends StatefulWidget {
+class LogoutCard extends StatefulWidget {
   final String title;
   final IconData icon;
   final VoidCallback onArrowClick;
@@ -9,7 +9,7 @@ class ProfileOptionCard extends StatefulWidget {
   // final Widget? expandedContent;
   final String? message; // Optional message for the expanded state
 
-  const ProfileOptionCard({
+  const LogoutCard({
     required this.title,
     required this.icon,
     required this.onArrowClick,
@@ -19,10 +19,10 @@ class ProfileOptionCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ProfileOptionCardState createState() => _ProfileOptionCardState();
+  _LogoutCardState createState() => _LogoutCardState();
 }
 
-class _ProfileOptionCardState extends State<ProfileOptionCard> {
+class _LogoutCardState extends State<LogoutCard> {
   bool _isExpanded = false;
 
   @override
