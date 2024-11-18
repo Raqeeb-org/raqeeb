@@ -5,7 +5,7 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Raqeeb Dashboard'),
+        title: const Text('Raqeeb Dashboard'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -16,7 +16,7 @@ class DashboardPage extends StatelessWidget {
               // Overview Section
               Text('Overview',
                   style: Theme.of(context).textTheme.headlineSmall),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -26,20 +26,20 @@ class DashboardPage extends StatelessWidget {
                   _buildInfoCard('Today\'s Trips', '6'),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Student Attendance Summary
               Text('Student Attendance Summary',
                   style: Theme.of(context).textTheme.headlineSmall),
-              SizedBox(height: 10),
-              ListTile(
+              const SizedBox(height: 10),
+              const ListTile(
                 leading: Icon(Icons.access_time, color: Colors.blue),
                 title: Text('Daily Attendance Log'),
                 subtitle: Text(
                     'Summary of student boardings and exits with timestamps.'),
               ),
-              SizedBox(height: 10),
-              ListTile(
+              const SizedBox(height: 10),
+              const ListTile(
                 leading: Icon(Icons.list, color: Colors.green),
                 title: Text('Student Status by Trip'),
                 subtitle:
@@ -47,11 +47,11 @@ class DashboardPage extends StatelessWidget {
               ),
 
               // Driver Performance and Profiles
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text('Driver Performance and Profiles',
                   style: Theme.of(context).textTheme.headlineSmall),
-              SizedBox(height: 10),
-              ListTile(
+              const SizedBox(height: 10),
+              const ListTile(
                 leading: CircleAvatar(
                     backgroundImage:
                         NetworkImage('https://via.placeholder.com/150')),
@@ -59,8 +59,8 @@ class DashboardPage extends StatelessWidget {
                 subtitle: Text(
                     'List of all drivers with photos and contact information.'),
               ),
-              SizedBox(height: 10),
-              ListTile(
+              const SizedBox(height: 10),
+              const ListTile(
                 leading: Icon(Icons.assessment, color: Colors.orange),
                 title: Text('Driver Performance Logs'),
                 subtitle: Text(
@@ -68,10 +68,10 @@ class DashboardPage extends StatelessWidget {
               ),
 
               // School Management Section
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text('School Management',
                   style: Theme.of(context).textTheme.headlineSmall),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ListTile(
                 leading: Icon(Icons.school, color: Colors.purple),
                 title: Text('School Profile Overview'),
