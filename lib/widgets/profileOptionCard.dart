@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:raqeeb/services/firebase_functions_service.dart';
+import 'package:raqeeb/screens/admins/addDriver.dart';
 
-// ProfileOptionCard Widget for other profile options
 class ProfileOptionCard extends StatefulWidget {
   final String title;
   final IconData icon;
-  final VoidCallback onArrowClick;
-  final bool expandable;
-  // final Widget? expandedContent;
-  final String? message; // Optional message for the expanded state
 
   const ProfileOptionCard({
     required this.title,
     required this.icon,
-    required this.onArrowClick,
-    this.expandable = false,
-    this.message,
     Key? key,
   }) : super(key: key);
 
@@ -23,7 +18,11 @@ class ProfileOptionCard extends StatefulWidget {
 }
 
 class _ProfileOptionCardState extends State<ProfileOptionCard> {
-  bool _isExpanded = false;
+  bool _isExpanded = false; // To manage the expanded state
+  String? _selectedDriver; // To store the selected driver ID
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFunctionsService firebaseFunctionsService =
+      FirebaseFunctionsService();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +44,7 @@ class _ProfileOptionCardState extends State<ProfileOptionCard> {
         ),
         child: Column(
           children: [
+            // Main Header Row
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -77,14 +77,138 @@ class _ProfileOptionCardState extends State<ProfileOptionCard> {
                         color: Colors.black54,
                       ),
                     ),
-                    onPressed: widget.onArrowClick,
+                    onPressed: () {
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    },
                   ),
                 ],
               ),
             ),
+
+            // Expanded Content
+            if (_isExpanded)
+              Column(
+                children: [
+                  ListTile(
+                    title: const Text(
+                      "Add Driver",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    leading: const Icon(Icons.add, color: Colors.green),
+                    onTap: () {
+                      // Navigate to Add Driver Screen
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const AddDriverScreen();
+                      }));
+                    },
+                  ),
+                  ListTile(
+                    title: const Text(
+                      "Delete Driver",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    leading: const Icon(Icons.delete, color: Colors.red),
+                    onTap: () {
+                      setState(() {
+                        _selectedDriver = null;
+                      });
+                    },
+                  ),
+                  if (_selectedDriver == null)
+                    StreamBuilder<QuerySnapshot>(
+                      stream: _firestore
+                          .collection('Users/2J4DFh6Gxi9vNAmip0iA/Drivers')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          return const Text("No drivers available to delete.");
+                        }
+
+                        final drivers = snapshot.data!.docs;
+
+                        return DropdownButton<String>(
+                          hint: const Text("Select a driver to delete"),
+                          value: _selectedDriver,
+                          onChanged: (String? value) {
+                            setState(() {
+                              _selectedDriver = value;
+                            });
+                          },
+                          items: drivers.map((driver) {
+                            final driverData =
+                                driver.data() as Map<String, dynamic>;
+                            return DropdownMenuItem<String>(
+                              value: driver.id,
+                              child: Text(driverData['fullName'] ?? 'Unknown'),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ),
+                  if (_selectedDriver != null)
+                    ElevatedButton(
+                      onPressed: () {
+                        _deleteDriver(_selectedDriver!);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red, // Background color
+                      ),
+                      child: const Text("Delete Driver"),
+                    ),
+                ],
+              ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _deleteDriver(String driverId) async {
+    try {
+      // Fetch the driver document to get the email
+      DocumentSnapshot driverDoc = await _firestore
+          .doc('Users/2J4DFh6Gxi9vNAmip0iA/Drivers/$driverId')
+          .get();
+
+      if (!driverDoc.exists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Driver not found')),
+        );
+        return;
+      }
+
+      // Extract email from driver document
+      // Extract email from the driver document
+      Map<String, dynamic> driverData =
+          driverDoc.data() as Map<String, dynamic>;
+      String email = driverData['email'];
+
+      // Call the Cloud Function to delete the driver account
+      await firebaseFunctionsService.deleteDriverAccountByEmail(email);
+
+      // Delete the driver document from Firestore
+      await _firestore
+          .doc('Users/2J4DFh6Gxi9vNAmip0iA/Drivers/$driverId')
+          .delete();
+
+      setState(() {
+        _selectedDriver = null;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Driver deleted successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete driver: $e')),
+      );
+    }
   }
 }
