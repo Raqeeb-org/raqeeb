@@ -193,24 +193,15 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
             const ChangePasswordCard(),
 
             // Add/Delete Student Widget
-            ProfileOptionCard(
+            const ProfileOptionCard(
               title: 'Add/Delete Student',
               icon: Icons.backpack,
-              onArrowClick: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const SomeOtherPage()));
-              },
             ),
 
             // Add/Delete Driver Widget
-            ProfileOptionCard(
+            const ProfileOptionCard(
               title: 'Add/Delete Driver',
               icon: Icons.directions_bus_filled,
-              onArrowClick: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AddDriverScreen()));
-              },
             ),
 
             // Logout Widget
