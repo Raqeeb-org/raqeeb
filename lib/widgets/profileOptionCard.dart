@@ -29,7 +29,7 @@ class _ProfileOptionCardState extends State<ProfileOptionCard> {
 
   @override
   Widget build(BuildContext context) {
-    final String collectionPath = (widget.userType == 'Drivers')
+    final String collectionPath = (widget.userType == 'Driver')
         ? 'Users/2J4DFh6Gxi9vNAmip0iA/Drivers'
         : 'Children';
 
@@ -149,7 +149,7 @@ class _ProfileOptionCardState extends State<ProfileOptionCard> {
                                 user.data() as Map<String, dynamic>;
                             return DropdownMenuItem<String>(
                               value: user.id,
-                              child: Text(((widget.userType == 'Drivers')
+                              child: Text(((widget.userType == 'Driver')
                                       ? userData['fullName']
                                       : '${userData['firstName']} ${userData['lastName']}') ??
                                   'Unknown'),
