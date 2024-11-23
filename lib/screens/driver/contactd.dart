@@ -133,7 +133,7 @@ class ContactCard extends StatelessWidget {
                   child: Text(
                     phone,
                     style: TextStyle(
-                      color: Colors.blue[200],
+                      color: const Color.fromARGB(255, 8, 130, 230),
                       fontSize: 14,
                       decoration: TextDecoration.underline,
                     ),
@@ -143,7 +143,8 @@ class ContactCard extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.phone, color: Colors.blue[200]),
+            icon: Icon(Icons.phone,
+                color: const Color.fromARGB(255, 8, 130, 230)),
             onPressed: onTap,
           ),
         ],
