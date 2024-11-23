@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:raqeeb/services/auth_service.dart';
 import 'package:raqeeb/widgets/logoutCard.dart';
-import 'package:raqeeb/screens/admins/addDriver.dart';
 import 'package:raqeeb/widgets/change_password_card.dart';
 import 'package:raqeeb/widgets/profileOptionCard.dart';
+import 'package:raqeeb/screens/admins/addDriver.dart';
+import 'package:raqeeb/screens/admins/addStudent.dart';
+import 'package:raqeeb/services/firebase_functions_service.dart';
 
 class AdminProfilePage extends StatefulWidget {
   const AdminProfilePage({super.key});
@@ -193,15 +195,21 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
             const ChangePasswordCard(),
 
             // Add/Delete Student Widget
-            const ProfileOptionCard(
-              title: 'Add/Delete Student',
+            ProfileOptionCard(
+              title: 'Manage Students',
               icon: Icons.backpack,
+              userType: 'Student',
+              screenBuilder: (context) => AddParentScreen(),
+              deleteLogic: deleteStudent,
             ),
 
             // Add/Delete Driver Widget
-            const ProfileOptionCard(
-              title: 'Add/Delete Driver',
+            ProfileOptionCard(
+              title: 'Manage Drivers',
               icon: Icons.directions_bus_filled,
+              userType: 'Driver',
+              screenBuilder: (context) => const AddDriverScreen(),
+              deleteLogic: deleteDriver,
             ),
 
             // Logout Widget
@@ -250,5 +258,110 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
         ],
       ),
     );
+  }
+
+  // Driver deletion logic
+  Future<void> deleteDriver(String driverId, BuildContext context) async {
+    final firestore = FirebaseFirestore.instance;
+    final firebaseFunctionsService = FirebaseFunctionsService();
+    try {
+      // Fetch the driver document to get the email
+      DocumentSnapshot driverDoc = await firestore
+          .doc('Users/2J4DFh6Gxi9vNAmip0iA/Drivers/$driverId')
+          .get();
+
+      if (!driverDoc.exists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Driver not found')),
+        );
+        return;
+      }
+
+      // Extract email from the driver document
+      Map<String, dynamic> driverData =
+          driverDoc.data() as Map<String, dynamic>;
+      String email = driverData['email'];
+
+      // Call the Cloud Function to delete the driver account
+      await firebaseFunctionsService.deleteDriverAccountByEmail(email);
+
+      // Delete the driver document from Firestore
+      await firestore
+          .doc('Users/2J4DFh6Gxi9vNAmip0iA/Drivers/$driverId')
+          .delete();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Driver deleted successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete driver: $e')),
+      );
+    }
+  }
+
+  // Student deletion logic
+  Future<void> deleteStudent(String studentId, BuildContext context) async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      // Fetch student document
+      DocumentSnapshot studentDoc =
+          await firestore.doc('Children/$studentId').get();
+
+      if (!studentDoc.exists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Student not found')),
+        );
+        return;
+      }
+
+      Map<String, dynamic> studentData =
+          studentDoc.data() as Map<String, dynamic>;
+      String parentPath = studentData['parentID1'];
+      DocumentReference parentRef = firestore.doc(parentPath);
+
+      // Delete the student
+      await firestore.doc('Children/$studentId').delete();
+
+      // Check if parent has other children
+      QuerySnapshot siblingSnapshot = await firestore
+          .collection('Children')
+          .where('parentID1', isEqualTo: parentPath)
+          .get();
+
+      if (siblingSnapshot.docs.isEmpty) {
+        // Delete parent document and account
+        DocumentSnapshot parentDoc = await parentRef.get();
+
+        if (parentDoc.exists) {
+          Map<String, dynamic> parentData =
+              parentDoc.data() as Map<String, dynamic>;
+          // get the parent email to delete the account
+          String parentEmail = parentData['email'];
+
+          final firebaseFunctionsService = FirebaseFunctionsService();
+          // Delete parent account from Auth service
+          await firebaseFunctionsService
+              .deleteDriverAccountByEmail(parentEmail);
+
+          // Delete parent document from Firestore
+          await parentRef.delete();
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Student and parent deleted successfully')),
+        );
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Student deleted successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete student: $e')),
+      );
+    }
   }
 }
