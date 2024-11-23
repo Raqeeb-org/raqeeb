@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
-
-void main() {
-  runApp(MaterialApp(
-    home: ParentHomepage(),
-  ));
-}
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ParentHomepage extends StatefulWidget {
   @override
@@ -14,13 +9,15 @@ class ParentHomepage extends StatefulWidget {
 }
 
 class _ParentHomepageState extends State<ParentHomepage> {
-  List<bool> _isExpanded = [false, false];
+  List<bool> _isExpanded = []; // For expanded states
   String _userName = '';
+  List<Map<String, dynamic>> _children = []; // To store children data
 
   @override
   void initState() {
     super.initState();
-    _getUserName(); // Call to get the user's name
+    _getUserName(); // Fetch the user's name
+    _fetchChildrenData(); // Fetch children from Firestore
   }
 
   // Method to get the user's name from the email
@@ -28,10 +25,46 @@ class _ParentHomepageState extends State<ParentHomepage> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null && user.email != null) {
       setState(() {
-        _userName = user.email!.split('@')[0]; // Extract name part of the email
+        _userName = user.email!.split('@')[0]; // Extract name from email
       });
     }
   }
+
+  // Fetch children data from Firestore
+  Future<void> _fetchChildrenData() async {
+  try {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) return;
+
+    // Construct the parent's DocumentReference
+    DocumentReference parentRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc('2J4DFh6Gxi9vNAmip0iA')
+        .collection('Parents')
+        .doc(currentUser.uid);
+
+    // Fetch children where parentID matches the parent's reference
+    QuerySnapshot childrenSnapshot = await FirebaseFirestore.instance
+        .collection('Children') // Collection containing child documents
+        .where('parentID', isEqualTo: parentRef) // Match by DocumentReference
+        .get();
+
+    // Map the results into a list of children data
+    List<Map<String, dynamic>> children = childrenSnapshot.docs.map((doc) {
+      return doc.data() as Map<String, dynamic>;
+    }).toList();
+
+    // Update the state with fetched children data
+    setState(() {
+      _children = children;
+      _isExpanded = List.filled(_children.length, false); // Match expanded states
+    });
+  } catch (e) {
+    print('Error fetching children data: $e');
+  }
+}
+
+
 
   void _launchCaller(String number) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: number);
@@ -65,14 +98,14 @@ class _ParentHomepageState extends State<ParentHomepage> {
                 children: [
                   Text(
                     'Hello, $_userName',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.orange,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
+                  const SizedBox(height: 8),
+                  const Text(
                     'MY CHILDREN',
                     style: TextStyle(
                       fontSize: 24,
@@ -80,11 +113,22 @@ class _ParentHomepageState extends State<ParentHomepage> {
                       color: Colors.orange,
                     ),
                   ),
-                  SizedBox(height: 16),
-                  _buildChildCard('Abdullah', 'GAGJT236H', '0555555555',
-                      'assets/images/abdullah.png', 0),
-                  _buildChildCard('Azeez', 'GAGJT236H', '0555555555',
-                      'assets/images/Azeez-2.png', 1),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _children.length,
+                      itemBuilder: (context, index) {
+                        final child = _children[index];
+                        return _buildChildCard(
+                          child['firstName'],
+                          child['idNum'].toString(),
+                          '0580239855', // Example driver number
+                          'assets/images/Talya.jpg', // Replace with actual image logic
+                          index,
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -94,8 +138,8 @@ class _ParentHomepageState extends State<ParentHomepage> {
     );
   }
 
-  Widget _buildChildCard(String name, String id, String driverNumber,
-      String imagePath, int index) {
+  Widget _buildChildCard(
+      String name, String id, String driverNumber, String imagePath, int index) {
     return Card(
       color: Colors.amber,
       child: Column(
@@ -121,27 +165,27 @@ class _ParentHomepageState extends State<ParentHomepage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Morning trip: Start (6:15 AM)',
                     style: TextStyle(fontSize: 16),
                   ),
-                  Text(
+                  const Text(
                     'Afternoon trip: Start (2:05 PM)',
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   GestureDetector(
                     onTap: () => _launchCaller(driverNumber),
                     child: Row(
                       children: [
-                        Icon(Icons.phone,
-                            color: const Color.fromARGB(255, 0, 0, 0)),
-                        SizedBox(width: 8),
+                        const Icon(Icons.phone,
+                            color: Color.fromARGB(255, 0, 0, 0)),
+                        const SizedBox(width: 8),
                         Text(
                           'Driver: $driverNumber',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
-                            color: const Color.fromARGB(255, 0, 0, 0),
+                            color: Color.fromARGB(255, 0, 0, 0),
                             decoration: TextDecoration.underline,
                           ),
                         ),

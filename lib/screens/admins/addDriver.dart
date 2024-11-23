@@ -116,7 +116,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
                     children: [
                       Icon(
                         Icons.account_circle,
-                        size: 60,
+                        size: 80,
                         color: Color.fromARGB(255, 247, 164, 0),
                       ),
                       Text(
@@ -190,6 +190,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
