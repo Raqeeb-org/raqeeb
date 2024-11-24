@@ -320,19 +320,61 @@ class _AddParentScreenState extends State<AddParentScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Full Name Field
-                buildTextField('Full Name', _controllers['Full Name']),
-                const SizedBox(height: 10),
-                // Phone No. Field
-                buildTextField('Phone No.', _controllers['Phone No.']),
-                const SizedBox(height: 10),
-                // Email Field
-                buildTextField('Email', _controllers['Email']),
-                const SizedBox(height: 10),
-                // Home Postal Code Field
-                buildTextField(
-                    'Home Postal Code', _controllers['Home Postal Code']),
-                const SizedBox(height: 10),
+                if (_isParentExisting)
+                  StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    stream: _getParentsByAdmin(adminId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return const Text('No parents available.');
+                      }
+
+                      return DropdownButtonFormField<String>(
+                        value: _selectedParent,
+                        hint: const Text('Select Parent'),
+                        items: snapshot.data!.docs.map((parentDoc) {
+                          final parentData = parentDoc.data();
+                          final parentName =
+                              parentData['name'] ?? 'Unnamed Parent';
+                          return DropdownMenuItem<String>(
+                            value: parentDoc.id,
+                            child: Text(parentName),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedParent = value;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Parent',
+                        ),
+                      );
+                    },
+                  )
+                else
+                  Column(
+                    children: [
+                      // Full Name Field
+                      buildTextField('Full Name', _controllers['Full Name']),
+                      // Phone No. Field
+                      buildTextField('Phone No.', _controllers['Phone No.']),
+                      // Email Field
+                      buildTextField('Email', _controllers['Email']),
+                      // Home Postal Code Field
+                      buildTextField(
+                          'Home Postal Code', _controllers['Home Postal Code']),
+                      buildTextField('Password', _controllers['Password'],
+                          isPassword: true),
+                      buildTextField(
+                          'Repeat Password', _controllers['Repeat Password'],
+                          isPassword: true),
+                    ],
+                  ),
+
                 // Password Field
                 buildTextField('Password', _controllers['Password'],
                     isPassword: true),
