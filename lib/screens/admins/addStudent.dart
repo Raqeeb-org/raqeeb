@@ -375,16 +375,6 @@ class _AddParentScreenState extends State<AddParentScreen> {
                     ],
                   ),
 
-                // Password Field
-                buildTextField('Password', _controllers['Password'],
-                    isPassword: true),
-                const SizedBox(height: 10),
-                // Repeat Password Field
-                buildTextField(
-                    'Repeat Password', _controllers['Repeat Password'],
-                    isPassword: true),
-                const SizedBox(height: 20),
-
                 // Submit Button
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
