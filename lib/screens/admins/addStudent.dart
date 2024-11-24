@@ -35,6 +35,33 @@ class _AddParentScreenState extends State<AddParentScreen> {
     super.dispose();
   }
 
+  /// Fetch parents based on admin ID
+  Stream<QuerySnapshot<Map<String, dynamic>>> _getParentsByAdmin(
+      String adminId) {
+    return FirebaseFirestore.instance
+        .collection('Children') // Assuming "Children" is the collection name
+        .where('adminId', isEqualTo: adminId)
+        .snapshots()
+        .asyncMap((childrenSnapshot) async {
+      final parentRefs = childrenSnapshot.docs
+          .map((doc) => (doc.data()['ParentID'] as DocumentReference).path)
+          .toSet();
+
+      final parentSnapshots = await Future.wait(
+        parentRefs.map((ref) => FirebaseFirestore.instance.doc(ref).get()),
+      );
+
+      final parentData = parentSnapshots.map((snap) {
+        return snap.data();
+      }).toList();
+
+      return QuerySnapshot(
+        docs: parentSnapshots,
+        metadata: childrenSnapshot.metadata,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final String? adminId = _firebaseService.getCurrentAdminId();
@@ -276,6 +303,23 @@ class _AddParentScreenState extends State<AddParentScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
+
+                // Parent Selection Dropdown
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isParentExisting,
+                      onChanged: (value) {
+                        setState(() {
+                          _isParentExisting = value!;
+                        });
+                      },
+                    ),
+                    const Text('Parent Already Exists'),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
                 // Full Name Field
                 buildTextField('Full Name', _controllers['Full Name']),
                 const SizedBox(height: 10),
