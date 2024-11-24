@@ -37,9 +37,13 @@ class _AddParentScreenState extends State<AddParentScreen> {
 
   // Fetch parents based on admin ID
   Stream<List<Map<String, dynamic>>> _getParentsByAdmin(String adminId) async* {
+    // Create a DocumentReference for the admin
+    final adminRef =
+        FirebaseFirestore.instance.collection('Admins').doc(adminId);
+
     await for (final childrenSnapshot in FirebaseFirestore.instance
         .collection('Children') // Assuming "Children" is the collection name
-        .where('schoolAdmin', isEqualTo: adminId)
+        .where('schoolAdmin', isEqualTo: adminRef)
         .snapshots()) {
       // Get unique parent references
       final parentRefs = childrenSnapshot.docs
