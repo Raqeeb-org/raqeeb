@@ -35,31 +35,30 @@ class _AddParentScreenState extends State<AddParentScreen> {
     super.dispose();
   }
 
-  /// Fetch parents based on admin ID
-  Stream<QuerySnapshot<Map<String, dynamic>>> _getParentsByAdmin(
-      String adminId) {
-    return FirebaseFirestore.instance
+  // Fetch parents based on admin ID
+  Stream<List<Map<String, dynamic>>> _getParentsByAdmin(String adminId) async* {
+    await for (final childrenSnapshot in FirebaseFirestore.instance
         .collection('Children') // Assuming "Children" is the collection name
-        .where('adminId', isEqualTo: adminId)
-        .snapshots()
-        .asyncMap((childrenSnapshot) async {
+        .where('schoolAdmin', isEqualTo: adminId)
+        .snapshots()) {
+      // Get unique parent references
       final parentRefs = childrenSnapshot.docs
-          .map((doc) => (doc.data()['ParentID'] as DocumentReference).path)
+          .map((doc) => (doc.data()['ParentID'] as DocumentReference))
           .toSet();
 
+      // Fetch parent documents
       final parentSnapshots = await Future.wait(
-        parentRefs.map((ref) => FirebaseFirestore.instance.doc(ref).get()),
+        parentRefs.map((ref) => ref.get()),
       );
 
-      final parentData = parentSnapshots.map((snap) {
-        return snap.data();
+      // Map parent data into a list
+      final parents = parentSnapshots.map((snap) {
+        return snap.data() as Map<String, dynamic>;
       }).toList();
 
-      return QuerySnapshot(
-        docs: parentSnapshots,
-        metadata: childrenSnapshot.metadata,
-      );
-    });
+      // Yield the list of parents
+      yield parents;
+    }
   }
 
   @override
@@ -321,25 +320,27 @@ class _AddParentScreenState extends State<AddParentScreen> {
                 const SizedBox(height: 10),
 
                 if (_isParentExisting)
-                  StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  StreamBuilder<List<Map<String, dynamic>>>(
                     stream: _getParentsByAdmin(adminId),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
                       }
-                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Text('No parents available.');
                       }
+
+                      final parents = snapshot.data!;
 
                       return DropdownButtonFormField<String>(
                         value: _selectedParent,
                         hint: const Text('Select Parent'),
-                        items: snapshot.data!.docs.map((parentDoc) {
-                          final parentData = parentDoc.data();
+                        items: parents.map((parentData) {
+                          final parentId = parentData['id'];
                           final parentName =
-                              parentData['name'] ?? 'Unnamed Parent';
+                              parentData['fullName'] ?? 'Unnamed Parent';
                           return DropdownMenuItem<String>(
-                            value: parentDoc.id,
+                            value: parentId.id,
                             child: Text(parentName),
                           );
                         }).toList(),
@@ -360,18 +361,24 @@ class _AddParentScreenState extends State<AddParentScreen> {
                     children: [
                       // Full Name Field
                       buildTextField('Full Name', _controllers['Full Name']),
+                      const SizedBox(height: 10),
                       // Phone No. Field
                       buildTextField('Phone No.', _controllers['Phone No.']),
+                      const SizedBox(height: 10),
                       // Email Field
                       buildTextField('Email', _controllers['Email']),
+                      const SizedBox(height: 10),
                       // Home Postal Code Field
                       buildTextField(
                           'Home Postal Code', _controllers['Home Postal Code']),
+                      const SizedBox(height: 10),
                       buildTextField('Password', _controllers['Password'],
                           isPassword: true),
+                      const SizedBox(height: 10),
                       buildTextField(
                           'Repeat Password', _controllers['Repeat Password'],
                           isPassword: true),
+                      const SizedBox(height: 10),
                     ],
                   ),
 
