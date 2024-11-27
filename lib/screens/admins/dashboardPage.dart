@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,17 +16,18 @@ class DashboardPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Overview Section
-              Text('Overview',
-                  style: Theme.of(context).textTheme.headlineSmall),
+              Text('Overview', style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildInfoCard('Total Active Buses', '5', Colors.lightBlue),
-                  _buildInfoCard('Total Students', '120', Colors.green),
-                  _buildInfoCard('Total Drivers', '8', Colors.orange),
-                  _buildInfoCard('Today\'s Trips', '6', Colors.red),
-                ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildInfoCard('Total Active Buses', '5', Colors.lightBlue),
+                    _buildInfoCard('Total Students', '120', Colors.green),
+                    _buildInfoCard('Total Drivers', '8', Colors.orange),
+                    _buildInfoCard('Today\'s Trips', '6', Colors.red),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -81,7 +83,8 @@ class DashboardPage extends StatelessWidget {
                 title: Text('Performance Analytics'),
                 subtitle: Text(
                     'Analyze trip efficiency, driver performance, and more.'),
-             const  ListTile(
+              ),
+              const ListTile(
                 leading: Icon(Icons.school, color: Colors.purple),
                 title: Text('School Profile Overview'),
                 subtitle:
@@ -113,7 +116,7 @@ class DashboardPage extends StatelessWidget {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: color)), // Text color matches the card color
-           const SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(title,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: color)), // Text color matches the card
