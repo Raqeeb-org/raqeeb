@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:raqeeb/utils/phone_utils.dart';
 
 void main() {
-  runApp(ContactPage());
+  runApp(ContactPagee());
 }
 
-class ContactPage extends StatefulWidget {
-  const ContactPage({Key? key}) : super(key: key);
+class ContactPagee extends StatefulWidget {
+  const ContactPagee({Key? key}) : super(key: key);
 
   @override
-  _ContactPageState createState() => _ContactPageState();
+  _ContactPageeState createState() => _ContactPageeState();
 }
 
-class _ContactPageState extends State<ContactPage> {
+class _ContactPageeState extends State<ContactPagee> {
   final Color customColor = Color(0xFFFCC471); // Define the custom color
 
   @override
@@ -58,7 +58,7 @@ class _ContactPageState extends State<ContactPage> {
               ),
               const SizedBox(height: 20),
               ContactCard(
-                role: 'School Driver',
+                role: 'Technical Support',
                 name: 'Ahmad Ali',
                 phone: '+96678893213',
                 imageUrl:
