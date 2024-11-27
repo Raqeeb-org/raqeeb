@@ -35,77 +35,6 @@ class _AddParentScreenState extends State<AddParentScreen> {
     super.dispose();
   }
 
-  Stream<List<Map<String, dynamic>>> _getParentsByAdmin(String adminId) async* {
-    final adminRef = FirebaseFirestore.instance
-        .collection('Users')
-        .doc('2J4DFh6Gxi9vNAmip0iA')
-        .collection('Admins')
-        .doc(adminId);
-
-    print('adminRef: $adminRef');
-
-    final query = FirebaseFirestore.instance
-        .collection('Children')
-        .where('schoolAdmin', isEqualTo: adminRef);
-
-    print('Query constructed: $query');
-
-    try {
-      await for (final childrenSnapshot in query.snapshots()) {
-        print('Children Snapshot: ${childrenSnapshot.docs}');
-        if (childrenSnapshot.docs.isEmpty) {
-          print('No matching children found.');
-          continue;
-        }
-
-        final parentRefs = childrenSnapshot.docs.map((doc) {
-          final parentRef = doc.data()['parentID'] as DocumentReference;
-          print('Parent Reference: $parentRef');
-          return parentRef;
-        }).toSet();
-
-        final parentSnapshots = await Future.wait(
-          parentRefs.map((ref) async {
-            try {
-              final snapshot = await ref.get();
-              print('Fetched Parent Snapshot: ${snapshot.id}');
-              return snapshot;
-            } catch (e) {
-              print('Error fetching parent reference $ref: $e');
-              return null; // Return null for failed fetch
-            }
-          }),
-        );
-
-        final validParentSnapshots = parentSnapshots
-            .where((snap) => snap != null)
-            .cast<DocumentSnapshot>();
-
-        final parents = validParentSnapshots
-            .map((snap) {
-              final data = snap.data() as Map<String, dynamic>?;
-              if (data == null) {
-                print('Invalid parent document: ${snap.id}');
-                return null;
-              }
-              return {
-                'docId': snap.id,
-                'fullName': data['fullName'] ?? 'Unnamed Parent',
-                'email': data['email'],
-                'phoneNumber': data['phoneNumber'],
-              };
-            })
-            .where((parent) => parent != null)
-            .toList();
-
-        print('Parents: $parents');
-        yield parents.whereType<Map<String, dynamic>>().toList();
-      }
-    } catch (e) {
-      print('Error in query: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final String? adminId = _firebaseService.getCurrentAdminId();
@@ -366,7 +295,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
 
                 if (_isParentExisting)
                   StreamBuilder<List<Map<String, dynamic>>>(
-                    stream: _getParentsByAdmin(adminId),
+                    stream: _firebaseService.getParentsByAdmin(adminId),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
