@@ -20,7 +20,7 @@ class _StatusScreenState extends State<StatusScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(172, 230, 238, 100), // Background color as in your image
+      backgroundColor: const Color.fromARGB(156, 172, 230, 238), // Background color as in your image
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
