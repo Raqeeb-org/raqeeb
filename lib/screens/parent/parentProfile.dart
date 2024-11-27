@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:raqeeb/screens/commons/login.dart';
 import 'package:raqeeb/widgets/change_password_card.dart';
+import 'package:raqeeb/widgets/logoutCard.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -15,39 +16,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isExpanded = false; // Control the expansion for the profile card
   Map<String, dynamic>? parentData; // Holds the parent data
 
-@override
-void initState() {
-  super.initState();
-  _fetchParentInfo(); // Fetch data from Firestore
-}
-  Future<void> _fetchParentInfo() async {
-  try {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    print("Current User UID: $userId");
-
-    // Fetch the parent document
-    DocumentSnapshot parentSnapshot = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc('2J4DFh6Gxi9vNAmip0iA') // User document
-        .collection('Parents')
-        .doc(userId) // Parent document ID
-        .get();
-
-    if (parentSnapshot.exists) {
-      setState(() {
-        parentData = parentSnapshot.data() as Map<String, dynamic>;
-        print("Fetched Parent Data: $parentData");
-      });
-    } else {
-      print("No Parent document found for UID: $userId");
-    }
-  } catch (e) {
-    print("Error fetching parent data: $e");
+  @override
+  void initState() {
+    super.initState();
+    _fetchParentInfo(); // Fetch data from Firestore
   }
-}
 
+  Future<void> _fetchParentInfo() async {
+    try {
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+      print("Current User UID: $userId");
 
+      // Fetch the parent document
+      DocumentSnapshot parentSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc('2J4DFh6Gxi9vNAmip0iA') // User document
+          .collection('Parents')
+          .doc(userId) // Parent document ID
+          .get();
 
+      if (parentSnapshot.exists) {
+        setState(() {
+          parentData = parentSnapshot.data() as Map<String, dynamic>;
+          print("Fetched Parent Data: $parentData");
+        });
+      } else {
+        print("No Parent document found for UID: $userId");
+      }
+    } catch (e) {
+      print("Error fetching parent data: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +70,14 @@ void initState() {
 
             // Expandable Profile Card
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 width: double.infinity,
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFCC80), 
+                  color: const Color(0xFFFFCC80),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -89,13 +89,16 @@ void initState() {
                   ],
                 ),
                 child: parentData == null
-                    ? const Center(child: CircularProgressIndicator()) // Show loading indicator while fetching data
+                    ? const Center(
+                        child:
+                            CircularProgressIndicator()) // Show loading indicator while fetching data
                     : Column(
                         children: [
                           Row(
                             children: [
                               const CircleAvatar(
-                                backgroundImage: AssetImage('assets/images/profile_icon.png'),
+                                backgroundImage: AssetImage(
+                                    'assets/images/profile_icon.png'),
                                 radius: 30,
                               ),
                               const SizedBox(width: 15),
@@ -126,13 +129,17 @@ void initState() {
                               ),
                               IconButton(
                                 icon: AnimatedRotation(
-                                  turns: _isExpanded ? 0.25 : 0, // Rotate arrow when expanded
+                                  turns: _isExpanded
+                                      ? 0.25
+                                      : 0, // Rotate arrow when expanded
                                   duration: const Duration(milliseconds: 300),
-                                  child: const Icon(Icons.arrow_forward_ios, color: Colors.black54),
+                                  child: const Icon(Icons.arrow_forward_ios,
+                                      color: Colors.black54),
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _isExpanded = !_isExpanded; // Toggle expansion
+                                    _isExpanded =
+                                        !_isExpanded; // Toggle expansion
                                   });
                                 },
                               ),
@@ -140,7 +147,8 @@ void initState() {
                           ),
                           if (_isExpanded) ...[
                             const SizedBox(height: 20),
-                            _buildExtraDetail('Email', parentData!['email'] ?? 'N/A'),
+                            _buildExtraDetail(
+                                'Email', parentData!['email'] ?? 'N/A'),
                           ]
                         ],
                       ),
@@ -150,7 +158,6 @@ void initState() {
 
             // Change Password Card
             const ChangePasswordCard(),
-
 
             const SizedBox(height: 20),
 
@@ -257,7 +264,8 @@ class ProfileOptionCard extends StatelessWidget {
               ),
               // Arrow Button
               IconButton(
-                icon: const Icon(Icons.arrow_forward_ios, color: Colors.black54),
+                icon:
+                    const Icon(Icons.arrow_forward_ios, color: Colors.black54),
                 onPressed: onArrowClick,
               ),
             ],
