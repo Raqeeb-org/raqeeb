@@ -2,11 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
-  final TextEditingController emailController =
-      TextEditingController(); // Add this to control the text field
+  final TextEditingController emailController = TextEditingController();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  @override
   Future<void> resetPassword(String email) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
@@ -73,7 +71,7 @@ class ForgotPasswordPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-                // Next Button
+                // Send Button with Email Icon
                 ElevatedButton(
                   onPressed: () async {
                     if (emailController.text.isNotEmpty) {
@@ -110,16 +108,26 @@ class ForgotPasswordPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(100),
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 60,
+                      horizontal: 40,
                       vertical: 12,
                     ),
                   ),
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Color(0xFF19181A), // Text color
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min, // Adjusts to fit content
+                    children: [
+                      Icon(
+                        Icons.email, // Email icon
+                        color: Color(0xFF19181A), // Icon color
+                      ),
+                      const SizedBox(width: 8), // Spacing between icon and text
+                      const Text(
+                        'Send',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xFF19181A), // Text color
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
