@@ -22,38 +22,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _fetchParentInfo();
   }
 
-Future<void> _fetchParentInfo() async {
-  try {
-    String? userId = FirebaseAuth.instance.currentUser?.uid;
+  Future<void> _fetchParentInfo() async {
+    try {
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
 
-    if (userId == null) {
-      print("No user is signed in.");
-      return;
+      if (userId == null) {
+        print("No user is signed in.");
+        return;
+      }
+
+      print("Fetching data for User UID: $userId");
+
+      // Fetch parent data
+      final parentSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc('2J4DFh6Gxi9vNAmip0iA')
+          .collection('Parents')
+          .doc(userId) // This must match the authenticated user's UID
+          .get();
+
+      if (parentSnapshot.exists) {
+        setState(() {
+          parentData = parentSnapshot.data() as Map<String, dynamic>?;
+          print("Fetched Parent Data: $parentData");
+        });
+      } else {
+        print("No Parent document found for UID: $userId");
+      }
+    } catch (e) {
+      print("Error fetching parent data: $e");
     }
-
-    print("Fetching data for User UID: $userId");
-
-    // Fetch parent data
-    final parentSnapshot = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc('2J4DFh6Gxi9vNAmip0iA')
-        .collection('Parents')
-        .doc(userId) // This must match the authenticated user's UID
-        .get();
-
-    if (parentSnapshot.exists) {
-      print("Parent document found: ${parentSnapshot.data()}");
-      setState(() {
-        parentData = parentSnapshot.data() as Map<String, dynamic>?;
-      });
-    } else {
-      print("No Parent document found for UID: $userId");
-    }
-  } catch (e) {
-    print("Error fetching parent data: $e");
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +73,8 @@ Future<void> _fetchParentInfo() async {
             ),
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 width: double.infinity,
@@ -92,60 +92,67 @@ Future<void> _fetchParentInfo() async {
                   ],
                 ),
                 child: parentData == null
-                    ? const Text("No data available or loading failed.")
-                    : Column(
-                        children: [
-                          Row(
+                    ? const Center(
+                        child: CircularProgressIndicator(), // Show loading indicator
+                      )
+                    : parentData!.isEmpty
+                        ? const Text("No data available or loading failed.")
+                        : Column(
                             children: [
-                              const CircleAvatar(
-                                backgroundImage: AssetImage('assets/images/profile_icon.png'),
-                                radius: 30,
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      parentData!['fullName'] ?? 'N/A',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
+                              Row(
+                                children: [
+                                  const CircleAvatar(
+                                    backgroundImage: AssetImage(
+                                        'assets/images/profile_icon.png'),
+                                    radius: 30,
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          parentData!['fullName'] ?? 'N/A',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          parentData!['phoneNumber'] ?? 'N/A',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blue,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      parentData!['phoneNumber'] ?? 'N/A',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.blue,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
+                                  ),
+                                  IconButton(
+                                    icon: AnimatedRotation(
+                                      turns: _isExpanded ? 0.25 : 0,
+                                      duration: const Duration(milliseconds: 300),
+                                      child: const Icon(Icons.arrow_forward_ios,
+                                          color: Colors.black54),
                                     ),
-                                  ],
-                                ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isExpanded = !_isExpanded;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
-                              IconButton(
-                                icon: AnimatedRotation(
-                                  turns: _isExpanded ? 0.25 : 0,
-                                  duration: const Duration(milliseconds: 300),
-                                  child: const Icon(Icons.arrow_forward_ios, color: Colors.black54),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _isExpanded = !_isExpanded;
-                                  });
-                                },
-                              ),
+                              if (_isExpanded) ...[
+                                const SizedBox(height: 20),
+                                _buildExtraDetail('Email', parentData!['email'] ?? 'N/A'),
+                              ]
                             ],
                           ),
-                          if (_isExpanded) ...[
-                            const SizedBox(height: 20),
-                            _buildExtraDetail('Email', parentData!['email'] ?? 'N/A'),
-                          ]
-                        ],
-                      ),
+
               ),
             ),
             const SizedBox(height: 20),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-
 class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Raqeeb Dashboard'),
+        centerTitle: true,
+        backgroundColor: Colors.lightBlue[200], // Set the AppBar color to light blue
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -20,10 +21,10 @@ class DashboardPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildInfoCard('Total Active Buses', '5'),
-                  _buildInfoCard('Total Students', '120'),
-                  _buildInfoCard('Total Drivers', '8'),
-                  _buildInfoCard('Today\'s Trips', '6'),
+                  _buildInfoCard('Total Active Buses', '5', Colors.lightBlue),
+                  _buildInfoCard('Total Students', '120', Colors.green),
+                  _buildInfoCard('Total Drivers', '8', Colors.orange),
+                  _buildInfoCard('Today\'s Trips', '6', Colors.red),
                 ],
               ),
               const SizedBox(height: 20),
@@ -80,6 +81,11 @@ class DashboardPage extends StatelessWidget {
                 title: Text('Performance Analytics'),
                 subtitle: Text(
                     'Analyze trip efficiency, driver performance, and more.'),
+             const  ListTile(
+                leading: Icon(Icons.school, color: Colors.purple),
+                title: Text('School Profile Overview'),
+                subtitle:
+                    Text('Address, contact details, and admin information.'),
               ),
             ],
           ),
@@ -88,20 +94,29 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard(String title, String count) {
+  Widget _buildInfoCard(String title, String count, Color color) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
         width: 100,
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1), // Background color with light opacity
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(count,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            Text(title, textAlign: TextAlign.center),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: color)), // Text color matches the card color
+           const SizedBox(height: 5),
+            Text(title,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: color)), // Text color matches the card
           ],
         ),
       ),
