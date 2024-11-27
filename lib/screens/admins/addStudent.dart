@@ -35,33 +35,74 @@ class _AddParentScreenState extends State<AddParentScreen> {
     super.dispose();
   }
 
-  // Fetch parents based on admin ID
   Stream<List<Map<String, dynamic>>> _getParentsByAdmin(String adminId) async* {
-    // Create a DocumentReference for the admin
-    final adminRef =
-        FirebaseFirestore.instance.collection('Admins').doc(adminId);
+    final adminRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc('2J4DFh6Gxi9vNAmip0iA')
+        .collection('Admins')
+        .doc(adminId);
 
-    await for (final childrenSnapshot in FirebaseFirestore.instance
-        .collection('Children') // Assuming "Children" is the collection name
-        .where('schoolAdmin', isEqualTo: adminRef)
-        .snapshots()) {
-      // Get unique parent references
-      final parentRefs = childrenSnapshot.docs
-          .map((doc) => (doc.data()['ParentID'] as DocumentReference))
-          .toSet();
+    print('adminRef: $adminRef');
 
-      // Fetch parent documents
-      final parentSnapshots = await Future.wait(
-        parentRefs.map((ref) => ref.get()),
-      );
+    final query = FirebaseFirestore.instance
+        .collection('Children')
+        .where('schoolAdmin', isEqualTo: adminRef);
 
-      // Map parent data into a list
-      final parents = parentSnapshots.map((snap) {
-        return snap.data() as Map<String, dynamic>;
-      }).toList();
+    print('Query constructed: $query');
 
-      // Yield the list of parents
-      yield parents;
+    try {
+      await for (final childrenSnapshot in query.snapshots()) {
+        print('Children Snapshot: ${childrenSnapshot.docs}');
+        if (childrenSnapshot.docs.isEmpty) {
+          print('No matching children found.');
+          continue;
+        }
+
+        final parentRefs = childrenSnapshot.docs.map((doc) {
+          final parentRef = doc.data()['parentID'] as DocumentReference;
+          print('Parent Reference: $parentRef');
+          return parentRef;
+        }).toSet();
+
+        final parentSnapshots = await Future.wait(
+          parentRefs.map((ref) async {
+            try {
+              final snapshot = await ref.get();
+              print('Fetched Parent Snapshot: ${snapshot.id}');
+              return snapshot;
+            } catch (e) {
+              print('Error fetching parent reference $ref: $e');
+              return null; // Return null for failed fetch
+            }
+          }),
+        );
+
+        final validParentSnapshots = parentSnapshots
+            .where((snap) => snap != null)
+            .cast<DocumentSnapshot>();
+
+        final parents = validParentSnapshots
+            .map((snap) {
+              final data = snap.data() as Map<String, dynamic>?;
+              if (data == null) {
+                print('Invalid parent document: ${snap.id}');
+                return null;
+              }
+              return {
+                'docId': snap.id,
+                'fullName': data['fullName'] ?? 'Unnamed Parent',
+                'email': data['email'],
+                'phoneNumber': data['phoneNumber'],
+              };
+            })
+            .where((parent) => parent != null)
+            .toList();
+
+        print('Parents: $parents');
+        yield parents.whereType<Map<String, dynamic>>().toList();
+      }
+    } catch (e) {
+      print('Error in query: $e');
     }
   }
 
@@ -328,23 +369,31 @@ class _AddParentScreenState extends State<AddParentScreen> {
                     stream: _getParentsByAdmin(adminId),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
+                        return const Center(child: CircularProgressIndicator());
                       }
+
+                      if (snapshot.hasError) {
+                        return const Text('Error loading parents.');
+                      }
+
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Text('No parents available.');
                       }
 
                       final parents = snapshot.data!;
+                      print('Final Parents for Dropdown: $parents');
 
                       return DropdownButtonFormField<String>(
                         value: _selectedParent,
                         hint: const Text('Select Parent'),
                         items: parents.map((parentData) {
-                          final parentId = parentData['id'];
+                          final parentDocId = parentData['docId'];
+                          //final parentId = parentRef.id;
                           final parentName =
                               parentData['fullName'] ?? 'Unnamed Parent';
+
                           return DropdownMenuItem<String>(
-                            value: parentId.id,
+                            value: parentDocId,
                             child: Text(parentName),
                           );
                         }).toList(),
@@ -353,9 +402,11 @@ class _AddParentScreenState extends State<AddParentScreen> {
                             _selectedParent = value;
                           });
                         },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
                           labelText: 'Parent',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                         ),
                       );
                     },
@@ -385,6 +436,8 @@ class _AddParentScreenState extends State<AddParentScreen> {
                       const SizedBox(height: 10),
                     ],
                   ),
+
+                const SizedBox(height: 20),
 
                 // Submit Button
                 ElevatedButton(
