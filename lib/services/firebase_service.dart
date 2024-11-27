@@ -60,4 +60,39 @@ class FirebaseService {
       'isCheckedIn': isCheckedIn,
     });
   }
+
+  // Function to retrieve the list of parents based on the admin ID
+  Stream<List<Map<String, dynamic>>> getParentsByAdmin(String adminId) async* {
+    final adminRef = _firestore
+        .collection('Users')
+        .doc('2J4DFh6Gxi9vNAmip0iA')
+        .collection('Admins')
+        .doc(adminId);
+
+    final query = _firestore
+        .collection('Children')
+        .where('schoolAdmin', isEqualTo: adminRef);
+
+    await for (final childrenSnapshot in query.snapshots()) {
+      final parentRefs = childrenSnapshot.docs.map((doc) {
+        return doc.data()['parentID'] as DocumentReference;
+      }).toSet();
+
+      final parentSnapshots = await Future.wait(
+        parentRefs.map((ref) => ref.get()),
+      );
+
+      final parents = parentSnapshots.map((snap) {
+        final data = snap.data() as Map<String, dynamic>;
+        return {
+          'docId': snap.id,
+          'fullName': data['fullName'] ?? 'Unnamed Parent',
+          'email': data['email'],
+          'phoneNumber': data['phoneNumber'],
+        };
+      }).toList();
+
+      yield parents;
+    }
+  }
 }
