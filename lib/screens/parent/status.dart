@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 
 class StatusScreen extends StatefulWidget {
   @override
@@ -10,11 +10,23 @@ class StatusScreen extends StatefulWidget {
 
 class _StatusScreenState extends State<StatusScreen> {
   int currentStatus = 0;
+  late Timer _timer;
 
-  void updateStatus(int status) {
-    setState(() {
-      currentStatus = status;
+  @override
+  void initState() {
+    super.initState();
+    // Start a timer that updates the status every 4 seconds
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      setState(() {
+        currentStatus = (currentStatus + 1) % 4; // Cycle through statuses (0-3)
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel(); // Stop the timer when the widget is disposed
+    super.dispose();
   }
 
   @override
@@ -167,69 +179,42 @@ class _StatusScreenState extends State<StatusScreen> {
             ),
 
             // Map Section
-            // Map Section
-Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 40.0),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text(
-        'Child Location',
-        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
-      ),
-      const SizedBox(height: 20),
-      Container(
-        height: 200, // Adjust height as needed
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.grey[300],
-        ),
-        child: GoogleMap(
-          initialCameraPosition: const CameraPosition(
-            target: LatLng(24.7136, 46.6753), // Replace with child's initial location
-            zoom: 14.0,
-          ),
-          markers: {
-            const Marker(
-              markerId: MarkerId('child_location'),
-              position: LatLng(24.7136, 46.6753), // Replace with child's actual location
-              infoWindow: InfoWindow(
-                title: "Child's Location",
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Child Location',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 200, // Adjust height as needed
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey[300],
+                    ),
+                    child: GoogleMap(
+                      initialCameraPosition: const CameraPosition(
+                        target: LatLng(24.7136, 46.6753), // Replace with child's initial location
+                        zoom: 14.0,
+                      ),
+                      markers: {
+                        const Marker(
+                          markerId: MarkerId('child_location'),
+                          position: LatLng(24.7136, 46.6753), // Replace with child's actual location
+                          infoWindow: InfoWindow(
+                            title: "Child's Location",
+                          ),
+                        ),
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-          },
-        ),
-      ),
-    ],
-  ),
-),
-
-
             const SizedBox(height: 20), // Add extra spacing to fill screen
-
-            // Trigger buttons to simulate status changes (for testing)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => updateStatus(0),
-                  child: const Text('Picked Up'),
-                ),
-                ElevatedButton(
-                  onPressed: () => updateStatus(1),
-                  child: const Text('On the Way'),
-                ),
-                ElevatedButton(
-                  onPressed: () => updateStatus(2),
-                  child: const Text('Arrived at School'),
-                ),
-                ElevatedButton(
-                  onPressed: () => updateStatus(3),
-                  child: const Text('Back Home'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20), // Add extra spacing to ensure the background reaches the bottom
           ],
         ),
       ),

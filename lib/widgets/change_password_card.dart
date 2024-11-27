@@ -34,6 +34,13 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
     super.dispose();
   }
 
+  OutlineInputBorder customBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(30),
+      borderSide: BorderSide(color: Colors.grey.shade400, width: 1),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -84,7 +91,9 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
                       obscureText: !_isCurrentPasswordVisible,
                       decoration: InputDecoration(
                         labelText: 'Current Password',
-                        border: OutlineInputBorder(),
+                        border: customBorder(),
+                        enabledBorder: customBorder(),
+                        focusedBorder: customBorder(),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isCurrentPasswordVisible
@@ -108,7 +117,9 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
                       obscureText: !_isNewPasswordVisible,
                       decoration: InputDecoration(
                         labelText: 'New Password',
-                        border: OutlineInputBorder(),
+                        border: customBorder(),
+                        enabledBorder: customBorder(),
+                        focusedBorder: customBorder(),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isNewPasswordVisible
@@ -131,7 +142,9 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
                       obscureText: !_isConfirmPasswordVisible,
                       decoration: InputDecoration(
                         labelText: 'Confirm Password',
-                        border: OutlineInputBorder(),
+                        border: customBorder(),
+                        enabledBorder: customBorder(),
+                        focusedBorder: customBorder(),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isConfirmPasswordVisible
@@ -166,10 +179,21 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
                         String confirmPassword =
                             _confirmPasswordController.text;
 
+                        // Check if new password is less than 7 characters
+                        if (newPassword.length < 7) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Failed to change password:The new password should be more than 7 digits')),
+                          );
+                          return;
+                        }
+
                         if (newPassword != confirmPassword) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content: Text('New passwords do not match')),
+                                content: Text(
+                                    'Failed to change password: New password and confirmation do not match.')),
                           );
                           return;
                         }
@@ -203,7 +227,7 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(
-                                    'Failed to change password: ${e.toString()}')),
+                                    'Failed to change password: you entered the correct password wrong')),
                           );
                         }
                       },
