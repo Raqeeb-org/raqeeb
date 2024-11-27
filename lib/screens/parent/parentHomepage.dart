@@ -115,20 +115,24 @@ class _ParentHomepageState extends State<ParentHomepage> {
                   ),
                   const SizedBox(height: 16),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: _children.length,
-                      itemBuilder: (context, index) {
-                        final child = _children[index];
-                        return _buildChildCard(
-                          child['firstName'],
-                          child['idNum'].toString(),
-                          '0580239855', // Example driver number
-                          'assets/images/Talya.jpg', // Replace with actual image logic
-                          index,
-                        );
-                      },
-                    ),
-                  ),
+  child: ListView.builder(
+    itemCount: _children.length,
+    itemBuilder: (context, index) {
+      final child = _children[index];
+      final imagePath = child['gender'] == 'Female' 
+          ? 'assets/images/femaleChild.png' 
+          : 'assets/images/maleChild.png';
+      return _buildChildCard(
+        child['firstName'],
+        child['idNum'].toString(),
+        '0580239855', // Example driver number
+        imagePath,    // Dynamically assign image
+        index,
+      );
+    },
+  ),
+),
+
                 ],
               ),
             ),

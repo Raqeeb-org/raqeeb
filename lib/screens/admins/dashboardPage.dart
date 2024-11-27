@@ -28,55 +28,58 @@ class DashboardPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Student Attendance Summary
-              Text('Student Attendance Summary',
+              // Student Attendance Monitoring
+              Text('Student Attendance Monitoring',
                   style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 10),
               const ListTile(
-                leading: Icon(Icons.access_time, color: Colors.blue),
-                title: Text('Daily Attendance Log'),
-                subtitle: Text(
-                    'Summary of student boardings and exits with timestamps.'),
+                leading: Icon(Icons.check_circle, color: Colors.green),
+                title: Text('Attendance Status'),
+                subtitle: Text('View real-time student attendance status.'),
               ),
               const SizedBox(height: 10),
               const ListTile(
-                leading: Icon(Icons.list, color: Colors.green),
-                title: Text('Student Status by Trip'),
-                subtitle:
-                    Text('Detailed view of each student’s boarding status.'),
+                leading: Icon(Icons.history, color: Colors.blue),
+                title: Text('Attendance History'),
+                subtitle: Text(
+                    'Historical records of student boardings and drop-offs.'),
               ),
 
-              // Driver Performance and Profiles
+              // Driver and Bus Management
               const SizedBox(height: 20),
-              Text('Driver Performance and Profiles',
+              Text('Driver and Bus Management',
                   style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 10),
               const ListTile(
-                leading: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage('https://via.placeholder.com/150')),
-                title: Text('Driver Overview'),
+                leading: Icon(Icons.person, color: Colors.purple),
+                title: Text('Driver Profiles'),
                 subtitle: Text(
-                    'List of all drivers with photos and contact information.'),
+                    'Manage driver information, contact details, and assigned buses.'),
               ),
               const SizedBox(height: 10),
               const ListTile(
-                leading: Icon(Icons.assessment, color: Colors.orange),
-                title: Text('Driver Performance Logs'),
+                leading: Icon(Icons.bus_alert, color: Colors.orange),
+                title: Text('Bus Maintenance Logs'),
                 subtitle: Text(
-                    'View each driver’s trip history and punctuality records.'),
+                    'Track bus maintenance schedules and operational status.'),
               ),
 
-              // School Management Section
+              // Reports and Analytics
               const SizedBox(height: 20),
-              Text('School Management',
+              Text('Reports and Analytics',
                   style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 10),
-              ListTile(
-                leading: Icon(Icons.school, color: Colors.purple),
-                title: Text('School Profile Overview'),
-                subtitle:
-                    Text('Address, contact details, and admin information.'),
+              const ListTile(
+                leading: Icon(Icons.analytics, color: Colors.teal),
+                title: Text('Attendance Reports'),
+                subtitle: Text('Generate and export attendance reports.'),
+              ),
+              const SizedBox(height: 10),
+              const ListTile(
+                leading: Icon(Icons.bar_chart, color: Colors.indigo),
+                title: Text('Performance Analytics'),
+                subtitle: Text(
+                    'Analyze trip efficiency, driver performance, and more.'),
               ),
             ],
           ),

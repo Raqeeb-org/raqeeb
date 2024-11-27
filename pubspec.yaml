@@ -77,6 +77,7 @@ flutter:
     - assets/images/bus.png
     - assets/images/femaleChild.png
     - assets/images/maleChild.png
+    - assets/images/driver1.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
