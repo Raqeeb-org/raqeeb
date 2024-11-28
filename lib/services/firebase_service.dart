@@ -132,4 +132,37 @@ class FirebaseService {
       throw Exception('Failed to add parent: $e');
     }
   }
+
+  // Add child to Firestore
+  Future<void> addChild({
+    required String firstName,
+    required String lastName,
+    required String midName,
+    required String idNum,
+    required String gender,
+    required String grade,
+    required String homePostalCode,
+    required String houseLocation,
+    required String busId,
+    required String parentId,
+    required String adminId,
+  }) async {
+    try {
+      await _firestore.collection('Children').add({
+        'firstName': firstName,
+        'lastName': lastName,
+        'midName': midName,
+        'idNum': idNum,
+        'gender': gender,
+        'grade': grade,
+        'homePostalCode': homePostalCode,
+        'houseLocation': houseLocation,
+        'bus': _firestore.doc('/Buses/$busId'),
+        'parentID': _firestore.doc('/Users/$adminId/Parents/$parentId'),
+        'schoolAdmin': _firestore.doc('/Users/$adminId/Admins/$adminId'),
+      });
+    } catch (e) {
+      throw Exception('Failed to add child: $e');
+    }
+  }
 }
