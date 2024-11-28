@@ -318,7 +318,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
 
       Map<String, dynamic> studentData =
           studentDoc.data() as Map<String, dynamic>;
-      String parentPath = studentData['parentID1'];
+      String parentPath = studentData['parentID'];
       DocumentReference parentRef = firestore.doc(parentPath);
 
       // Delete the student
@@ -327,7 +327,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
       // Check if parent has other children
       QuerySnapshot siblingSnapshot = await firestore
           .collection('Children')
-          .where('parentID1', isEqualTo: parentPath)
+          .where('parentID', isEqualTo: parentPath)
           .get();
 
       if (siblingSnapshot.docs.isEmpty) {
