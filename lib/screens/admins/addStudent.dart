@@ -378,11 +378,98 @@ class _AddParentScreenState extends State<AddParentScreen> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Student Added')),
-                      );
+                      try {
+                        final adminId = _firebaseService.getCurrentAdminId();
+                        if (adminId == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Admin is not logged in')),
+                          );
+                          return;
+                        }
+
+                        // Check if the parent already exists
+                        if (_isParentExisting) {
+                          if (_selectedParent == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Please select a parent')),
+                            );
+                            return;
+                          }
+
+                          // Add the child with the existing parent reference
+                          await _firebaseService.addChild(
+                            firstName: _controllers['First Name']!.text,
+                            lastName: _controllers['Last Name']!.text,
+                            midName: _controllers['Middle Name']!.text,
+                            idNum: _controllers['ID No.']!.text,
+                            gender: _selectedGender,
+                            grade: _selectedGrade!,
+                            homePostalCode:
+                                _controllers['Home Postal Code']!.text,
+                            houseLocation:
+                                '[LAT, LNG]', // Replace with actual coordinates
+                            currentLocation: "",
+                            busId: _selectedBus!,
+                            parentId:
+                                _selectedParent!, // Use selected parent's ID
+                            adminId: adminId,
+                            status: "",
+                          );
+                        } else {
+                          // Parent does not exist; create parent and add child
+                          final String parentId =
+                              await _firebaseService.addParentAndCreateAuth(
+                            email: _controllers['Email']!.text,
+                            password: _controllers['Password']!.text,
+                            fullName: _controllers['Full Name']!.text,
+                            phoneNumber: _controllers['Phone No.']!.text,
+                            adminId: adminId,
+                          );
+
+                          // Add child with the newly created parent
+                          await _firebaseService.addChild(
+                            firstName: _controllers['First Name']!.text,
+                            lastName: _controllers['Last Name']!.text,
+                            midName: _controllers['Middle Name']!.text,
+                            idNum: _controllers['ID No.']!.text,
+                            gender: _selectedGender,
+                            grade: _selectedGrade!,
+                            homePostalCode:
+                                _controllers['Home Postal Code']!.text,
+                            houseLocation:
+                                '[LAT, LNG]', // Replace with actual coordinates
+                            currentLocation: "",
+                            busId: _selectedBus!,
+                            parentId: parentId,
+                            adminId: adminId,
+                            status: "",
+                          );
+                        }
+
+                        // Show success message
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Student added successfully')),
+                        );
+
+                        // Reset form
+                        _formKey.currentState!.reset();
+                        setState(() {
+                          _selectedGender = '';
+                          _selectedBus = null;
+                          _selectedGrade = null;
+                          _selectedParent = null;
+                          _isParentExisting = false;
+                        });
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: $e')),
+                        );
+                      }
                     }
                   },
                   child: const Text(

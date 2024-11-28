@@ -143,9 +143,11 @@ class FirebaseService {
     required String grade,
     required String homePostalCode,
     required String houseLocation,
+    required String currentLocation,
     required String busId,
     required String parentId,
     required String adminId,
+    required String status,
   }) async {
     try {
       await _firestore.collection('Children').add({
@@ -157,9 +159,11 @@ class FirebaseService {
         'grade': grade,
         'homePostalCode': homePostalCode,
         'houseLocation': houseLocation,
+        'location': currentLocation,
         'bus': _firestore.doc('/Buses/$busId'),
         'parentID': _firestore.doc('/Users/$adminId/Parents/$parentId'),
         'schoolAdmin': _firestore.doc('/Users/$adminId/Admins/$adminId'),
+        'status': status,
       });
     } catch (e) {
       throw Exception('Failed to add child: $e');
