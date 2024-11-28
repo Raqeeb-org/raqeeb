@@ -124,7 +124,6 @@ class FirebaseService {
         'email': email,
         'fullName': fullName,
         'phoneNumber': phoneNumber,
-        'role': 'Parent',
       });
 
       return parentId; // Return parentId to use as reference in child document
@@ -161,8 +160,10 @@ class FirebaseService {
         'houseLocation': houseLocation,
         'location': currentLocation,
         'bus': _firestore.doc('/Buses/$busId'),
-        'parentID': _firestore.doc('/Users/$adminId/Parents/$parentId'),
-        'schoolAdmin': _firestore.doc('/Users/$adminId/Admins/$adminId'),
+        'parentID':
+            _firestore.doc('/Users/2J4DFh6Gxi9vNAmip0iA/Parents/$parentId'),
+        'schoolAdmin':
+            _firestore.doc('/Users/2J4DFh6Gxi9vNAmip0iA/Admins/$adminId'),
         'status': status,
       });
     } catch (e) {
