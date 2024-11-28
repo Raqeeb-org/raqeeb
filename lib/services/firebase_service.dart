@@ -117,7 +117,7 @@ class FirebaseService {
       // Add parent to Firestore
       await _firestore
           .collection('Users')
-          .doc(adminId)
+          .doc('2J4DFh6Gxi9vNAmip0iA')
           .collection('Parents')
           .doc(parentId)
           .set({
