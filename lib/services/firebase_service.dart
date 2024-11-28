@@ -95,4 +95,41 @@ class FirebaseService {
       yield parents;
     }
   }
+
+  // Create parent in Firestore and Firebase Authentication
+  Future<String> addParentAndCreateAuth({
+    required String email,
+    required String password,
+    required String fullName,
+    required String phoneNumber,
+    required String adminId,
+  }) async {
+    try {
+      // Create user in Firebase Auth
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      String parentId = userCredential.user!.uid;
+
+      // Add parent to Firestore
+      await _firestore
+          .collection('Users')
+          .doc(adminId)
+          .collection('Parents')
+          .doc(parentId)
+          .set({
+        'email': email,
+        'fullName': fullName,
+        'phoneNumber': phoneNumber,
+        'role': 'Parent',
+      });
+
+      return parentId; // Return parentId to use as reference in child document
+    } catch (e) {
+      throw Exception('Failed to add parent: $e');
+    }
+  }
 }
