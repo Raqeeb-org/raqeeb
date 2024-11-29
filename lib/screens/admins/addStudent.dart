@@ -492,6 +492,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
       child: Container(
         width: 350,
         child: TextFormField(
+          maxLength: 40,
           controller: controller,
           obscureText: isPassword,
           style: const TextStyle(color: Colors.black),
