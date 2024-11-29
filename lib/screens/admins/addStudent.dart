@@ -390,6 +390,23 @@ class _AddParentScreenState extends State<AddParentScreen> {
                           return;
                         }
 
+                        // Check for duplicate email in Firestore
+                        if (!_isParentExisting) {
+                          // Checking for duplicates only if parent is being created
+                          final existingUser = await FirebaseFirestore.instance
+                              .collection('Parents')
+                              .where('email',
+                                  isEqualTo: _controllers['Email']!.text.trim())
+                              .get();
+                          if (existingUser.docs.isNotEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Email already in use')),
+                            );
+                            return; // Stop execution if email is already in use
+                          }
+                        }
+
                         // Check if the parent already exists
                         if (_isParentExisting) {
                           if (_selectedParent == null) {
@@ -477,7 +494,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -489,7 +506,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
   Widget buildTextField(String label, TextEditingController? controller,
       {bool isPassword = false}) {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: 350,
         child: TextFormField(
           maxLength: 40,
