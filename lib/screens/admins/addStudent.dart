@@ -515,7 +515,38 @@ class _AddParentScreenState extends State<AddParentScreen> {
             if (value == null || value.isEmpty) {
               return 'Please enter $label';
             }
-            return null;
+
+            // Example: Validate email format
+            if (label == 'Email' &&
+                !RegExp(r"^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")
+                    .hasMatch(value)) {
+              return 'Please enter a valid email';
+            }
+
+            // Example: Validate phone number
+            if (label == 'Phone No.' && !RegExp(r'^\d{10}$').hasMatch(value)) {
+              return 'Please enter a valid 10-digit phone number';
+            }
+
+            // Example: Validate ID number (numeric only)
+            if (label == 'ID No.' && !RegExp(r'^\d+$').hasMatch(value)) {
+              return 'ID must be numeric';
+            }
+
+            // Example: Validate password strength
+            if (label == 'Password' &&
+                !RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+                    .hasMatch(value)) {
+              return 'Password must be at least 8 characters long and include letters and numbers';
+            }
+
+            // Example: Validate postal code (numeric and fixed length = 5 digits)
+            if (label == 'Home Postal Code' &&
+                !RegExp(r'\d{5}$').hasMatch(value)) {
+              return 'Please enter a valid postal code';
+            }
+
+            return null; // If validation passes
           },
         ),
       ),
