@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:raqeeb/screens/commons/login.dart';
 import 'package:raqeeb/widgets/change_password_card.dart';
 import 'package:raqeeb/widgets/logoutCard.dart';
+import 'package:raqeeb/services/auth_service.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -161,17 +162,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             LogoutCard(
               title: 'Logout',
               icon: Icons.logout,
+              expandable: true,
+              message: 'Are you sure you want to logout?',
               onArrowClick: () async {
-                try {
-                  print("Signing out...");
-                  await FirebaseAuth.instance.signOut();
-                  print("Sign out successful");
-                  Navigator.of(context, rootNavigator: true).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                } catch (e) {
-                  print("Error during sign out: $e");
-                }
+                // Calling the sign-out method from your AuthService
+                AuthService authService = AuthService();
+                await authService.signOut();
+
+                // Navigate to the login screen
+                Navigator.pushReplacementNamed(context, '/login');
               },
             ),
           ],

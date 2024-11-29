@@ -15,23 +15,19 @@ class DashboardPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Colored Squares Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildColoredCard(
-                    title: 'Active Buses',
-                    count: '5',
-                    color: const Color.fromARGB(255, 205, 151, 222),
-                    icon: Icons.directions_bus,
-                  ),
-                  _buildColoredCard(
-                    title: 'Student Attendance',
-                    count: '98%',
-                    color: const Color.fromARGB(255, 133, 223, 136),
-                    icon: Icons.school,
-                  ),
-                ],
+              // Overview Section
+              Text('Overview', style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: 10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildInfoCard('Total Active Buses', '5', Colors.lightBlue),
+                    _buildInfoCard('Total Students', '120', Colors.green),
+                    _buildInfoCard('Total Drivers', '8', Colors.orange),
+                    _buildInfoCard('Today\'s Trips', '6', Colors.red),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -124,11 +120,18 @@ class DashboardPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
-              const SizedBox(height: 5),
-              Text(
-                title,
-                style: const TextStyle(fontSize: 16, color: Colors.white),
-                textAlign: TextAlign.center,
+              const SizedBox(height: 10),
+              const ListTile(
+                leading: Icon(Icons.bar_chart, color: Colors.indigo),
+                title: Text('Performance Analytics'),
+                subtitle: Text(
+                    'Analyze trip efficiency, driver performance, and more.'),
+              ),
+              const ListTile(
+                leading: Icon(Icons.school, color: Colors.purple),
+                title: Text('School Profile Overview'),
+                subtitle:
+                    Text('Address, contact details, and admin information.'),
               ),
             ],
           ),
@@ -149,13 +152,15 @@ class DashboardPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            const SizedBox(height: 10),
-            ...content,
+            Text(count,
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: color)), // Text color matches the card color
+            const SizedBox(height: 5),
+            Text(title,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: color)), // Text color matches the card
           ],
         ),
       ),
@@ -174,5 +179,4 @@ class DashboardPage extends StatelessWidget {
       subtitle: Text(subtitle),
     );
   }
-  //I'm trying something
 }
