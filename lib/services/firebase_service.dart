@@ -127,6 +127,12 @@ class FirebaseService {
       });
 
       return parentId; // Return parentId to use as reference in child document
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        throw Exception('Email is already registered');
+      } else {
+        throw Exception('Failed to add parent: ${e.message}');
+      }
     } catch (e) {
       throw Exception('Failed to add parent: $e');
     }
