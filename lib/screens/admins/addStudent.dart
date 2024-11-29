@@ -380,6 +380,19 @@ class _AddParentScreenState extends State<AddParentScreen> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      // Check if Password and Repeat Password fields match
+                      final password = _controllers['Password']!.text;
+                      final repeatPassword =
+                          _controllers['Repeat Password']!.text;
+
+                      if (password != repeatPassword) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Passwords do not match')),
+                        );
+                        return; // Stop further execution if passwords do not match
+                      }
+
                       try {
                         final adminId = _firebaseService.getCurrentAdminId();
                         if (adminId == null) {
@@ -492,7 +505,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
       child: SizedBox(
         width: 350,
         child: TextFormField(
-          maxLength: 40,
+          maxLength: 35,
           controller: controller,
           obscureText: isPassword,
           style: const TextStyle(color: Colors.black),
