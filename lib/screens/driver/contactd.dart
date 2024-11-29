@@ -67,10 +67,6 @@ class _ContactPageeState extends State<ContactPagee> {
                 onTap: () => makePhoneCall('+96678893213'),
               ),
               const Spacer(),
-              Image.asset(
-                'assets/helpdesk.png', // Add this image to your assets folder
-                height: 150,
-              ),
             ],
           ),
         ),
