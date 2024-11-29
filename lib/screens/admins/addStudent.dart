@@ -11,11 +11,13 @@ class _AddParentScreenState extends State<AddParentScreen> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> _controllers = {
     'First Name': TextEditingController(),
+    'Middle Name': TextEditingController(),
     'Last Name': TextEditingController(),
     'ID No.': TextEditingController(),
     'Full Name': TextEditingController(),
     'Phone No.': TextEditingController(),
     'Email': TextEditingController(),
+    'Home Postal Code': TextEditingController(),
     'Password': TextEditingController(),
     'Repeat Password': TextEditingController(),
   };
@@ -23,6 +25,9 @@ class _AddParentScreenState extends State<AddParentScreen> {
   final FirebaseService _firebaseService = FirebaseService();
   String _selectedGender = '';
   String? _selectedBus; // To store the selected bus
+  String? _selectedGrade; // To store the selected grade
+  String? _selectedParent;
+  bool _isParentExisting = false; // Tracks whether the parent exists
 
   @override
   void dispose() {
@@ -41,7 +46,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFACE6EE), // Baby blue background color
+      backgroundColor: const Color(0xFFACE6EE),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -96,7 +101,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // First Name and Last Name Fields Side by Side
+                // First Name and Middle Name Fields Side by Side
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -109,10 +114,14 @@ class _AddParentScreenState extends State<AddParentScreen> {
                     Container(
                       width: 175,
                       child: buildTextField(
-                          'Last Name', _controllers['Last Name']),
+                          'Middle Name', _controllers['Middle Name']),
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
+
+                // Last Name Field
+                buildTextField('Last Name', _controllers['Last Name']),
                 const SizedBox(height: 10),
 
                 // ID No. Field
@@ -163,52 +172,90 @@ class _AddParentScreenState extends State<AddParentScreen> {
 
                 const SizedBox(height: 10),
 
-                // Bus Selection Dropdown
-                StreamBuilder<QuerySnapshot>(
-                  stream: _firebaseService.getBusesForAdmin(adminId),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Text('No buses available for this admin.');
-                    }
+                // Bus Selection Dropdown and Child Grade Dropdown
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 175,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: _firebaseService.getBusesForAdmin(adminId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!.docs.isEmpty) {
+                            return const Text(
+                                'No buses available for this admin.');
+                          }
 
-                    // Extract bus names or IDs
-                    final buses = snapshot.data!.docs;
+                          // Extract bus names or IDs
+                          final buses = snapshot.data!.docs;
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 45.0),
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedBus,
-                        hint: const Text('Select a bus'),
-                        items: buses.map((bus) {
-                          final busData = bus.data() as Map<String, dynamic>;
-                          final busName = busData['busNum'] ?? 'Unnamed Bus';
-                          return DropdownMenuItem<String>(
-                            value: bus.id,
-                            child: Text(busName),
+                          return DropdownButtonFormField<String>(
+                            value: _selectedBus,
+                            hint: const Text('Assign a bus'),
+                            items: buses.map((bus) {
+                              final busData =
+                                  bus.data() as Map<String, dynamic>;
+                              final busName =
+                                  busData['busNum'] ?? 'Unnamed Bus';
+                              return DropdownMenuItem<String>(
+                                value: bus.id,
+                                child: Text(busName),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedBus = value;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Bus',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            validator: (value) =>
+                                value == null ? 'Please select a bus' : null,
                           );
-                        }).toList(),
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      width: 175,
+                      child: DropdownButtonFormField<String>(
+                        value: _selectedGrade,
+                        hint: const Text('Select Grade'),
+                        items: List.generate(6, (index) {
+                          final grade = 'Grade ${index + 1}';
+                          return DropdownMenuItem<String>(
+                            value: grade,
+                            child: Text(grade),
+                          );
+                        }),
                         onChanged: (value) {
                           setState(() {
-                            _selectedBus = value;
+                            _selectedGrade = value!;
                           });
                         },
                         decoration: InputDecoration(
-                          labelText: 'Bus',
+                          labelText: 'Grade',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
                         validator: (value) =>
-                            value == null ? 'Please select a bus' : null,
+                            value == null ? 'Please select a grade' : null,
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 10),
 
-                const SizedBox(height: 20),
                 // Add a divider between the ID No. and Phone No. fields
                 const Divider(
                   color: Color.fromARGB(255, 169, 165, 165),
@@ -229,23 +276,96 @@ class _AddParentScreenState extends State<AddParentScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Full Name Field
-                buildTextField('Full Name', _controllers['Full Name']),
+
+                // Parent Selection Dropdown
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isParentExisting,
+                      onChanged: (value) {
+                        setState(() {
+                          _isParentExisting = value!;
+                        });
+                      },
+                    ),
+                    const Text('Parent Already Exists'),
+                  ],
+                ),
                 const SizedBox(height: 10),
-                // Phone No. Field
-                buildTextField('Phone No.', _controllers['Phone No.']),
-                const SizedBox(height: 10),
-                // Email Field
-                buildTextField('Email', _controllers['Email']),
-                const SizedBox(height: 10),
-                // Password Field
-                buildTextField('Password', _controllers['Password'],
-                    isPassword: true),
-                const SizedBox(height: 10),
-                // Repeat Password Field
-                buildTextField(
-                    'Repeat Password', _controllers['Repeat Password'],
-                    isPassword: true),
+
+                if (_isParentExisting)
+                  StreamBuilder<List<Map<String, dynamic>>>(
+                    stream: _firebaseService.getParentsByAdmin(adminId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasError) {
+                        return const Text('Error loading parents.');
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text('No parents available.');
+                      }
+
+                      final parents = snapshot.data!;
+                      print('Final Parents for Dropdown: $parents');
+
+                      return DropdownButtonFormField<String>(
+                        value: _selectedParent,
+                        hint: const Text('Select Parent'),
+                        items: parents.map((parentData) {
+                          final parentDocId = parentData['docId'];
+                          //final parentId = parentRef.id;
+                          final parentName =
+                              parentData['fullName'] ?? 'Unnamed Parent';
+
+                          return DropdownMenuItem<String>(
+                            value: parentDocId,
+                            child: Text(parentName),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedParent = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Parent',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                else
+                  Column(
+                    children: [
+                      // Full Name Field
+                      buildTextField('Full Name', _controllers['Full Name']),
+                      const SizedBox(height: 10),
+                      // Phone No. Field
+                      buildTextField('Phone No.', _controllers['Phone No.']),
+                      const SizedBox(height: 10),
+                      // Email Field
+                      buildTextField('Email', _controllers['Email']),
+                      const SizedBox(height: 10),
+                      // Home Postal Code Field
+                      buildTextField(
+                          'Home Postal Code', _controllers['Home Postal Code']),
+                      const SizedBox(height: 10),
+                      buildTextField('Password', _controllers['Password'],
+                          isPassword: true),
+                      const SizedBox(height: 10),
+                      buildTextField(
+                          'Repeat Password', _controllers['Repeat Password'],
+                          isPassword: true),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+
                 const SizedBox(height: 20),
 
                 // Submit Button
@@ -258,11 +378,98 @@ class _AddParentScreenState extends State<AddParentScreen> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Student Added')),
-                      );
+                      try {
+                        final adminId = _firebaseService.getCurrentAdminId();
+                        if (adminId == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Admin is not logged in')),
+                          );
+                          return;
+                        }
+
+                        // Check if the parent already exists
+                        if (_isParentExisting) {
+                          if (_selectedParent == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Please select a parent')),
+                            );
+                            return;
+                          }
+
+                          // Add the child with the existing parent reference
+                          await _firebaseService.addChild(
+                            firstName: _controllers['First Name']!.text,
+                            lastName: _controllers['Last Name']!.text,
+                            midName: _controllers['Middle Name']!.text,
+                            idNum: _controllers['ID No.']!.text,
+                            gender: _selectedGender,
+                            grade: _selectedGrade!,
+                            homePostalCode:
+                                _controllers['Home Postal Code']!.text,
+                            houseLocation:
+                                '[LAT, LNG]', // Replace with actual coordinates
+                            currentLocation: "",
+                            busId: _selectedBus!,
+                            parentId:
+                                _selectedParent!, // Use selected parent's ID
+                            adminId: adminId,
+                            status: "",
+                          );
+                        } else {
+                          // Parent does not exist; create parent and add child
+                          final String parentId =
+                              await _firebaseService.addParentAndCreateAuth(
+                            email: _controllers['Email']!.text,
+                            password: _controllers['Password']!.text,
+                            fullName: _controllers['Full Name']!.text,
+                            phoneNumber: _controllers['Phone No.']!.text,
+                            adminId: adminId,
+                          );
+
+                          // Add child with the newly created parent
+                          await _firebaseService.addChild(
+                            firstName: _controllers['First Name']!.text,
+                            lastName: _controllers['Last Name']!.text,
+                            midName: _controllers['Middle Name']!.text,
+                            idNum: _controllers['ID No.']!.text,
+                            gender: _selectedGender,
+                            grade: _selectedGrade!,
+                            homePostalCode:
+                                _controllers['Home Postal Code']!.text,
+                            houseLocation:
+                                '[LAT, LNG]', // Replace with actual coordinates
+                            currentLocation: "",
+                            busId: _selectedBus!,
+                            parentId: parentId,
+                            adminId: adminId,
+                            status: "",
+                          );
+                        }
+
+                        // Show success message
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Student added successfully')),
+                        );
+
+                        // Reset form
+                        _formKey.currentState!.reset();
+                        setState(() {
+                          _selectedGender = '';
+                          _selectedBus = null;
+                          _selectedGrade = null;
+                          _selectedParent = null;
+                          _isParentExisting = false;
+                        });
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: $e')),
+                        );
+                      }
                     }
                   },
                   child: const Text(

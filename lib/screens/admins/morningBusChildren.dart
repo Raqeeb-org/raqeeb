@@ -54,7 +54,7 @@ class MorningBusChildren extends StatelessWidget {
             itemCount: children.length,
             itemBuilder: (context, index) {
               final child = children[index].data() as Map<String, dynamic>;
-              final DocumentReference parentRef = child['parentID1'];
+              final DocumentReference parentRef = child['parentID'];
               print("Debug: Parent ID for child: ${parentRef.id}");
 
               return FutureBuilder<DocumentSnapshot>(
