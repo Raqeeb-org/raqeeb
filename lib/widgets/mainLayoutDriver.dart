@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 import 'package:raqeeb/screens/driver/driverHomePage.dart';
 import 'package:raqeeb/screens/driver/driverProfile.dart';
 
+import '../screens/driver/contactd.dart';
+
 class MainLayoutDriver extends StatefulWidget {
   final int initialIndex;
 
@@ -29,7 +31,7 @@ class MainLayoutState extends State<MainLayoutDriver> {
 
   // List of pages with username passed to DriverHomePage
   List<Widget> get _pages => <Widget>[
-        DriverHomePage(userName: _userName), // Page 0
+        const ContactPagee(), // Page 0 - Navigate to contactd.dart
         DriverHomePage(userName: _userName), // Page 1
         DriverProfilePage(), // Page 2
       ];
@@ -65,8 +67,8 @@ class MainLayoutState extends State<MainLayoutDriver> {
               backgroundColor: Colors.white,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.directions_bus),
-                  label: 'Track',
+                  icon: Icon(Icons.contact_page),
+                  label: 'Contact',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),

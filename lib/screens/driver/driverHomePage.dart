@@ -32,18 +32,29 @@ class DriverHomePage extends StatelessWidget {
                   'Hello, $userName', // Display the user's name
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber[700],
+
+                    color: Colors.black, // Set text color to black
                   ),
                 ),
                 SizedBox(height: 8),
-                Text(
-                  'Schedules',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber[700],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.schedule, // Add schedule icon
+                      color: Colors.amber[700],
+                      size: 28,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Schedules',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber[700],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
