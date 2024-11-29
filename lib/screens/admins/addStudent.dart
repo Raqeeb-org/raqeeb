@@ -392,8 +392,10 @@ class _AddParentScreenState extends State<AddParentScreen> {
 
                         // Check for duplicate email in Firestore
                         if (!_isParentExisting) {
-                          // Checking for duplicates only if parent is being created
+                          // Only check for duplicates if parent is being created
                           final existingUser = await FirebaseFirestore.instance
+                              .collection('Users')
+                              .doc('2J4DFh6Gxi9vNAmip0iA')
                               .collection('Parents')
                               .where('email',
                                   isEqualTo: _controllers['Email']!.text.trim())
@@ -419,14 +421,14 @@ class _AddParentScreenState extends State<AddParentScreen> {
 
                           // Add the child with the existing parent reference
                           await _firebaseService.addChild(
-                            firstName: _controllers['First Name']!.text,
-                            lastName: _controllers['Last Name']!.text,
-                            midName: _controllers['Middle Name']!.text,
-                            idNum: _controllers['ID No.']!.text,
+                            firstName: _controllers['First Name']!.text.trim(),
+                            lastName: _controllers['Last Name']!.text.trim(),
+                            midName: _controllers['Middle Name']!.text.trim(),
+                            idNum: _controllers['ID No.']!.text.trim(),
                             gender: _selectedGender,
                             grade: _selectedGrade!,
                             homePostalCode:
-                                _controllers['Home Postal Code']!.text,
+                                _controllers['Home Postal Code']!.text.trim(),
                             houseLocation:
                                 '[LAT, LNG]', // Replace with actual coordinates
                             currentLocation: "",
@@ -440,23 +442,23 @@ class _AddParentScreenState extends State<AddParentScreen> {
                           // Parent does not exist; create parent and add child
                           final String parentId =
                               await _firebaseService.addParentAndCreateAuth(
-                            email: _controllers['Email']!.text,
+                            email: _controllers['Email']!.text.trim(),
                             password: _controllers['Password']!.text,
-                            fullName: _controllers['Full Name']!.text,
-                            phoneNumber: _controllers['Phone No.']!.text,
+                            fullName: _controllers['Full Name']!.text.trim(),
+                            phoneNumber: _controllers['Phone No.']!.text.trim(),
                             adminId: adminId,
                           );
 
                           // Add child with the newly created parent
                           await _firebaseService.addChild(
-                            firstName: _controllers['First Name']!.text,
-                            lastName: _controllers['Last Name']!.text,
-                            midName: _controllers['Middle Name']!.text,
-                            idNum: _controllers['ID No.']!.text,
+                            firstName: _controllers['First Name']!.text.trim(),
+                            lastName: _controllers['Last Name']!.text.trim(),
+                            midName: _controllers['Middle Name']!.text.trim(),
+                            idNum: _controllers['ID No.']!.text.trim(),
                             gender: _selectedGender,
                             grade: _selectedGrade!,
                             homePostalCode:
-                                _controllers['Home Postal Code']!.text,
+                                _controllers['Home Postal Code']!.text.trim(),
                             houseLocation:
                                 '[LAT, LNG]', // Replace with actual coordinates
                             currentLocation: "",
