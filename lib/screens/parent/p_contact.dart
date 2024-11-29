@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-
+import 'package:raqeeb/utils/phone_utils.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: ContactPage(),
   ));
 }
@@ -131,8 +130,8 @@ class ContactCard extends StatelessWidget {
                   onTap: onTap,
                   child: Text(
                     phone,
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 8, 130, 230),
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 8, 130, 230),
                       fontSize: 14,
                       decoration: TextDecoration.underline,
                     ),
@@ -142,22 +141,12 @@ class ContactCard extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.phone,
-                color: const Color.fromARGB(255, 8, 130, 230)),
+            icon: const Icon(Icons.phone,
+                color: Color.fromARGB(255, 8, 130, 230)),
             onPressed: onTap,
           ),
         ],
       ),
     );
-  }
-}
-
-// Utility function for making phone calls (placed in phone_utils.dart)
-void makePhoneCall(String phoneNumber) async {
-  final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
-  if (await canLaunchUrl(phoneUri)) {
-    await launchUrl(phoneUri);
-  } else {
-    throw 'Could not launch $phoneNumber';
   }
 }
