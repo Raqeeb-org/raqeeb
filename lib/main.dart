@@ -49,6 +49,7 @@ class RaqeebApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen(), // Set the SplashScreen as the home page
+      debugShowCheckedModeBanner: false,
       // Adding the routes for navigation
       routes: {
         // Admin's home page route
