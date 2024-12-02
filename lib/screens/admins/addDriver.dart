@@ -133,16 +133,13 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
 
                 // First Name and Last Name Fields Side by Side
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 175, // Custom width for First Name
+                    Expanded(
                       child: buildTextField(
                           'First Name', _controllers['First Name']),
                     ),
-                    const SizedBox(width: 10), // Space between the two fields
-                    SizedBox(
-                      width: 175, // Custom width for Last Name
+                    const SizedBox(width: 10),
+                    Expanded(
                       child: buildTextField(
                           'Last Name', _controllers['Last Name']),
                     ),
@@ -204,7 +201,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
       {bool isPassword = false}) {
     return Center(
       child: SizedBox(
-        width: 350, // Default width for other text boxes
+        width: double.infinity,
         child: TextFormField(
           controller: controller,
           obscureText: isPassword,
@@ -217,15 +214,15 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                   color: Color.fromARGB(255, 247, 164, 0), width: 2.0),
-              borderRadius: BorderRadius.circular(30.0), // More rounded corners
+              borderRadius: BorderRadius.circular(30.0), // Rounded corners
             ),
             enabledBorder: OutlineInputBorder(
               borderSide:
                   const BorderSide(color: Color.fromARGB(255, 247, 164, 0)),
-              borderRadius: BorderRadius.circular(30.0), // More rounded corners
+              borderRadius: BorderRadius.circular(30.0), // Rounded corners
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0), // More rounded corners
+              borderRadius: BorderRadius.circular(30.0), // Rounded corners
             ),
           ),
           validator: (value) {

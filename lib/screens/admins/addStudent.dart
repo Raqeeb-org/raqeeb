@@ -105,14 +105,12 @@ class _AddParentScreenState extends State<AddParentScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 175,
+                    Flexible(
                       child: buildTextField(
                           'First Name', _controllers['First Name']),
                     ),
                     const SizedBox(width: 10),
-                    Container(
-                      width: 175,
+                    Flexible(
                       child: buildTextField(
                           'Middle Name', _controllers['Middle Name']),
                     ),
@@ -176,8 +174,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 175,
+                    Flexible(
                       child: StreamBuilder<QuerySnapshot>(
                         stream: _firebaseService.getBusesForAdmin(adminId),
                         builder: (context, snapshot) {
@@ -191,7 +188,6 @@ class _AddParentScreenState extends State<AddParentScreen> {
                                 'No buses available for this admin.');
                           }
 
-                          // Extract bus names or IDs
                           final buses = snapshot.data!.docs;
 
                           return DropdownButtonFormField<String>(
@@ -225,8 +221,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Container(
-                      width: 175,
+                    Flexible(
                       child: DropdownButtonFormField<String>(
                         value: _selectedGrade,
                         hint: const Text('Select Grade'),
@@ -256,7 +251,6 @@ class _AddParentScreenState extends State<AddParentScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Add a divider between the ID No. and Phone No. fields
                 const Divider(
                   color: Color.fromARGB(255, 169, 165, 165),
                   thickness: 1,
@@ -310,14 +304,11 @@ class _AddParentScreenState extends State<AddParentScreen> {
                       }
 
                       final parents = snapshot.data!;
-                      print('Final Parents for Dropdown: $parents');
-
                       return DropdownButtonFormField<String>(
                         value: _selectedParent,
                         hint: const Text('Select Parent'),
                         items: parents.map((parentData) {
                           final parentDocId = parentData['docId'];
-                          //final parentId = parentRef.id;
                           final parentName =
                               parentData['fullName'] ?? 'Unnamed Parent';
 
@@ -343,16 +334,12 @@ class _AddParentScreenState extends State<AddParentScreen> {
                 else
                   Column(
                     children: [
-                      // Full Name Field
                       buildTextField('Full Name', _controllers['Full Name']),
                       const SizedBox(height: 10),
-                      // Phone No. Field
                       buildTextField('Phone No.', _controllers['Phone No.']),
                       const SizedBox(height: 10),
-                      // Email Field
                       buildTextField('Email', _controllers['Email']),
                       const SizedBox(height: 10),
-                      // Home Postal Code Field
                       buildTextField(
                           'Home Postal Code', _controllers['Home Postal Code']),
                       const SizedBox(height: 10),
@@ -362,16 +349,14 @@ class _AddParentScreenState extends State<AddParentScreen> {
                       buildTextField(
                           'Repeat Password', _controllers['Repeat Password'],
                           isPassword: true),
-                      const SizedBox(height: 10),
                     ],
                   ),
-
                 const SizedBox(height: 20),
 
                 // Submit Button
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange, // Background color
+                    backgroundColor: Colors.orange,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40.0, vertical: 15.0),
                     shape: RoundedRectangleBorder(
@@ -380,7 +365,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      // Check if Password and Repeat Password fields match
+                      // Original Logic
                       final password = _controllers['Password']!.text;
                       final repeatPassword =
                           _controllers['Repeat Password']!.text;
@@ -390,7 +375,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
                           const SnackBar(
                               content: Text('Passwords do not match')),
                         );
-                        return; // Stop further execution if passwords do not match
+                        return;
                       }
 
                       try {
@@ -403,7 +388,6 @@ class _AddParentScreenState extends State<AddParentScreen> {
                           return;
                         }
 
-                        // Check if the parent already exists
                         if (_isParentExisting) {
                           if (_selectedParent == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -413,7 +397,6 @@ class _AddParentScreenState extends State<AddParentScreen> {
                             return;
                           }
 
-                          // Add the child with the existing parent reference
                           await _firebaseService.addChild(
                             firstName: _controllers['First Name']!.text.trim(),
                             lastName: _controllers['Last Name']!.text.trim(),
@@ -423,17 +406,14 @@ class _AddParentScreenState extends State<AddParentScreen> {
                             grade: _selectedGrade!,
                             homePostalCode:
                                 _controllers['Home Postal Code']!.text.trim(),
-                            houseLocation:
-                                '[LAT, LNG]', // Replace with actual coordinates
+                            houseLocation: '[LAT, LNG]',
                             currentLocation: "",
                             busId: _selectedBus!,
-                            parentId:
-                                _selectedParent!, // Use selected parent's ID
+                            parentId: _selectedParent!,
                             adminId: adminId,
                             status: "",
                           );
                         } else {
-                          // Parent does not exist; create parent and add child
                           final String parentId =
                               await _firebaseService.addParentAndCreateAuth(
                             email: _controllers['Email']!.text.trim(),
@@ -443,7 +423,6 @@ class _AddParentScreenState extends State<AddParentScreen> {
                             adminId: adminId,
                           );
 
-                          // Add child with the newly created parent
                           await _firebaseService.addChild(
                             firstName: _controllers['First Name']!.text.trim(),
                             lastName: _controllers['Last Name']!.text.trim(),
@@ -453,8 +432,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
                             grade: _selectedGrade!,
                             homePostalCode:
                                 _controllers['Home Postal Code']!.text.trim(),
-                            houseLocation:
-                                '[LAT, LNG]', // Replace with actual coordinates
+                            houseLocation: '[LAT, LNG]',
                             currentLocation: "",
                             busId: _selectedBus!,
                             parentId: parentId,
@@ -463,13 +441,11 @@ class _AddParentScreenState extends State<AddParentScreen> {
                           );
                         }
 
-                        // Show success message
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                               content: Text('Student added successfully')),
                         );
 
-                        // Reset form
                         _formKey.currentState!.reset();
                         setState(() {
                           _selectedGender = '';
@@ -503,7 +479,7 @@ class _AddParentScreenState extends State<AddParentScreen> {
       {bool isPassword = false}) {
     return Center(
       child: SizedBox(
-        width: 350,
+        width: double.infinity,
         child: TextFormField(
           maxLength: 35,
           controller: controller,
@@ -530,37 +506,32 @@ class _AddParentScreenState extends State<AddParentScreen> {
               return 'Please enter $label';
             }
 
-            // Example: Validate email format
             if (label == 'Email' &&
                 !RegExp(r"^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")
                     .hasMatch(value)) {
               return 'Please enter a valid email';
             }
 
-            // Example: Validate phone number
             if (label == 'Phone No.' && !RegExp(r'^\d{10}$').hasMatch(value)) {
               return 'Please enter a valid 10-digit phone number';
             }
 
-            // Example: Validate ID number (numeric only)
             if (label == 'ID No.' && !RegExp(r'^\d+$').hasMatch(value)) {
               return 'ID must be numeric';
             }
 
-            // Example: Validate password strength
             if (label == 'Password' &&
                 !RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
                     .hasMatch(value)) {
-              return 'Password must be at least 8 characters long and include letters and numbers';
+              return '• Password must be 8+ characters\n• Must include letters and numbers';
             }
 
-            // Example: Validate postal code (numeric and fixed length = 5 digits)
             if (label == 'Home Postal Code' &&
                 !RegExp(r'\d{5}$').hasMatch(value)) {
               return 'Please enter a valid postal code';
             }
 
-            return null; // If validation passes
+            return null;
           },
         ),
       ),

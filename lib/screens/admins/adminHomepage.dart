@@ -53,6 +53,7 @@ class AdminHomePageState extends State<AdminHomePage> {
             // Banner Section with the image
             Stack(
               children: [
+                SizedBox(height: 30),
                 Image.asset(
                   'assets/images/header.png', // School banner image
                   width: double.infinity,
