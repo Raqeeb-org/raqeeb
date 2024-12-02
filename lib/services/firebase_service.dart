@@ -171,6 +171,7 @@ class FirebaseService {
         'schoolAdmin':
             _firestore.doc('/Users/2J4DFh6Gxi9vNAmip0iA/Admins/$adminId'),
         'status': status,
+        'isCheckedIn': false,
       });
     } catch (e) {
       throw Exception('Failed to add child: $e');
