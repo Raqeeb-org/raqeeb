@@ -33,7 +33,11 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
   }
 
   void _addDriver() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      print("Validation failed");
+      return;
+    }
+    ;
 
     final String firstName = _controllers['First Name']!.text.trim();
     final String lastName = _controllers['Last Name']!.text.trim();
@@ -232,7 +236,43 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
             if (value == null || value.isEmpty) {
               return 'Please enter $label';
             }
-            return null;
+            // Example: Validate email format
+            if (label == 'Email' &&
+                !RegExp(r"^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")
+                    .hasMatch(value)) {
+              return 'Please enter a valid email';
+            }
+
+            // Example: Validate phone number
+            if (label == 'Phone No.' && !RegExp(r'^\d{10}$').hasMatch(value)) {
+              return 'Please enter a valid 10-digit phone number';
+            }
+
+            // Example: Validate ID number (numeric only, max length 10 digits)
+            if (label == 'ID No.') {
+              value = value.trim();
+              if (!RegExp(r'^\d+$').hasMatch(value)) {
+                return 'ID must be numeric';
+              }
+              if (value.length != 10) {
+                return 'ID must be exactly 10 digits';
+              }
+            }
+
+            // Example: Validate password strength
+            if (label == 'Password' &&
+                !RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+                    .hasMatch(value)) {
+              return 'Password must be at least 8 characters long and include letters and numbers';
+            }
+
+            // Ensure passwords match
+            if (label == 'Repeat Password' &&
+                value != _controllers['Password']!.text) {
+              return 'Passwords do not match';
+            }
+
+            return null; // If validation passes
           },
         ),
       ),
