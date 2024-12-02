@@ -4,7 +4,8 @@ import 'package:raqeeb/screens/driver/DriverMapScreen.dart';
 import 'package:url_launcher/url_launcher.dart'; // Import url_launcher for phone functionality
 
 class MorningTripScreen extends StatelessWidget {
-  final LocationService _locationService = LocationService(); // Initialize LocationService
+  final LocationService _locationService =
+      LocationService(); // Initialize LocationService
 
   @override
   Widget build(BuildContext context) {
@@ -75,14 +76,23 @@ class MorningTripScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         List<Map<String, dynamic>> studentLocations = [
-                          {"name": "Khaled", "latitude": 24.774265, "longitude": 46.738586},
-                          {"name": "Deena", "latitude": 24.774965, "longitude": 46.739586},
+                          {
+                            "name": "Khaled",
+                            "latitude": 24.774265,
+                            "longitude": 46.738586
+                          },
+                          {
+                            "name": "Deena",
+                            "latitude": 24.774965,
+                            "longitude": 46.739586
+                          },
                           // Add more students as needed
                         ];
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DriverMapScreen(studentLocations: studentLocations),
+                            builder: (context) => DriverMapScreen(
+                                studentLocations: studentLocations),
                           ),
                         );
                       },
@@ -93,7 +103,7 @@ class MorningTripScreen extends StatelessWidget {
                       ),
                       child: Text(
                         "Start Trip",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                     ),
                     ElevatedButton(
@@ -107,8 +117,8 @@ class MorningTripScreen extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
-                        "Report",
-                        style: TextStyle(fontSize: 18),
+                        "Get Help",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                     ),
                   ],

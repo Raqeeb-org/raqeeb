@@ -67,9 +67,9 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 50),
             const Text(
-              'Driver Profile',
+              'Profile',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

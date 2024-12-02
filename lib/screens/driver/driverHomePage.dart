@@ -13,11 +13,12 @@ class DriverHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // Image section
           Image.asset(
-            'assets/images/header.png',
+            'assets/images/Schoole.png',
             width: double.infinity,
             height: 200,
             fit: BoxFit.cover,

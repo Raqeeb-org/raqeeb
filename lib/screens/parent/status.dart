@@ -32,7 +32,8 @@ class _StatusScreenState extends State<StatusScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(156, 172, 230, 238), // Background color as in your image
+      backgroundColor: const Color.fromARGB(
+          156, 172, 230, 238), // Background color as in your image
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -54,7 +55,7 @@ class _StatusScreenState extends State<StatusScreen> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'You can learn about your children status by tracking this line :)',
+                    'Stay informed about your children status by following this tracker!',
                     style: TextStyle(fontSize: 16, color: Colors.black87),
                     textAlign: TextAlign.center,
                   ),
@@ -66,7 +67,8 @@ class _StatusScreenState extends State<StatusScreen> {
             SizedBox(
               height: 80, // Adjust the height for the timeline
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -78,7 +80,10 @@ class _StatusScreenState extends State<StatusScreen> {
                         isFirst: true,
                         indicatorStyle: IndicatorStyle(
                           width: 10,
-                          color: currentStatus >= 0 ? Colors.blue : Colors.grey, // Active or inactive based on status
+                          color: currentStatus >= 0
+                              ? Colors.blue
+                              : Colors
+                                  .grey, // Active or inactive based on status
                           iconStyle: IconStyle(
                             iconData: Icons.circle,
                             color: Colors.white,
@@ -89,7 +94,10 @@ class _StatusScreenState extends State<StatusScreen> {
                           thickness: 6,
                         ),
                         afterLineStyle: LineStyle(
-                          color: currentStatus > 0 ? Colors.blue : Colors.grey, // Active or inactive based on status
+                          color: currentStatus > 0
+                              ? Colors.blue
+                              : Colors
+                                  .grey, // Active or inactive based on status
                           thickness: 6,
                         ),
                         endChild: const Padding(
@@ -104,18 +112,24 @@ class _StatusScreenState extends State<StatusScreen> {
                         alignment: TimelineAlign.center,
                         indicatorStyle: IndicatorStyle(
                           width: 10,
-                          color: currentStatus >= 1 ? Colors.orange : Colors.grey, // Active or inactive
+                          color: currentStatus >= 1
+                              ? Colors.orange
+                              : Colors.grey, // Active or inactive
                           iconStyle: IconStyle(
                             iconData: Icons.directions_bus,
                             color: Colors.white,
                           ),
                         ),
                         beforeLineStyle: LineStyle(
-                          color: currentStatus >= 1 ? Colors.blue : Colors.grey, // Active or inactive
+                          color: currentStatus >= 1
+                              ? Colors.blue
+                              : Colors.grey, // Active or inactive
                           thickness: 6,
                         ),
                         afterLineStyle: LineStyle(
-                          color: currentStatus > 1 ? Colors.blue : Colors.grey, // Active or inactive
+                          color: currentStatus > 1
+                              ? Colors.blue
+                              : Colors.grey, // Active or inactive
                           thickness: 6,
                         ),
                         endChild: const Padding(
@@ -130,18 +144,24 @@ class _StatusScreenState extends State<StatusScreen> {
                         alignment: TimelineAlign.center,
                         indicatorStyle: IndicatorStyle(
                           width: 10,
-                          color: currentStatus >= 2 ? Colors.green : Colors.grey, // Active or inactive
+                          color: currentStatus >= 2
+                              ? Colors.green
+                              : Colors.grey, // Active or inactive
                           iconStyle: IconStyle(
                             iconData: Icons.school,
                             color: Colors.white,
                           ),
                         ),
                         beforeLineStyle: LineStyle(
-                          color: currentStatus >= 2 ? Colors.blue : Colors.grey, // Active or inactive
+                          color: currentStatus >= 2
+                              ? Colors.blue
+                              : Colors.grey, // Active or inactive
                           thickness: 6,
                         ),
                         afterLineStyle: LineStyle(
-                          color: currentStatus > 2 ? Colors.blue : Colors.grey, // Active or inactive
+                          color: currentStatus > 2
+                              ? Colors.blue
+                              : Colors.grey, // Active or inactive
                           thickness: 6,
                         ),
                         endChild: const Padding(
@@ -157,14 +177,18 @@ class _StatusScreenState extends State<StatusScreen> {
                         isLast: true,
                         indicatorStyle: IndicatorStyle(
                           width: 10,
-                          color: currentStatus == 3 ? Colors.red : Colors.grey, // Active or inactive
+                          color: currentStatus == 3
+                              ? Colors.red
+                              : Colors.grey, // Active or inactive
                           iconStyle: IconStyle(
                             iconData: Icons.home,
                             color: Colors.white,
                           ),
                         ),
                         beforeLineStyle: LineStyle(
-                          color: currentStatus == 3 ? Colors.blue : Colors.grey, // Active or inactive
+                          color: currentStatus == 3
+                              ? Colors.blue
+                              : Colors.grey, // Active or inactive
                           thickness: 6,
                         ),
                         endChild: const Padding(
@@ -186,7 +210,10 @@ class _StatusScreenState extends State<StatusScreen> {
                 children: [
                   const Text(
                     'Child Location',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87),
                   ),
                   const SizedBox(height: 20),
                   Container(
@@ -197,13 +224,15 @@ class _StatusScreenState extends State<StatusScreen> {
                     ),
                     child: GoogleMap(
                       initialCameraPosition: const CameraPosition(
-                        target: LatLng(24.7136, 46.6753), // Replace with child's initial location
+                        target: LatLng(24.7136,
+                            46.6753), // Replace with child's initial location
                         zoom: 14.0,
                       ),
                       markers: {
                         const Marker(
                           markerId: MarkerId('child_location'),
-                          position: LatLng(24.7136, 46.6753), // Replace with child's actual location
+                          position: LatLng(24.7136,
+                              46.6753), // Replace with child's actual location
                           infoWindow: InfoWindow(
                             title: "Child's Location",
                           ),

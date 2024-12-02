@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:raqeeb/screens/commons/location_service.dart';
-import 'package:raqeeb/screens/driver/DriverMapScreen.dart'; 
+import 'package:raqeeb/screens/driver/DriverMapScreen.dart';
 import 'package:url_launcher/url_launcher.dart'; // Import url_launcher for phone functionality
 
 class AfternoonTripScreen extends StatelessWidget {
-  final LocationService _locationService = LocationService(); // Initialize LocationService
-  
+  final LocationService _locationService =
+      LocationService(); // Initialize LocationService
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,17 +76,38 @@ class AfternoonTripScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         List<Map<String, dynamic>> studentLocations = [
-                          {"name": "Basma ", "latitude": 24.774265, "longitude": 46.738586},
-                          {"name": "Deena", "latitude": 24.774965, "longitude": 46.739586},
-                          {"name": "Haneen", "latitude": 24.77494, "longitude": 46.739597},
-                          {"name": "Azeez", "latitude": 24.778965, "longitude": 46.739586},
-                          {"name": "Abdullah", "latitude": 24.664965, "longitude": 46.723586},
+                          {
+                            "name": "Basma ",
+                            "latitude": 24.774265,
+                            "longitude": 46.738586
+                          },
+                          {
+                            "name": "Deena",
+                            "latitude": 24.774965,
+                            "longitude": 46.739586
+                          },
+                          {
+                            "name": "Haneen",
+                            "latitude": 24.77494,
+                            "longitude": 46.739597
+                          },
+                          {
+                            "name": "Azeez",
+                            "latitude": 24.778965,
+                            "longitude": 46.739586
+                          },
+                          {
+                            "name": "Abdullah",
+                            "latitude": 24.664965,
+                            "longitude": 46.723586
+                          },
                           // Add more students as needed
                         ];
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DriverMapScreen(studentLocations: studentLocations),
+                            builder: (context) => DriverMapScreen(
+                                studentLocations: studentLocations),
                           ),
                         );
                       },
@@ -96,7 +118,7 @@ class AfternoonTripScreen extends StatelessWidget {
                       ),
                       child: Text(
                         "Start Trip",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                     ),
                     ElevatedButton(
@@ -110,8 +132,8 @@ class AfternoonTripScreen extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       ),
                       child: Text(
-                        "Report",
-                        style: TextStyle(fontSize: 18),
+                        "Get Help",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                     ),
                   ],

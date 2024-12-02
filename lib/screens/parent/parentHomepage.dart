@@ -32,39 +32,38 @@ class _ParentHomepageState extends State<ParentHomepage> {
 
   // Fetch children data from Firestore
   Future<void> _fetchChildrenData() async {
-  try {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) return;
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) return;
 
-    // Construct the parent's DocumentReference
-    DocumentReference parentRef = FirebaseFirestore.instance
-        .collection('Users')
-        .doc('2J4DFh6Gxi9vNAmip0iA')
-        .collection('Parents')
-        .doc(currentUser.uid);
+      // Construct the parent's DocumentReference
+      DocumentReference parentRef = FirebaseFirestore.instance
+          .collection('Users')
+          .doc('2J4DFh6Gxi9vNAmip0iA')
+          .collection('Parents')
+          .doc(currentUser.uid);
 
-    // Fetch children where parentID matches the parent's reference
-    QuerySnapshot childrenSnapshot = await FirebaseFirestore.instance
-        .collection('Children') // Collection containing child documents
-        .where('parentID', isEqualTo: parentRef) // Match by DocumentReference
-        .get();
+      // Fetch children where parentID matches the parent's reference
+      QuerySnapshot childrenSnapshot = await FirebaseFirestore.instance
+          .collection('Children') // Collection containing child documents
+          .where('parentID', isEqualTo: parentRef) // Match by DocumentReference
+          .get();
 
-    // Map the results into a list of children data
-    List<Map<String, dynamic>> children = childrenSnapshot.docs.map((doc) {
-      return doc.data() as Map<String, dynamic>;
-    }).toList();
+      // Map the results into a list of children data
+      List<Map<String, dynamic>> children = childrenSnapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
 
-    // Update the state with fetched children data
-    setState(() {
-      _children = children;
-      _isExpanded = List.filled(_children.length, false); // Match expanded states
-    });
-  } catch (e) {
-    print('Error fetching children data: $e');
+      // Update the state with fetched children data
+      setState(() {
+        _children = children;
+        _isExpanded =
+            List.filled(_children.length, false); // Match expanded states
+      });
+    } catch (e) {
+      print('Error fetching children data: $e');
+    }
   }
-}
-
-
 
   void _launchCaller(String number) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: number);
@@ -78,17 +77,20 @@ class _ParentHomepageState extends State<ParentHomepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          Stack(
-            children: [
-              Image.asset(
-                'assets/images/header.png',
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 200,
-              ),
-            ],
+          Center(
+            child: Stack(
+              children: [
+                Image.asset(
+                  'assets/images/Schoole.png',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 200,
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Padding(
@@ -100,39 +102,39 @@ class _ParentHomepageState extends State<ParentHomepage> {
                     'Hello, $_userName',
                     style: const TextStyle(
                       fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.orange,
+                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'MY CHILDREN',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.orange,
+                  Center(
+                    child: Text(
+                      'MY CHILDREN',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Expanded(
-  child: ListView.builder(
-    itemCount: _children.length,
-    itemBuilder: (context, index) {
-      final child = _children[index];
-      final imagePath = child['gender'] == 'Female' 
-          ? 'assets/images/femaleChild.png' 
-          : 'assets/images/maleChild.png';
-      return _buildChildCard(
-        child['firstName'],
-        child['idNum'].toString(),
-        '0580239855', // Example driver number
-        imagePath,    // Dynamically assign image
-        index,
-      );
-    },
-  ),
-),
-
+                    child: ListView.builder(
+                      itemCount: _children.length,
+                      itemBuilder: (context, index) {
+                        final child = _children[index];
+                        final imagePath = child['gender'] == 'Female'
+                            ? 'assets/images/femaleChild.png'
+                            : 'assets/images/maleChild.png';
+                        return _buildChildCard(
+                          child['firstName'],
+                          child['idNum'].toString(),
+                          '0580239855', // Example driver number
+                          imagePath, // Dynamically assign image
+                          index,
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -142,8 +144,8 @@ class _ParentHomepageState extends State<ParentHomepage> {
     );
   }
 
-  Widget _buildChildCard(
-      String name, String id, String driverNumber, String imagePath, int index) {
+  Widget _buildChildCard(String name, String id, String driverNumber,
+      String imagePath, int index) {
     return Card(
       color: Colors.amber,
       child: Column(
