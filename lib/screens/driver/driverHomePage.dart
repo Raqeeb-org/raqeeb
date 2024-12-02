@@ -80,7 +80,9 @@ class DriverHomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MorningTripScreen()),
+                          builder: (context) => MorningTripScreen(
+                              driverId:
+                                  FirebaseAuth.instance.currentUser!.uid)),
                     );
                   },
                 ),
