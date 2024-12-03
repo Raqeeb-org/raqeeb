@@ -24,6 +24,10 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Visibility toggle states for password fields
+  bool _isPasswordVisible = false;
+  bool _isRepeatPasswordVisible = false;
+
   @override
   void dispose() {
     for (var controller in _controllers.values) {
@@ -33,7 +37,10 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
   }
 
   void _addDriver() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      print("Validation failed");
+      return;
+    }
 
     final String firstName = _controllers['First Name']!.text.trim();
     final String lastName = _controllers['Last Name']!.text.trim();
@@ -159,15 +166,32 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
                 buildTextField('Email', _controllers['Email']),
                 const SizedBox(height: 10),
 
-                // Password Field
-                buildTextField('Password', _controllers['Password'],
-                    isPassword: true),
+                // Password Field with Visibility Toggle
+                buildTextField(
+                  'Password',
+                  _controllers['Password'],
+                  isPassword: true,
+                  isPasswordVisible: _isPasswordVisible,
+                  togglePasswordVisibility: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
                 const SizedBox(height: 10),
 
-                // Repeat Password Field
+                // Repeat Password Field with Visibility Toggle
                 buildTextField(
-                    'Repeat Password', _controllers['Repeat Password'],
-                    isPassword: true),
+                  'Repeat Password',
+                  _controllers['Repeat Password'],
+                  isPassword: true,
+                  isPasswordVisible: _isRepeatPasswordVisible,
+                  togglePasswordVisibility: () {
+                    setState(() {
+                      _isRepeatPasswordVisible = !_isRepeatPasswordVisible;
+                    });
+                  },
+                ),
                 const SizedBox(height: 20),
 
                 // Submit Button
@@ -197,14 +221,19 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
   }
 
   // Helper function to build text form fields
-  Widget buildTextField(String label, TextEditingController? controller,
-      {bool isPassword = false}) {
+  Widget buildTextField(
+    String label,
+    TextEditingController? controller, {
+    bool isPassword = false,
+    bool? isPasswordVisible,
+    VoidCallback? togglePasswordVisibility,
+  }) {
     return Center(
       child: SizedBox(
         width: double.infinity,
         child: TextFormField(
           controller: controller,
-          obscureText: isPassword,
+          obscureText: isPassword && !(isPasswordVisible ?? false),
           style: const TextStyle(
               color: Colors.black), // Set input text color to black
           decoration: InputDecoration(
@@ -224,12 +253,59 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30.0), // Rounded corners
             ),
+            suffixIcon: isPassword
+                ? IconButton(
+                    icon: Icon(
+                      isPasswordVisible!
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: const Color.fromARGB(255, 144, 141, 141),
+                    ),
+                    onPressed: togglePasswordVisibility,
+                  )
+                : null,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter $label';
             }
-            return null;
+            // Example: Validate email format
+            if (label == 'Email' &&
+                !RegExp(r"^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")
+                    .hasMatch(value)) {
+              return 'Please enter a valid email';
+            }
+
+            // Example: Validate phone number
+            if (label == 'Phone No.' && !RegExp(r'^\d{10}$').hasMatch(value)) {
+              return 'Please enter a valid 10-digit phone number';
+            }
+
+            // Example: Validate ID number (numeric only, max length 10 digits)
+            if (label == 'ID No.') {
+              value = value.trim();
+              if (!RegExp(r'^\d+$').hasMatch(value)) {
+                return 'ID must be numeric';
+              }
+              if (value.length != 10) {
+                return 'ID must be exactly 10 digits';
+              }
+            }
+
+            // Example: Validate password strength
+            if (label == 'Password' &&
+                !RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+                    .hasMatch(value)) {
+              return 'Password must be at least 8 characters long and include letters and numbers';
+            }
+
+            // Ensure passwords match
+            if (label == 'Repeat Password' &&
+                value != _controllers['Password']!.text) {
+              return 'Passwords do not match';
+            }
+
+            return null; // If validation passes
           },
         ),
       ),

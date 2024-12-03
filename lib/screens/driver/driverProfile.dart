@@ -14,8 +14,7 @@ class DriverProfilePage extends StatefulWidget {
 
 class _DriverProfilePageState extends State<DriverProfilePage> {
   bool _isExpanded = false;
-
-  // Variables to store driver data
+  bool _isLoading = true; // Add a loading state
   String fullName = '';
   String phoneNum = '';
   String email = '';
@@ -26,16 +25,12 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
   @override
   void initState() {
     super.initState();
-    fetchDriverData(); // Fetch the driver data when the widget is initialized
+    fetchDriverData();
   }
 
-  // Method to fetch the driver's data from Firestore
   Future<void> fetchDriverData() async {
     try {
-      // Get the current user's UID
       String userId = FirebaseAuth.instance.currentUser!.uid;
-
-      // Fetch the driver's data from Firestore
       DocumentSnapshot driverSnapshot = await FirebaseFirestore.instance
           .collection('Users')
           .doc('2J4DFh6Gxi9vNAmip0iA')
@@ -43,19 +38,22 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
           .doc(userId)
           .get();
 
-      // Check if the document exists and update state variables
       if (driverSnapshot.exists) {
         setState(() {
           fullName = driverSnapshot['fullName'] ?? 'N/A';
           phoneNum = driverSnapshot['phoneNum'] ?? 'N/A';
           email = driverSnapshot['email'] ?? 'N/A';
-          adminID = driverSnapshot['adminID'] ?? 'N/A';
+          // school = driverSnapshot['school'] ?? 'N/A';
           tripStatus = driverSnapshot['tripStatus'] ?? 'N/A';
           idNo = driverSnapshot['idNo'] ?? 'N/A';
+          _isLoading = false; // Set loading to false after fetching data
         });
       }
     } catch (e) {
       print('Error fetching driver data: $e');
+      setState(() {
+        _isLoading = false; // Stop loading if there is an error
+      });
     }
   }
 
@@ -78,96 +76,97 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
             ),
             const SizedBox(height: 20),
 
-            // Expandable Profile Card
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: double.infinity,
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 252, 196, 113),
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.purple,
-                          child: Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Colors.white,
+            // Show loading indicator or profile card
+            _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 10.0),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 252, 196, 113),
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
                           ),
-                        ),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
                             children: [
-                              Text(
-                                fullName,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                              const CircleAvatar(
+                                radius: 35,
+                                backgroundColor: Colors.purple,
+                                child: Icon(
+                                  Icons.person,
+                                  size: 40,
+                                  color: Colors.white,
                                 ),
-                                overflow: TextOverflow.ellipsis,
                               ),
-                              Text(
-                                phoneNum,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blue,
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      fullName,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      phoneNum,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.blue,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
-                                overflow: TextOverflow.ellipsis,
+                              ),
+                              IconButton(
+                                icon: AnimatedRotation(
+                                  turns: _isExpanded ? 0.25 : 0,
+                                  duration: const Duration(milliseconds: 300),
+                                  child: const Icon(Icons.arrow_forward_ios,
+                                      color: Colors.black54),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isExpanded = !_isExpanded;
+                                  });
+                                },
                               ),
                             ],
                           ),
-                        ),
-                        IconButton(
-                          icon: AnimatedRotation(
-                            turns: _isExpanded ? 0.25 : 0,
-                            duration: const Duration(milliseconds: 300),
-                            child: const Icon(Icons.arrow_forward_ios,
-                                color: Colors.black54),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isExpanded = !_isExpanded;
-                            });
-                          },
-                        ),
-                      ],
+                          if (_isExpanded) ...[
+                            const SizedBox(height: 20),
+                            _buildExtraDetail('Email', email),
+                            //  _buildExtraDetail('Admin ID', adminID),
+                            //  _buildExtraDetail('Trip Status', tripStatus),
+                            _buildExtraDetail('ID Number', idNo),
+                          ]
+                        ],
+                      ),
                     ),
-                    if (_isExpanded) ...[
-                      const SizedBox(height: 20),
-                      _buildHorizontalDetail('Email', email),
-                      _buildExtraDetail('Admin ID', adminID),
-                      _buildExtraDetail('Trip Status', tripStatus),
-                      _buildExtraDetail('ID Number', idNo),
-                    ]
-                  ],
-                ),
-              ),
-            ),
+                  ),
 
-            // Replace with ChangePasswordCard
             const ChangePasswordCard(),
-
-            // Logout Widget
             LogoutCard(
               title: 'Logout',
               icon: Icons.logout,
@@ -185,34 +184,6 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
     );
   }
 
-  // Helper widget to build horizontally aligned details
-  Widget _buildHorizontalDetail(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            '$label: ',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black54,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Helper widget to build extra details for the profile card
   Widget _buildExtraDetail(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),

@@ -179,12 +179,15 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
                         String confirmPassword =
                             _confirmPasswordController.text;
 
-                        // Check if new password is less than 7 characters
-                        if (newPassword.length < 7) {
+                        // Regular expression to check for at least one letter and one number
+                        final RegExp passwordRegex =
+                            RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+
+                        if (!passwordRegex.hasMatch(newPassword)) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text(
-                                    'Failed to change password:The new password should be more than 7 digits')),
+                                    'Failed to change password: The new password must be at least 8 characters long and include both letters and numbers.')),
                           );
                           return;
                         }
@@ -226,8 +229,7 @@ class _ChangePasswordCardState extends State<ChangePasswordCard> {
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(
-                                    'Failed to change password: you entered the correct password wrong')),
+                                content: Text('Failed to change password: $e')),
                           );
                         }
                       },
