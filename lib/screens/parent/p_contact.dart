@@ -52,7 +52,7 @@ class _ContactPageState extends State<ContactPage> {
               role: 'School Administrator',
               name: 'Muhammed Alsheekh',
               phone: '+966547778823',
-              imageUrl: 'assets/images/admin1.png', // Admin-specific image
+              imageUrl: 'assets/images/human.png', // Admin-specific image
               backgroundColor: customColor,
               onTap: () => makePhoneCall('+966547778823'),
             ),
@@ -61,7 +61,7 @@ class _ContactPageState extends State<ContactPage> {
               role: 'School Driver',
               name: 'Ahmad Ali',
               phone: '+96678893213',
-              imageUrl: 'assets/images/driver1.png', // Driver-specific image
+              imageUrl: 'assets/images/human.png', // Driver-specific image
               backgroundColor: customColor,
               onTap: () => makePhoneCall('+96678893213'),
             ),

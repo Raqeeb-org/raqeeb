@@ -51,8 +51,7 @@ class _ContactPageeState extends State<ContactPagee> {
                 role: 'School Administrator',
                 name: 'Muhammed Alsheekh',
                 phone: '+966547778823',
-                imageUrl:
-                    'https://via.placeholder.com/100', // Replace with actual image URL
+                imageUrl: 'assets/images/human.png', // Use assets image
                 backgroundColor: customColor, // Set card color
                 onTap: () => makePhoneCall('+966547778823'),
               ),
@@ -61,8 +60,7 @@ class _ContactPageeState extends State<ContactPagee> {
                 role: 'Technical Support',
                 name: 'Ahmad Ali',
                 phone: '+96678893213',
-                imageUrl:
-                    'https://via.placeholder.com/100', // Replace with actual image URL
+                imageUrl: 'assets/images/human.png', // Use assets image
                 backgroundColor: customColor, // Set card color
                 onTap: () => makePhoneCall('+96678893213'),
               ),
@@ -104,7 +102,7 @@ class ContactCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundImage: NetworkImage(imageUrl),
+            backgroundImage: AssetImage(imageUrl), // Use AssetImage here
           ),
           const SizedBox(width: 12),
           Expanded(

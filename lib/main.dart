@@ -9,25 +9,31 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:raqeeb/screens/commons/forgotPassword.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize Firebase for web
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: "AIzaSyAbZ2Jap00L4fdOXBOAEYuHSOp1MpNCxyo",
-        authDomain: "raqeeb-c6520.firebaseapp.com",
-        projectId: "raqeeb-c6520",
-        storageBucket: "raqeeb-c6520.appspot.com",
-        messagingSenderId: "479747832887",
-        appId: "1:479747832887:web:e59b52cd50e7648c4fd3b2",
-      ),
-    );
-  } else {
-    await Firebase.initializeApp();
-    // Set authentication persistence (local for mobile)
-    await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+
+  // Initialize Firebase
+  try {
+    if (kIsWeb) {
+      // Web platform Firebase initialization
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyAbZ2Jap00L4fdOXBOAEYuHSOp1MpNCxyo",
+          authDomain: "raqeeb-c6520.firebaseapp.com",
+          projectId: "raqeeb-c6520",
+          storageBucket: "raqeeb-c6520.appspot.com",
+          messagingSenderId: "479747832887",
+          appId: "1:479747832887:web:e59b52cd50e7648c4fd3b2",
+        ),
+      );
+    } else {
+      // Mobile platform Firebase initialization
+      await Firebase.initializeApp();
+    }
+  } catch (e) {
+    debugPrint("Firebase initialization error: $e");
   }
+
   runApp(const RaqeebApp());
 }
 
@@ -42,7 +48,8 @@ class RaqeebApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SplashScreen(), // Set the LoginPage as the home page
+      home: SplashScreen(), // Set the SplashScreen as the home page
+      debugShowCheckedModeBanner: false,
       // Adding the routes for navigation
       routes: {
         // Admin's home page route
@@ -53,6 +60,7 @@ class RaqeebApp extends StatelessWidget {
         '/parent_home': (context) => const MainLayoutParent(),
         // Login page route
         '/login': (context) => LoginPage(),
+        // Forgot password page route
         '/forgot_password': (context) => ForgotPasswordPage(),
       },
     );
