@@ -83,7 +83,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 50),
             // Profile Title
             const Text(
               'Profile',
@@ -122,9 +122,9 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                       children: [
                         // Profile Image
                         const CircleAvatar(
-                          radius: 35, // Circular profile image
+                          radius: 40, // Circular profile image
                           backgroundImage:
-                              AssetImage('assets/images/admin1.png'),
+                              AssetImage('assets/images/profile_icon.png'),
                         ),
                         const SizedBox(
                             width: 15), // Space between image and info

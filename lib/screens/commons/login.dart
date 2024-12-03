@@ -172,7 +172,7 @@ class LoginScreenState extends State<LoginPage> {
                 ),
                 child: const Text(
                   'Log in',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.black),
                 ),
               ),
               const SizedBox(height: 20),
@@ -183,7 +183,10 @@ class LoginScreenState extends State<LoginPage> {
                   // Forgot password logic
                   Navigator.pushNamed(context, '/forgot_password');
                 },
-                child: const Text('Forgot my password'),
+                child: const Text(
+                  'Forgot my password',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ],
           ),
